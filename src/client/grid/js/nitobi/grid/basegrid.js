@@ -1,3 +1,977 @@
+<<<<<<< .mine
+nitobi.lang.defineNs("nitobi.grid");
+
+if (false)
+{
+	/**
+	 * @namespace The namespace for classes that make up 
+	 * the Nitobi Grid component.
+	 * The most commonly used classes are {@link nitobi.grid.Grid}, {@link nitobi.grid.Cell},
+	 * and {@link nitobi.grid.Column}
+	 * @constructor
+	 */
+	nitobi.grid = function(){};
+}
+
+/**
+ * Static property used to create a non-paging Grid.
+ */
+nitobi.grid.PAGINGMODE_NONE="none";
+/**
+ * Static property used to create a standard paging Grid.
+ */
+nitobi.grid.PAGINGMODE_STANDARD="standard";
+/**
+ * Static property used to create a live scrolling Grid.
+ */
+nitobi.grid.PAGINGMODE_LIVESCROLLING="livescrolling";
+
+/*
+standard - remote standard paging (no caching)
+livescrolling - remote livescrolling (with caching)
+localpaging - local paging
+nonpaging - local or remote data with no paging
+smartpaging - remote standard paging (with caching)
+locallivescrolling - local livescrolling
+*/
+
+/**
+ * Creates a new Grid component.
+ * @class The nitobi.grid.Grid class is used to create Grid components. More often than not, you'll be instantiating a Grid via a declaration.
+ * For example, a databound grid declaration might look like this:
+ * <pre class="code">
+ * &lt;ntb:grid id="DataboundGrid" gethandler="get.do" savehandler="save.do" mode="livescrolling"&gt;&lt;/ntb:grid&gt;
+ * </pre>
+ * <p>
+ * A grid that uses locally defined data might declared like so:
+ * </p>
+ * <pre class="code">
+ * &lt;ntb:grid id="SimpleGrid" width="350" height="300" mode="locallivescrolling" datasourceid="data" toolbarenabled="true"&gt;
+ * 	&lt;ntb:datasources&gt;
+ *		&lt;ntb:datasource id="data"&gt;
+ *			&lt;ntb:datasourcestructure FieldNames="Name|FavColor|FavAnimal"&nbsp;&nbsp;&gt;&lt;/ntb:datasourcestructure&gt;
+ *			&lt;ntb:data&gt;
+ *				&lt;ntb:e xi="1" a="Tammara Farley" b="blue" c="cat" &gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="2" a="Dwana Barton" b="red" c="dog"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="3" a="Lucas Blake" b="green" c="ferret"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="4" a="Lilli Bender" b="grey" c="squirrel"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="5" a="Emilia Foster" b="orange" c="pig"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="7" a="Crystal House" b="brown" c="horse"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="8" a="Lindsay Cohen" b="cyan" c="cow"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="12" a="Lindsay Bender" b="grey" c="squirrel"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="13" a="Emilia Foster" b="orange" c="pig"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="14" a="Dwana Irwin" b="beige" c="crocodile"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="15" a="Steve Lilli" b="brown" c="horse"&gt;&lt;/ntb:e&gt;
+ *				&lt;ntb:e xi="16" a="Lindsay Dwana" b="cyan" c="cow"&gt;&lt;/ntb:e&gt;
+ *			&lt;/ntb:data&gt;
+ *		&lt;/ntb:datasource&gt;								
+ *	&lt;/ntb:datasources&gt;
+ * &lt;/ntb:grid&gt;
+ * </pre>
+ * The <code>mode</code> attribute on the <code>ntb:grid</code> declaration defines what sort of Grid to instantiate such as
+ * LiveScrolling, LocalPaging, NonPaging, or Standard.
+ * To instantiate through script a specific version of the Grid class should be instantiated such as: 
+ * <pre class="code">
+ * var myGrid = new nitobi.grid.GridLiveScrolling();
+ * myGrid.setPagingMode(nitobi.grid.PAGINGMODE_LIVESCROLLING);
+ * myGrid.setDataMode(nitobi.data.DATAMODE_CACHING);
+ * myGrid.setGetHandler("data.xml");
+ * myGrid.attachToParentDomElement(document.getElementById("myGrid"));
+ * myGrid.bind();
+ * </pre>
+ * @constructor
+ * @param {String} uid The unique ID of the Grid. 
+ * @see nitobi.grid.GridLiveScrolling
+ * @see nitobi.grid.GridNonpaging
+ * @see nitobi.grid.GridLocalPage
+ * @see nitobi.grid.GridStandard
+ */
+nitobi.grid.Grid = function(uid) {
+	nitobi.prepare();
+	// pre-compile accessors (if necessary)
+	/**
+	 * @private
+	 */
+	EBAAutoRender=false;
+
+	/**
+	 * @private
+	 */
+	this.disposal = [];
+
+	/**
+	 * @private
+	 */
+	this.uid = uid || nitobi.base.getUid();
+
+	// TODO: Move this into a base class
+	/**
+	 * @private
+	 * This is a hash of named attributes to XML DOM nodes (attributes or elements) in the Grid model.
+	 */
+	this.modelNodes = {};
+	/**
+	 * @private
+	 * This is a hash of Grid Cell objects indexed by row_col.
+	 */
+	this.cachedCells = {};
+
+	this.configureDefaults();
+
+	//	First thing is to register the dispose method onunload.
+	//	We do not use he regular unload mechanism since it will not get call
+	//	cause it will be detached by the global nitobi unload cleanup method.
+	//	This will add the disposed method to a custom list that will also be called on global unload
+	if (nitobi.browser.IE6) {
+		nitobi.html.addUnload(nitobi.lang.close(this, this.dispose));
+	}
+
+	// Attach event handlers
+	this.subscribe("AttachToParent",this.initialize);
+	this.subscribe("DataReady",this.layout);
+
+	this.subscribe("AfterCellEdit",this.autoSave);
+	this.subscribe("AfterRowInsert",this.autoSave);
+	this.subscribe("AfterRowDelete",this.autoSave);
+	this.subscribe("AfterPaste",this.autoSave);
+	this.subscribe("AfterPaste",this.focus);
+
+	// We need to check if the horizontal scroll bar needs to be drawn after it's
+	// rendered and everytime the grid is resized.
+	this.subscribeOnce("HtmlReady", this.adjustHorizontalScrollBars);
+	this.subscribe("AfterGridResize", this.adjustHorizontalScrollBars)
+
+	/**
+	 * Various events that are attached to the root of the Grid HTML.
+	 * @type Array
+	 * @private
+	 */
+	this.events = [];
+
+	/**
+	 * Various events that are attached to the Grid scroller element that contains both the data and header.
+	 * @type Array
+	 * @private
+	 */
+	this.scrollerEvents = [];
+
+	/**
+	 * Various events that are attached to the Grid data element, which contains the rendered data cells.
+	 * @type Array
+	 * @private
+	 */
+	this.cellEvents = [];
+
+	/**
+	 * Various events that are attached to the Grid header element, which contains the column headers.
+	 * @type Array
+	 * @private
+	 */
+	this.headerEvents = [];
+
+	/**
+	 * Various key events that are attached to the Grid key navigator element.
+	 * @type Array
+	 * @private
+	 */
+	this.keyEvents = [];
+}
+
+nitobi.lang.implement(nitobi.grid.Grid, nitobi.Object);
+
+var ntb_gridp = nitobi.grid.Grid.prototype;
+
+nitobi.grid.Grid.prototype.properties = {
+	// JS properties
+	id:{n:"ID",t:"",d:"",p:"j"},
+	selection:{n:"Selection",t:"",d:null,p:"j"},
+	bound:{n:"Bound",t:"",d:false,p:"j"},
+	registeredto:{n:"RegisteredTo",t:"",d:true,p:"j"},
+	licensekey:{n:"LicenseKey",t:"",d:true,p:"j"},
+	columns:{n:"Columns",t:"",d:true,p:"j"},
+	columnsdefined:{n:"ColumnsDefined",t:"",d:false,p:"j"},
+	declaration:{n:"Declaration",t:"",d:"",p:"j"},
+	datasource:{n:"Datasource",t:"",d:true,p:"j"},
+	keygenerator:{n:"KeyGenerator",t:"",d:"",p:"j"},
+	version:{n:"Version",t:"",d:3.01,p:"j"},
+	cellclicked:{n:"CellClicked",t:"",d:false,p:"j"},
+
+		// XML properties
+	uid:{n:"uid",t:"s",d:"",p:"x"},
+	datasourceid:{n:"DatasourceId",t:"s",d:"",p:"x"},
+	currentpageindex:{n:"CurrentPageIndex",t:"i",d:0,p:"x"},
+	columnindicatorsenabled:{n:"ColumnIndicatorsEnabled",t:"b",d:true,p:"x"},
+	rowindicatorsenabled:{n:"RowIndicatorsEnabled",t:"b",d:false,p:"x"},
+	toolbarenabled:{n:"ToolbarEnabled",t:"b",d:true,p:"x"},
+	toolbarheight:{n:"ToolbarHeight",t:"i",d:25,p:"x"},
+	rowhighlightenabled:{n:"RowHighlightEnabled",t:"b",d:false,p:"x"},
+	rowselectenabled:{n:"RowSelectEnabled",t:"b",d:false,p:"x"},
+	gridresizeenabled:{n:"GridResizeEnabled",t:"b",d:false,p:"x"},
+	widthfixed:{n:"WidthFixed",t:"b",d:false,p:"x"},
+	heightfixed:{n:"HeightFixed",t:"b",d:false,p:"x"},
+	minwidth:{n:"MinWidth",t:"i",d:20,p:"x"},
+	minheight:{n:"MinHeight",t:"i",d:0,p:"x"},
+	singleclickeditenabled:{n:"SingleClickEditEnabled",t:"b",d:false,p:"x"},
+	autokeyenabled:{n:"AutoKeyEnabled",t:"b",d:false,p:"x"},
+	tooltipsenabled:{n:"ToolTipsEnabled",t:"b",d:false,p:"x"},
+	entertab:{n:"EnterTab",t:"s",d:"down",p:"x"},
+	hscrollbarenabled:{n:"HScrollbarEnabled",t:"b",d:true,p:"x"},
+	vscrollbarenabled:{n:"VScrollbarEnabled",t:"b",d:true,p:"x"},
+	rowheight:{n:"RowHeight",t:"i",d:23,p:"x"},
+	headerheight:{n:"HeaderHeight",t:"i",d:23,p:"x"},
+	top:{n:"top",t:"i",d:0,p:"x"},
+	left:{n:"left",t:"i",d:0,p:"x"},
+	scrollbarwidth:{n:"scrollbarWidth",t:"i",d:22,p:"x"},
+	scrollbarheight:{n:"scrollbarHeight",t:"i",d:22,p:"x"},
+	freezetop:{n:"freezetop",t:"i",d:0,p:"x"},
+	frozenleftcolumncount:{n:"FrozenLeftColumnCount",t:"i",d:0,p:"x"},
+	rowinsertenabled:{n:"RowInsertEnabled",t:"b",d:true,p:"x"},
+	rowdeleteenabled:{n:"RowDeleteEnabled",t:"b",d:true,p:"x"},
+	asynchronous:{n:"Asynchronous",t:"b",d:true,p:"x"},
+	autosaveenabled:{n:"AutoSaveEnabled",t:"b",d:false,p:"x"},
+	columncount:{n:"ColumnCount",t:"i",d:0,p:"x"},
+	rowsperpage:{n:"RowsPerPage",t:"i",d:20,p:"x"},
+	forcevalidate:{n:"ForceValidate",t:"b",d:false,p:"x"},
+	height:{n:"Height",t:"i",d:100,p:"x"},
+	lasterror:{n:"LastError",t:"s",d:"",p:"x"},
+	multirowselectenabled:{n:"MultiRowSelectEnabled",t:"b",d:false,p:"x"},
+	multirowselectfield:{n:"MultiRowSelectField",t:"s",d:"",p:"x"},
+	multirowselectattr:{n:"MultiRowSelectAttr",t:"s",d:"",p:"x"},
+	gethandler:{n:"GetHandler",t:"s",d:"",p:"x"},
+	savehandler:{n:"SaveHandler",t:"s",d:"",p:"x"},
+	width:{n:"Width",t:"i",d:"",p:"x"},
+	pagingmode:{n:"PagingMode",t:"s",d:"LiveScrolling",p:"x"},
+	datamode:{n:"DataMode",t:"s",d:"Caching",p:"x"},
+	rendermode:{n:"RenderMode",t:"s",d:"",p:"x"},
+	copyenabled:{n:"CopyEnabled",t:"b",d:true,p:"x"},
+	pasteenabled:{n:"PasteEnabled",t:"b",d:true,p:"x"},
+	sortenabled:{n:"SortEnabled",t:"b",d:true,p:"x"},
+	sortmode:{n:"SortMode",t:"s",d:"default",p:"x"},
+	editmode:{n:"EditMode",t:"b",d:false,p:"x"},
+	expanding:{n:"Expanding",t:"b",d:false,p:"x"},
+	theme:{n:"Theme",t:"s",d:"nitobi",p:"x"},
+	cellborder:{n:"CellBorder",t:"i",d:0,p:"x"},
+	innercellborder:{n:"InnerCellBorder",t:"i",d:0,p:"x"},
+	dragfillenabled:{n:"DragFillEnabled",t:"b",d:true,p:"x"},
+	
+		// Events
+	oncellclickevent:{n:"OnCellClickEvent",t:"",p:"e"},
+	onbeforecellclickevent:{n:"OnBeforeCellClickEvent",t:"",p:"e"},
+	oncelldblclickevent:{n:"OnCellDblClickEvent",t:"",p:"e"},
+	ondatareadyevent:{n:"OnDataReadyEvent",t:"",p:"e"},
+	onhtmlreadyevent:{n:"OnHtmlReadyEvent",t:"",p:"e"},
+	ondatarenderedevent:{n:"OnDataRenderedEvent",t:"",p:"e"},
+	oncelldoubleclickevent:{n:"OnCellDoubleClickEvent",t:"",p:"e"},
+	onafterloaddatapageevent:{n:"OnAfterLoadDataPageEvent",t:"",p:"e"},
+	onbeforeloaddatapageevent:{n:"OnBeforeLoadDataPageEvent",t:"",p:"e"},
+	onafterloadpreviouspageevent:{n:"OnAfterLoadPreviousPageEvent",t:"",p:"e"},
+	onbeforeloadpreviouspageevent:{n:"OnBeforeLoadPreviousPageEvent",t:"",p:"e"},
+	onafterloadnextpageevent:{n:"OnAfterLoadNextPageEvent",t:"",p:"e"},
+	onbeforeloadnextpageevent:{n:"OnBeforeLoadNextPageEvent",t:"",p:"e"},
+	onbeforecelleditevent:{n:"OnBeforeCellEditEvent",t:"",p:"e"},
+	onaftercelleditevent:{n:"OnAfterCellEditEvent",t:"",p:"e"},
+	onbeforerowinsertevent:{n:"OnBeforeRowInsertEvent",t:"",p:"e"},
+	onafterrowinsertevent:{n:"OnAfterRowInsertEvent",t:"",p:"e"},
+	onbeforesortevent:{n:"OnBeforeSortEvent",t:"",p:"e"},
+	onaftersortevent:{n:"OnAfterSortEvent",t:"",p:"e"},
+	onbeforerefreshevent:{n:"OnBeforeRefreshEvent",t:"",p:"e"},
+	onafterrefreshevent:{n:"OnAfterRefreshEvent",t:"",p:"e"},
+	onbeforesaveevent:{n:"OnBeforeSaveEvent",t:"",p:"e"},
+	onaftersaveevent:{n:"OnAfterSaveEvent",t:"",p:"e"},
+	onhandlererrorevent:{n:"OnHandlerErrorEvent",t:"",p:"e"},
+	onrowblurevent:{n:"OnRowBlurEvent",t:"",p:"e"},
+	oncellfocusevent:{n:"OnCellFocusEvent",t:"",p:"e"},
+	onfocusevent:{n:"OnFocusEvent",t:"",p:"e"},
+	oncellblurevent:{n:"OnCellBlurEvent",t:"",p:"e"},
+	onafterrowdeleteevent:{n:"OnAfterRowDeleteEvent",t:"",p:"e"},
+	onbeforerowdeleteevent:{n:"OnBeforeRowDeleteEvent",t:"",p:"e"},
+	oncellupdateevent:{n:"OnCellUpdateEvent",t:"",p:"e"},
+	onrowfocusevent:{n:"OnRowFocusEvent",t:"",p:"e"},
+	onbeforecopyevent:{n:"OnBeforeCopyEvent",t:"",p:"e"},
+	onaftercopyevent:{n:"OnAfterCopyEvent",t:"",p:"e"},
+	onbeforepasteevent:{n:"OnBeforePasteEvent",t:"",p:"e"},
+	onafterpasteevent:{n:"OnAfterPasteEvent",t:"",p:"e"},
+	onerrorevent:{n:"OnErrorEvent",t:"",p:"e"},
+	oncontextmenuevent:{n:"OnContextMenuEvent",t:"",p:"e"},
+	oncellvalidateevent:{n:"OnCellValidateEvent",t:"",p:"e"},
+	onkeydownevent:{n:"OnKeyDownEvent",t:"",p:"e"},
+	onkeyupevent:{n:"OnKeyUpEvent",t:"",p:"e"},
+	onkeypressevent:{n:"OnKeyPressEvent",t:"",p:"e"},
+	onmouseoverevent:{n:"OnMouseOverEvent",t:"",p:"e"},
+	onmouseoutevent:{n:"OnMouseOutEvent",t:"",p:"e"},
+	onmousemoveevent:{n:"OnMouseMoveEvent",t:"",p:"e"},
+	onhitrowendevent:{n:"OnHitRowEndEvent",t:"",p:"e"},
+	onhitrowstartevent:{n:"OnHitRowStartEvent",t:"",p:"e"},
+	onafterdragfillevent:{n:"OnAfterDragFillEvent",t:"",p:"e"},
+	onbeforedragfillevent:{n:"OnBeforeDragFillEvent",t:"",p:"e"},
+	onafterresizeevent:{n:"OnAfterResizeEvent",t:"",p:"e"},
+	onbeforeresizeevent:{n:"OnBeforeResizeEvent",t:"",p:"e"}
+};
+
+// This is a temporary thing to map lowercase attribute names to uppercase ones
+nitobi.grid.Grid.prototype.xColumnProperties = {
+	column: {
+		align:{n:"Align",t:"s",d:"left"},
+		classname:{n:"ClassName",t:"s",d:""},
+		cssstyle:{n:"CssStyle",t:"s",d:""},
+		columnname:{n:"ColumnName",t:"s",d:""},
+		type:{n:"Type",t:"s",d:"text"},
+		datatype:{n:"DataType",t:"s",d:"text"},
+		editable:{n:"Editable",t:"b",d:true},
+		initial:{n:"Initial",t:"s",d:""},
+		label:{n:"Label",t:"s",d:""},
+		gethandler:{n:"GetHandler",t:"s",d:""},
+		datasource:{n:"DataSource",t:"s",d:""},
+		template:{n:"Template",t:"s",d:""},
+		templateurl:{n:"TemplateUrl",t:"s",d:""},
+		maxlength:{n:"MaxLength",t:"i",d:255},
+		sortdirection:{n:"SortDirection",t:"s",d:"Desc"},
+		sortenabled:{n:"SortEnabled",t:"b",d:true},
+		width:{n:"Width",t:"i",d:100},
+		visible:{n:"Visible",t:"b",d:true},
+		xdatafld:{n:"xdatafld",t:"s",d:""},
+		value:{n:"Value",t:"s",d:""},
+		xi:{n:"xi",t:"i",d:100},
+		oncellclickevent:{n:"OnCellClickEvent"},
+		onbeforecellclickevent:{n:"OnBeforeCellClickEvent"},
+		oncelldblclickevent:{n:"OnCellDblClickEvent"},
+		onheaderdoubleclickevent:{n:"OnHeaderDoubleClickEvent"},
+		onheaderclickevent:{n:"OnHeaderClickEvent"},
+		onbeforeresizeevent:{n:"OnBeforeResizeEvent"},
+		onafterresizeevent:{n:"OnAfterResizeEvent"},
+		oncellvalidateevent:{n:"OnCellValidateEvent"},
+		onbeforecelleditevent:{n:"OnBeforeCellEditEvent"},
+		onaftercelleditevent:{n:"OnAfterCellEditEvent"},
+		oncellblurevent:{n:"OnCellBlurEvent"},
+		oncellfocusevent:{n:"OnCellFocusEvent"},
+		onbeforesortevent:{n:"OnBeforeSortEvent"},
+		onaftersortevent:{n:"OnAfterSortEvent"},
+		oncellupdateevent:{n:"OnCellUpdateEvent"},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	textcolumn: {
+	},
+	numbercolumn: {
+		align:{n:"Align",t:"s",d:"right"},
+		mask:{n:"Mask",t:"s",d:"#,###.00"},
+		negativemask:{n:"NegativeMask",t:"s",d:""},
+		groupingseparator:{n:"GroupingSeparator",t:"s",d:","},
+		decimalseparator:{n:"DecimalSeparator",t:"s",d:"."},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	datecolumn: {
+		mask:{n:"Mask",t:"s",d:"M/d/yyyy"},
+		calendarenabled:{n:"CalendarEnabled",t:"b",d:true}
+	},
+	listboxeditor: {
+		datasourceid:{n:"DatasourceId",t:"s",d:""},
+		datasource:{n:"Datasource",t:"s",d:""},
+		gethandler:{n:"GetHandler",t:"s",d:""},
+		displayfields:{n:"DisplayFields",t:"s",d:""},
+		valuefield:{n:"ValueField",t:"s",d:""},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	lookupeditor: {
+		datasourceid:{n:"DatasourceId",t:"s",d:""},
+		datasource:{n:"Datasource",t:"s",d:""},
+		gethandler:{n:"GetHandler",t:"s",d:""},
+		displayfields:{n:"DisplayFields",t:"s",d:""},
+		valuefield:{n:"ValueField",t:"s",d:""},
+		delay:{n:"Delay",t:"s",d:""},
+		size:{n:"Size",t:"s",d:6},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"},
+		forcevalidoption:{n:"ForceValidOption",t:"b",d:false},
+		autocomplete:{n:"AutoComplete",t:"b",d:true},
+		autoclear:{n:"AutoClear",t:"b",d:false},
+		getonenter:{n:"GetOnEnter",t:"b",d:false},
+		referencecolumn:{n:"ReferenceColumn",t:"s",d:""}
+	},
+	checkboxeditor: {
+		datasourceid:{n:"DatasourceId",t:"s",d:""},
+		datasource:{n:"Datasource",t:"s",d:""},
+		gethandler:{n:"GetHandler",t:"s",d:""},
+		displayfields:{n:"DisplayFields",t:"s",d:""},
+		valuefield:{n:"ValueField",t:"s",d:""},
+		checkedvalue:{n:"CheckedValue",t:"s",d:""},
+		uncheckedvalue:{n:"UnCheckedValue",t:"s",d:""}
+	},
+	linkeditor: {
+		openwindow:{n:"OpenWindow",t:"b",d:true}
+	},
+	texteditor: {
+		maxlength:{n:"MaxLength",t:"i",d:255},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	numbereditor: {
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	textareaeditor: {
+		maxlength:{n:"MaxLength",t:"i",d:255},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	dateeditor: {
+		mask:{n:"Mask",t:"s",d:"M/d/yyyy"},
+		calendarenabled:{n:"CalendarEnabled",t:"b",d:true},
+		onkeydownevent:{n:"OnKeyDownEvent"},
+		onkeyupevent:{n:"OnKeyUpEvent"},
+		onkeypressevent:{n:"OnKeyPressEvent"},
+		onchangeevent:{n:"OnChangeEvent"}
+	},
+	imageeditor: {
+		imageurl:{n:"ImageUrl",t:"s",d:""}
+	},
+	passwordeditor: {
+	}
+};
+
+nitobi.grid.Grid.prototype.typeAccessorCreators = {
+	s:function() {}, //string
+	b:function() {}, //bool
+	i:function() {}, //integer
+	n:function() {} //number
+	};
+
+nitobi.grid.Grid.prototype.createAccessors = function(name) {
+	var item = nitobi.grid.Grid.prototype.properties[name];
+	nitobi.grid.Grid.prototype["set"+item.n] = function() {this[item.p+item.t+"SET"](item.n, arguments)};
+	nitobi.grid.Grid.prototype["get"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
+	nitobi.grid.Grid.prototype["is"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
+	nitobi.grid.Grid.prototype[item.n] = item.d;
+}
+
+//ntb_gridp.properties
+for (var name in nitobi.grid.Grid.prototype.properties)
+{
+	nitobi.grid.Grid.prototype.createAccessors(name);
+}
+
+/**#@+
+   @memberOf nitobi.grid.Grid
+*/
+/**
+ * Initializes the component and creates all children objects of the component. This method is called implicitly 
+ * when the component is attached to a DOM element in the web page. This is primarily for use by component developers
+ */
+nitobi.grid.Grid.prototype.initialize= function() 
+{
+	// Called when parent.addChild() occurs 
+	this.fire("Preinitialize");
+	this.initializeFromCss();
+	this.createChildren(); // Each subclass overrides this method to create its own children
+	this.fire("AfterInitialize");
+	this.fire("CreationComplete");
+}
+
+
+/**
+ * Initializes properties such as header height and row height from CSS classes.
+ * @private
+ */
+nitobi.grid.Grid.prototype.initializeFromCss = function()
+{
+	this.CellHoverColor = this.getThemedStyle("ntb-cell-hover", "backgroundColor") || "#C0C0FF";
+	this.RowHoverColor = this.getThemedStyle("ntb-row-hover", "backgroundColor") || "#FFFFC0";
+	this.CellActiveColor = this.getThemedStyle("ntb-cell-active", "backgroundColor") || "#F0C0FF";
+	this.RowActiveColor = this.getThemedStyle("ntb-row-active", "backgroundColor") || "#FFC0FF";
+
+	var rowHeight = this.getThemedStyle("ntb-row", "height");
+	if (rowHeight != null && rowHeight != "")
+		this.setRowHeight(parseInt(rowHeight));
+
+	var headerHeight = this.getThemedStyle("ntb-grid-header", "height");
+	if (headerHeight != null && headerHeight != "")
+		this.setHeaderHeight(parseInt(headerHeight));
+
+	if (nitobi.browser.IE && nitobi.lang.isStandards()) {
+		// We need to get the cell padding values
+		var cellBorder = this.getThemedClass("ntb-cell-border");
+		if (cellBorder != null)
+			this.setCellBorder(parseInt(cellBorder.borderLeftWidth+0) + parseInt(cellBorder.borderRightWidth+0) + parseInt(cellBorder.paddingLeft+0) + parseInt(cellBorder.paddingRight+0));
+	}
+
+	// In Firefox 3 we need to get the padding of the DIV inside the cell and subtract it
+	// from the desired column width then set the width of the data so that overflow will be respected
+	if (nitobi.browser.MOZ) {
+		var cellBorder = this.getThemedClass("ntb-cell");
+		if (cellBorder != null)
+			this.setInnerCellBorder(parseInt(cellBorder.borderLeftWidth+0) + parseInt(cellBorder.borderRightWidth+0) + parseInt(cellBorder.paddingLeft+0) + parseInt(cellBorder.paddingRight+0));
+	}
+/*
+	// TODO:
+	// In IE standards mode we need to do some rowHeight and headerHeight adjustments for padding ...
+	// Maybe in Firefox too ...
+	var cellClass = nitobi.html.Css.getClass(".ntb-cell");
+	var rowClass = nitobi.html.Css.getClass(".ntb-row"+this.uid);
+	rowClass.height = parseInt(rowClass.height) - (parseInt(cellClass.paddingTop) + parseInt(cellClass.paddingTop));
+*/
+}
+
+nitobi.grid.Grid.prototype.getThemedClass = function(clazz)
+{
+	var C=nitobi.html.Css;
+	var r = C.getRule("." + this.getTheme() + " ." + clazz) || C.getRule("."+clazz);
+	var ret = null;
+	if (r != null && r.style != null)
+		ret = r.style;
+	return ret;
+}
+
+
+nitobi.grid.Grid.prototype.getThemedStyle = function(clazz, style)
+{
+	return nitobi.html.Css.getClassStyle("." + this.getTheme() + " ." + clazz, style);
+}
+
+/**
+ * Sets the xmlDataSource property of the various renderers associated with the Grid. This method is called from connectToDataSet.
+ * @private
+ * @param {nitobi.data.DataSet} dataSet The DataSet to connect the renders to.
+ * @see #connectToDataSet
+ */
+nitobi.grid.Grid.prototype.connectRenderersToDataSet= function(dataset) 
+{
+	this.TopLeftRenderer.xmlDataSource = dataset;
+	this.TopCenterRenderer.xmlDataSource = dataset;
+	this.MidLeftRenderer.xmlDataSource = dataset;
+	this.MidCenterRenderer.xmlDataSource = dataset;
+}
+
+/**
+ * Connects the component to a nitobi.data.DataTable in a nitobi.data.DataSet. 
+ * If the DataTable is specified then this will also call conntectToDataTable(). 
+ * Before a Grid can render any data it must be connected to a DataSet.
+ * @param {nitobi.data.DataSet} dataSet The DataSet to connect the component to.
+ * @param {nitobi.data.DataTable} dataTable The nitobi.data.DataSet to connect the component to.
+ * @see #connectToDataSet
+ * @private
+ */
+nitobi.grid.Grid.prototype.connectToDataSet= function(dataset,table) 
+{
+	this.data = dataset;
+	// TODO: why is this here and when is it used?
+	if (this.TopLeftRenderer) {
+
+		this.connectRenderersToDataSet(dataset);
+	}
+	this.connectToTable(table);
+}
+
+/**
+ * Connects a Grid to a table as specified by the table argument. If there is 
+ * no table argument it will attempt to connect a table with the id '_default'. 
+ * If no table can be found it will return false.  This is also called from 
+ * conntectToDataSet if the second argument is used when calling that function.<br><br>
+ * The component subscribes to the following events from the 
+ * nitobi.data.DataTable:
+ * &lt;ul&gt;
+ * &lt;li&gt;RowCountChanged - nitobi.grid.Grid.setRowCount()&lt;/li&gt;
+ * &lt;li&gt;RowCountKnown - nitobi.grid.Grid.setRowCount()&lt;/li&gt;
+ * &lt;li&gt;StructureChanged - nitobigrid..Grid.updateStructure()&lt;/li&gt;
+ * &lt;li&gt;ColumnsInitialized - nitobi.grid.Grid.updateStructure()&lt;/li&gt;
+ * &lt;/ul&gt;
+ * After the DataTable is connected, the OnTableConnectedEvent will fire.
+ * @param {String} table The table to which the Grid should connect.
+ * @type Boolean
+ */
+nitobi.grid.Grid.prototype.connectToTable= function(table) 
+{
+	// Use the table as the table id if it is a string
+	if (typeof(table) == "string")
+		this.datatable = this.data.getTable(table);
+	// Use the table itself if it's an object
+	else if (typeof(table) == "object")
+		this.datatable = table;
+	// Use the default table if it exists
+	else if (this.data.getTable('_default')+'' != 'undefined')
+		this.datatable = this.data.getTable('_default');
+	// Otherwise we have problems
+	else
+		return false;
+
+	this.connected=true;
+	this.updateStructure();
+
+	var dt = this.datatable;
+	var L = nitobi.lang;
+
+	dt.subscribe("DataReady",L.close(this,this.handleHandlerError));
+	dt.subscribe("DataReady",L.close(this,this.syncWithData));
+	dt.subscribe("DataSorted",L.close(this,this.syncWithData));
+	dt.subscribe("RowInserted",L.close(this,this.syncWithData));
+	dt.subscribe("RowDeleted",L.close(this,this.syncWithData));
+	dt.subscribe("RowCountChanged",L.close(this,this.setRowCount));
+	dt.subscribe("PastEndOfData",L.close(this,this.adjustRowCount));
+	dt.subscribe("RowCountKnown",L.close(this,this.finalizeRowCount));
+	dt.subscribe("StructureChanged",L.close(this,this.updateStructure));
+	dt.subscribe("ColumnsInitialized",L.close(this,this.updateStructure));
+
+	this.dataTableId = this.datatable.id;
+	this.datatable.setOnGenerateKey(this.getKeyGenerator());
+
+	this.fire('TableConnected', this.datatable);
+
+	return true;
+}
+
+/**
+ * Ensures that the Grid is connected to a DataTable. If there is no connected 
+ * DataTable it will create a new DataTable with ID "_default" and use the 
+ * GetHandler, SaveHandler and DataMode properties on the Grid.
+ */
+nitobi.grid.Grid.prototype.ensureConnected = function() 
+{
+	// Case: nodataSet has been been defined
+	if (this.data == null) {
+		this.data = new nitobi.data.DataSet();
+		this.data.initialize();
+
+		this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()},this.isAutoKeyEnabled());
+		this.datatable.initialize("_default",this.getGetHandler(),this.getSaveHandler());
+		this.data.add(this.datatable);
+		this.connectToDataSet(this.data);
+	}
+	// Case: no dataTable has been defined
+	// TODO: this only works with remote datasources ...
+	// this is grid mode dependent.
+	if (this.datatable == null) {
+		this.datatable=this.data.getTable("_default");
+		if (this.datatable == null) {
+			this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
+			this.datatable.initialize("_default",this.getGetHandler(),this.getSaveHandler());
+			this.data.add(this.datatable);
+		}
+		this.connectToDataSet(this.data);
+	}
+	this.connected=true;
+}
+
+/**
+ * Updates the component with information about a connected DataTable. This will be called when the OnStructureChangedEvent 
+ * or OnColumnsInitializedEvent is fired from the DataTable.
+ * @private
+ */
+nitobi.grid.Grid.prototype.updateStructure = function() 
+{
+	if (this.inferredColumns) {
+		this.defineColumns(this.datatable);
+	}
+	this.mapColumns();
+
+	if (this.TopLeftRenderer)
+	{
+		this.defineColumnBindings();
+		this.defineColumnsFinalize();
+//		this.makeXSL();
+	}
+}
+
+/**
+ * Sets the <code>fieldMap</code> property of the Grid to match that of the connected DataTable. This is called from <code>updateStructure()</code>.
+ * @private
+ */
+nitobi.grid.Grid.prototype.mapColumns= function() 
+{
+	// TODO: This seems a bit sketchy to keep in sync if we ever use this.fieldMap
+	// if so we should be using a setter and preferably creating the connection between the two properties
+	this.fieldMap = this.datatable.fieldMap;
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.configureDefaults= function() 
+{
+	// Note: properties should be assigned before components are attached or initialized (to avoid duplicate code execution)
+	// Assume that accessors expect that sub-components haven't been created yet.
+	// Make settings quickly - defer work until validation
+
+	this.initializeModel();
+	this.displayedFirstRow=0;
+	this.displayedRowCount=0;
+	this.localFilter=null;
+	this.columns = [];
+	this.fieldMap = {};
+	this.frameRendered = false;
+	this.connected=false;
+	this.inferredColumns=true;
+	this.selectedRows = [];
+
+	this.minHeight=20;
+	this.minWidth=20;
+
+	this.setRowCount(0);
+	this.layoutValid=false;
+
+	//	This is a hack for backwards compat
+	//	It is set in the bind method by looking at the data format returned from the server
+	this.oldVersion = false;
+
+	// create XSL Processors
+	this.frameCssXslProc = nitobi.grid.frameCssXslProc;
+	this.frameXslProc = nitobi.grid.frameXslProc;
+}
+
+/**
+ * Attaches any events to the component DOM elements after the intial render. Common DOM events attached here include KeyPress, SelectStart and ContextMenu.
+ * @private
+ * @align
+ */
+nitobi.grid.Grid.prototype.attachDomEvents= function()
+{
+	// The only way to attach the selection-prevention event in an XHTML compliant way.
+	// This is only used (and will only work) for IE - for Moz/others we have CSS that handles it.
+	ntbAssert(this.UiContainer!=null && nitobi.html.getFirstChild(this.UiContainer)!=null,'The Grid has not been attached to the DOM yet using attachToDom method. Therefore, attachDomEvents cannot proceed.',null,EBA_THROW);
+
+	var dGridElement = this.getGridContainer();
+
+	// Header specific events
+	var he = this.headerEvents;
+	he.push({type:'mousedown', handler:this.handleHeaderMouseDown});
+	he.push({type:'mouseup', handler:this.handleHeaderMouseUp});
+	he.push({type:'mousemove', handler:this.handleHeaderMouseMove});
+
+	nitobi.html.attachEvents(this.getHeaderContainer(), he, this);
+
+	// Data or cell specific events
+	var ce = this.cellEvents;
+	ce.push({type:'mousedown', handler:this.handleCellMouseDown});
+	ce.push({type:'mousemove', handler:this.handleCellMouseMove});
+
+	nitobi.html.attachEvents(this.getDataContainer(), ce, this);
+
+	// Scroller specific (ie Header + Data) events
+	//var se = this.scrollerEvents;
+	//se.push({type:"selectstart", handler:function(evt) { return false; }});
+
+	//nitobi.html.attachEvents(this.getScrollerContainer(), se, this);
+
+	// Global Grid events
+	var ge = this.events;
+	ge.push({type:'contextmenu', handler:this.handleContextMenu});
+	ge.push({type:'mousedown', handler:this.handleMouseDown});
+	ge.push({type:'mouseup', handler:this.handleMouseUp});
+	ge.push({type:'mousemove', handler:this.handleMouseMove});
+	ge.push({type:'mouseout', handler:this.handleMouseOut});
+	ge.push({type:'mouseover', handler:this.handleMouseOver});
+
+	// TODO: decode these sorts of registrations in the event manager.
+	if (!nitobi.browser.MOZ)
+	{
+		ge.push({type:'mousewheel', handler:this.handleMouseWheel});
+	}
+	else // MOZ
+	{
+		// Not sure this actually works since in the scorllhoriz and vert methods we focus again.
+		nitobi.html.attachEvent($("vscrollclip"+this.uid), "mousedown", this.focus, this);
+		nitobi.html.attachEvent($("hscrollclip"+this.uid), "mousedown", this.focus, this);
+
+		// This one needs to be tested still ...
+		ge.push({type:'DOMMouseScroll', handler:this.handleMouseWheel});
+	}
+
+	nitobi.html.attachEvents(dGridElement, ge, this, false);
+
+	// For IE if we are selecting either the select box or a cell then return false.
+	if (nitobi.browser.IE)
+		dGridElement.onselectstart = function() {var id =window.event.srcElement.id;if (id.indexOf('selectbox') == 0 || id.indexOf('cell') == 0) return false;};
+
+	// If it is IE we choose the entire grid to be the keyNav focused element 
+	// otherwise we use a special hidden element for Firefox for foucs performance reason
+	if (nitobi.browser.IE)
+		this.keyNav = this.getScrollerContainer();
+	else
+		this.keyNav = $("ntb-grid-keynav"+this.uid);
+
+	this.keyEvents = [
+		{type:'keydown', handler:this.handleKey},
+		{type:'keyup', handler:this.handleKeyUp},
+		{type:'keypress', handler:this.handleKeyPress}];
+
+	nitobi.html.attachEvents(this.keyNav, this.keyEvents, this);
+
+	// Attach the DOM events for grid resizing
+	var rightGrabby = $("ntb-grid-resizeright" + this.uid);
+	var btmGrabby = $("ntb-grid-resizebottom" + this.uid);
+	if (rightGrabby != null)
+	{
+		nitobi.html.attachEvent(rightGrabby, "mousedown", this.beforeResize, this);
+		nitobi.html.attachEvent(btmGrabby, "mousedown", this.beforeResize, this);
+	}
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.hoverCell=function(cell) 
+{
+	// This will check if the BG color is the expected BG color
+	// and only apply the hover if it is
+	var h = this.hovered;
+	if (h) {
+		var hs = h.style;
+		if (hs.backgroundColor == this.CellHoverColor)
+			hs.backgroundColor = this.hoveredbg;
+	}
+	if (cell==null || cell==this.activeCell) return;
+	var cs = cell.style;
+	this.hoveredbg=cs.backgroundColor;
+	this.hovered=cell;
+	cs.backgroundColor = this.CellHoverColor;
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.hoverRow=function(row) 
+{
+	if (!this.isRowHighlightEnabled()) return;
+
+	var C = nitobi.html.Css;
+	if (this.leftrowhovered && this.leftrowhovered!=this.leftActiveRow) {
+		this.leftrowhovered.style.backgroundColor = this.leftrowhoveredbg;
+		//C.removeClass(this.leftrowhovered, "ntb-row-hover", true);
+	}
+	if (this.midrowhovered && this.midrowhovered!=this.midActiveRow) {
+		this.midrowhovered.style.backgroundColor = this.midrowhoveredbg;
+		//C.removeClass(this.midrowhovered, "ntb-row-hover", true);
+	}
+	if (row==this.activeRow || row==null) return;
+
+	var offset=-1;
+
+	var rowCell = nitobi.html.getFirstChild(row);
+
+	var rowNumber = nitobi.grid.Row.getRowNumber(row);
+	var rowNodes = nitobi.grid.Row.getRowElements(this, rowNumber);
+
+	if (rowNodes.left!=null && rowNodes.left!=this.leftActiveRow) {
+		this.leftrowhoveredbg=rowNodes.left.style.backgroundColor;
+		this.leftrowhovered=rowNodes.left;
+		rowNodes.left.style.backgroundColor = this.RowHoverColor;
+		//C.addClass(rowNodes.left, "ntb-row-hover", true);
+	}
+
+	if (rowNodes.mid!=null && rowNodes.mid!=this.midActiveRow) {
+		this.midrowhoveredbg=rowNodes.mid.style.backgroundColor;
+		this.midrowhovered=rowNodes.mid;
+		rowNodes.mid.style.backgroundColor = this.RowHoverColor;
+		//C.addClass(rowNodes.mid, "ntb-row-hover", true);
+	}
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.clearHover = function()
+{
+	// Clear hover
+	this.hoverCell();
+	this.hoverRow();
+}
+
+/**
+ * Event handler for the mouseover event.
+ * @param {Event} evt The Event object.
+ * @private
+ */
+nitobi.grid.Grid.prototype.handleMouseOver = function(evt)
+{
+	this.fire("MouseOver", evt);
+}
+
+/**
+ * Event handler for the mouseout event.
+ * @param {Event} evt The Event object.
+ * @private
+ */
+nitobi.grid.Grid.prototype.handleMouseOut = function(evt)
+{
+	this.clearHover();
+	this.fire("MouseOut", evt);
+}
+
+/**
+ * Event handler for the mouse wheel event.
+ * @param {Event} evt The Event object.
+ * @private
+ */
+nitobi.grid.Grid.prototype.handleMouseDown = function(evt)
+{
+	// check if grid is in edit mode - if so, validate input first
+	//if (this.isEditMode())
+		//if (!this.cellEditor.checkValidity(evt)) return;
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.handleHeaderMouseDown=function(evt)
+{
+	var cell  = this.findActiveCell(evt.srcElement);
+	if (cell==null) return;
+
+	var colNumber = nitobi.grid.Cell.getColumnNumber(cell);
+
+	if (this.headerResizeHover(evt, cell))
+	{
+		var col = this.getColumnObject(colNumber);
+		var beforeColumnResizeEventArgs = new nitobi.grid.OnBeforeColumnResizeEventArgs(this, col);
+		if (!nitobi.event.evaluate(col.getOnBeforeResizeEvent(), beforeColumnResizeEventArgs)) return;
+
+		this.columnResizer.startResize(this, colNumber, cell, evt);
+
+		return false;
+	}
+	else
+	{
+		this.headerClicked(colNumber);
+		this.fire("HeaderDown", colNumber);
+	}
+}
+
+/**
+ * @private
+ */
+nitobi.grid.Grid.prototype.handleCellMouseDown=function(evt)
+{
+	// At this point the srcElement could either be the selection or the cell
+	var cell  = this.findActiveCell(evt.srcElement) || this.activeCell;
+	if (cell==null) return;
+
+	//	Check if the shift key is not pressed and if not then start selecting
+	if (!evt.shiftKey)
+	{
+		// Fire the beforecellclick event on the grid and column
+		var activeColumn = this.getSelectedColumnObject();
+		var clickEventArgs = new nitobi.grid.OnCellClickEventArgs(this, this.getSelectedCellObject());
+		if (!this.fire("BeforeCellClick", clickEventArgs) || (!!activeColumn && !nitobi.event.evaluate(activeColumn.getOnBeforeCellClickEvent(), clickEventArgs))) return;
+
+		//Becomes the order of mouseup/mousedown events can get reversed in firefox, we need to make sure the mouseup
+		//doesnt activate cell highlighting before mousedown completes.  All references to waitt are about controlling
+		//this.  Without this fix, FireFox can start a cell highlight select process, especially if there are event handlers
+		//hooked onto the mouse down processing.
+=======
 /*
  * Nitobi Complete UI 1.0
  * Copyright(c) 2008, Nitobi
@@ -977,6 +1951,7 @@ nitobi.grid.Grid.prototype.handleCellMouseDown=function(evt)
 		//doesnt activate cell highlighting before mousedown completes.  All references to waitt are about controlling
 		//this.  Without this fix, FireFox can start a cell highlight select process, especially if there are event handlers
 		//hooked onto the mouse down processing.
+>>>>>>> .r38
 		this.waitt = true;
 
 		// Set the state variable indicating that we are have started a click...
@@ -5591,7 +6566,8 @@ nitobi.grid.Grid.prototype.getColumnMap = function(firstColumn,lastColumn)
 {
 	var columns = this.getColumnDefinitions();
 	firstColumn = (firstColumn == null)?0:firstColumn;
-	lastColumn = (lastColumn == null)?columns.length-1:lastColumn;
+	lastColumn = (lastColumn == null)?column
+s.length-1:lastColumn;
 	var map = new Array();
 	for (var i=firstColumn; i<=lastColumn && (null != columns[i]); i++) {
 		map.push(columns[i].getAttribute("xdatafld").substr(1));
