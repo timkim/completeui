@@ -151,6 +151,8 @@ nitobi.fisheye.FishEye = function(id)
 	 */
 	this.startedIKillTimer = false;
 	
+	this.bounceOnClick = true;
+	
 	/**
 	 * @private
 	 */
@@ -407,7 +409,8 @@ nitobi.fisheye.FishEye.prototype.renderItems = function()
 			item.currentWidth = myWidth;
 			item.currentHeight = myHeight;
 			item.img.onclick = function(){
-				obj.bounceItem(obj.highindex,5000);  
+				if(obj.bounceOnClick)
+					obj.bounceItem(obj.highindex,5000);  
 				obj.get(obj.highindex).onClick.notify();
 			};
 			
