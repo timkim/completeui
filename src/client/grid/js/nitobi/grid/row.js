@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * Creates a row object that encapsulates a row of data in the Nitobi Grid component.
  * @class The Row class represents a row of data in a Grid.  You can use a Row object

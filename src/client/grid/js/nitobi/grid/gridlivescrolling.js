@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * Creates a livescrolling Grid.
  * @class A subclass of nitobi.grid.Grid that adds livescrolling fucntionality.  Just-in-time paging as the user scrolls through data. 

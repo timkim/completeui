@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * @class A subclass of nitobi.grid.Grid that adds standard paging functionality.  
  * Fixed-height grid with remote paging that does not scroll
