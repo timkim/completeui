@@ -1,10 +1,3 @@
-/*
- * Nitobi Complete UI 1.0
- * Copyright(c) 2008, Nitobi
- * support@nitobi.com
- * 
- * http://www.nitobi.com/license
- */
 nitobi.lang.defineNs("nitobi.grid");
 
 if (false)
@@ -5591,7 +5584,8 @@ nitobi.grid.Grid.prototype.getColumnMap = function(firstColumn,lastColumn)
 {
 	var columns = this.getColumnDefinitions();
 	firstColumn = (firstColumn == null)?0:firstColumn;
-	lastColumn = (lastColumn == null)?columns.length-1:lastColumn;
+	lastColumn = (lastColumn == null)?column
+s.length-1:lastColumn;
 	var map = new Array();
 	for (var i=firstColumn; i<=lastColumn && (null != columns[i]); i++) {
 		map.push(columns[i].getAttribute("xdatafld").substr(1));

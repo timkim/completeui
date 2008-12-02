@@ -1,10 +1,3 @@
-/*
- * Nitobi Complete UI 1.0
- * Copyright(c) 2008, Nitobi
- * support@nitobi.com
- * 
- * http://www.nitobi.com/license
- */
 /**
  * @class This class is responsible for converting data formats used in nitobi.data.FormatConverterr
  */

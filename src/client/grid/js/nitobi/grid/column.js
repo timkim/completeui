@@ -1,10 +1,3 @@
-/*
- * Nitobi Complete UI 1.0
- * Copyright(c) 2008, Nitobi
- * support@nitobi.com
- * 
- * http://www.nitobi.com/license
- */
 /**
  * Creates a new Column object.
  * @class The Column class abstracts a single column in a Nitobi Grid.  It provides the base functionality

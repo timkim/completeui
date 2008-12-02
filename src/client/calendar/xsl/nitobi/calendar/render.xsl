@@ -21,7 +21,6 @@
 			</xsl:if>
 			<div style="display:block;clear:both;float:none;height:0px;width:auto;overflow:hidden;"><xsl:comment>dummy</xsl:comment></div>
 			<xsl:apply-templates select="ntb:calendar"/>
-			
 			<input id="{@id}.value" type="hidden" value="" name="{@id}"/>
 		</div>
 	</xsl:template>

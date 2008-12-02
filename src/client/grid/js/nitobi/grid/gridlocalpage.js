@@ -1,10 +1,3 @@
-/*
- * Nitobi Complete UI 1.0
- * Copyright(c) 2008, Nitobi
- * support@nitobi.com
- * 
- * http://www.nitobi.com/license
- */
 /**
  * Creates a local paging Grid.
  * @class A subclass of nitobi.grid.Grid that uses local data and adds standard paging functionality. 
