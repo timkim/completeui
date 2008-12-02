@@ -312,6 +312,9 @@ nitobi.grid.Scroller3x3.prototype.createRenderers = function(data)
  */
 nitobi.grid.Scroller3x3.prototype.getSurface = function(path)
 {
+	if (path == null) {
+		return null;
+	}
 	if (this.surfaceMap[path] != null)
 	{
 		return this.surfaceMap[path];

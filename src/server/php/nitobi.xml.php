@@ -236,7 +236,7 @@ class EBAGetHandler
 	
 	var $m_foreignKey;
 	var $m_foreignKeyValue;
-
+	var $m_primaryKey;
     function EBAGetHandler()
     {
 	$this->m_ErrorMessage	 = "";
@@ -281,9 +281,12 @@ class EBAGetHandler
 	
 	function SetTotalRowCount($rowCount)
 	{
-		$this->m_totalRowCount = $rowCount;
+		$this->m_totalRowCount = (string) $rowCount;
 	}
-	
+	function SetPrimaryKey($theKey)
+	{
+		$this->m_primaryKey = $theKey;
+	}
 	function DefineForeignKey($fk)
 	{
 		$this->m_foreignKey = $fk;
@@ -412,7 +415,7 @@ class EBAGetHandler
 	$results  = "<?xml version=\"1.0\" encoding=\"$encoding\" ?>";
 	# print the columns as the fields attribute of  the opening root tag
 
-	$results .= "<root xml:lang=\"{$this->m_dataLanguage}\" fields=\"".
+	$results .= "<root xml:lang=\"{$this->m_dataLanguage}\" primaryfield=\"{$this->m_primaryKey}\" fields=\"".
 	            strtr(implode("|",array_keys($this->m_ColunmNames)),$this->m_TranscodeList)."\"";
 	if ($this->m_ErrorMessage != "")
 	{
@@ -487,6 +490,7 @@ class EBASaveHandler
 	var $XmlStr;
 	var $m_ErrorMessage;
 	var $m_ForeignKeyValue;
+	var $m_PrimaryKey;
 	# XML's reserved chars and their entity references
     var $m_TranscodeList = array(
 				 "&"  =>  "&amp;", # Make sure to replace this first.
@@ -504,6 +508,7 @@ class EBASaveHandler
 	{
 		header("Content-type:text/xml;charset=$encoding");
 		//	print $this->toXML($encoding);
+		$this->XmlStr = str_replace("<root ", "<root primaryfield=\"".$this->m_PrimaryKey."\" ", $this->XmlStr);
 		if( $this->m_ErrorMessage != "" )
 		{
 			print str_replace("<root ", "<root error=\"".strtr($this->m_ErrorMessage,$this->m_TranscodeList)."\" ", $this->XmlStr);
@@ -514,6 +519,11 @@ class EBASaveHandler
 		}
 	}
 
+	function SetPrimaryKey($theField)
+	{
+		$this->m_PrimaryKey = $theField;
+	}
+	
 	function ReturnInsertCount()
 	{
 		return $this->InsertCount;
@@ -654,9 +664,10 @@ class EBASaveHandler
 	function ProcessRecords()
 	{
 		$postData = $GLOBALS["HTTP_RAW_POST_DATA"];
-
+		
 		# Populate EBAGetHandler_Fields with the fields names
 		$EBAUpdategram = $postData;
+		//print("POST DATA:" . $GLOBALS["HTTP_RAW_POST_DATA"]);
 		$ParsePos = 0;
 		if (strlen($EBAUpdategram) > 5)
 		{

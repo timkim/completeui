@@ -10,6 +10,7 @@
 	<xsl:param name="totalRowCount" select="//root/@totalrowcount"/>
 	<xsl:param name="parentfield" select="//root/@parentfield"/>
 	<xsl:param name="parentvalue" select="//root/@parentvalue"/>
+	<xsl:param name="primaryfield" select="//root/@primaryfield"/>
 	<xsl:template match="//root">
 		<ntb:treegrid xmlns:ntb="http://www.nitobi.com">
 			<ntb:datasources>
@@ -20,7 +21,9 @@
 					<xsl:if test="$parentvalue">
 						<xsl:attribute name="parentvalue"><xsl:value-of select="$parentvalue"/></xsl:attribute>
 					</xsl:if>
-						
+					<xsl:if test="$primaryfield">
+						<xsl:attribute name="primaryfield"><xsl:value-of select="$primaryfield"/></xsl:attribute>
+					</xsl:if>	
 					<xsl:if test="@error">
 						<xsl:attribute name="error"><xsl:value-of select="@error" /></xsl:attribute>
 					</xsl:if>

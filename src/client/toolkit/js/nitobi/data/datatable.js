@@ -230,7 +230,6 @@ nitobi.data.DataTable.prototype.initializeXml = function(oXml)
 //		{
 			s = nitobi.xml.transformToString(this.xmlDoc, this.sortXslProc, "xml");
 //		}
-console.log(this.uid + ' initializeXml');
 		this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, s);
 
 		this.dataCache.insert(0, rows-1);
@@ -262,7 +261,6 @@ nitobi.data.DataTable.prototype.initializeXmlData = function(oXml)
 
 	// load up the xml
 	sXml = sXml.replace(/fieldnames=/g,"FieldNames=").replace(/keys=/g,"Keys=")//.replace(/defaults=/g,"Defaults=").replace(/types=/g,"Types=");
-console.log(this.uid + ' initializeXmlData');
 	this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, sXml);
 
 	this.datastructure = this.xmlDoc.selectSingleNode('//'+nitobi.xml.nsPrefix+'datasource[@id=\'' + this.id + '\']/'+nitobi.xml.nsPrefix+'datasourcestructure');
@@ -296,7 +294,6 @@ nitobi.data.DataTable.prototype.initializeSchema = function()
 	var types = this.types.join("|");
 
 	this.dataCache.flush();
-console.log(this.uid + ' initializeSchema');
 	this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, nitobi.data.DataTable.DEFAULT_DATA.replace(/\{id\}/g,this.id).replace(/\{fields\}/g,fields).replace(/\{keys\}/g,keys).replace(/\{defaults\}/g,defaults).replace(/\{types\}/g,types));
 
 	this.datastructure = this.xmlDoc.selectSingleNode('//'+nitobi.xml.nsPrefix+'datasource[@id=\'' + this.id + '\']/'+nitobi.xml.nsPrefix+'datasourcestructure');
@@ -390,7 +387,6 @@ nitobi.data.DataTable.prototype.flush = function()
 	//this.descriptor.reset();
 	this.flushCache();
 	this.flushLog();
-console.log(this.uid + ' flush');
 	this.xmlDoc = nitobi.xml.createXmlDoc();
 }
 
@@ -490,7 +486,6 @@ nitobi.data.DataTable.prototype.commitBatchInsert = function()
 	// TODO: this should change so that the createRecord method will not actually
 	// do the insert in batch mode but instead create a list of all the records to 
 	// create and then use some xsl.
-
 	this.batchInsert = false;
 	var insertedRowCount = this.batchInsertRowCount;
 	this.batchInsertRowCount = 0;
@@ -876,6 +871,7 @@ nitobi.data.DataTable.prototype.save = function(callback, beforeSaveEvent)
 						}
 					}
 					insertNodes[i].setAttribute("xf", this.parentValue);
+
 				}
 				var updateNodes = this.log.selectNodes("//"+nitobi.xml.nsPrefix+"e[@xac = 'u']");
 				for (var i = 0; i < updateNodes.length; i++)
@@ -1023,9 +1019,10 @@ nitobi.data.DataTable.prototype.saveComplete = function(evtArgs)
 					if (xk != null)
 					{
 						var record = this.findWithoutMap("xid", rows[i].getAttribute("xid"))[0];
-						//var key = this.fieldMap["_xk"].substring(1);
-						//record.setAttribute(key, xk);
-						record.setAttribute("xk", xk);
+						var key = this.fieldMap["_xk"].substring(1);
+						var primarykey = this.fieldMap[this.primaryField].substring(1);
+						record.setAttribute(key, xk);
+						record.setAttribute(primarykey, xk);
 					}
 				}
 			}
@@ -1140,7 +1137,6 @@ nitobi.data.DataTable.prototype.sort = function(column,dir,type,local)
 		this.sortXslProc.addParameter("column",column,"");
 		this.sortXslProc.addParameter("dir",dir,"");
 		this.sortXslProc.addParameter("type",type,"");
-		console.log(this.uid + ' sort');
 		this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, nitobi.xml.transformToString(this.xmlDoc, this.sortXslProc, "xml"));
 		this.fire("DataSorted");
 	}
@@ -1351,7 +1347,6 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 		if (this.mode!="caching") //(this.id != "_default")
 		{
 			// Clear existing data if mode is non-caching
-			console.log(this.uid + ' getComplete');
 			this.xmlDoc=nitobi.xml.createXmlDoc();
 		}
 		if (null == xd || null == xd.xml || '' == xd.xml)
@@ -1383,11 +1378,10 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 				this.successCallback.call(this.context);
 			}
 		}
-		// If this is our first encounter with the data then autoconfigure the datatable parameters (paging stuff, columns, #rows, etc)
+		// If this is our firstf encounter with the data then autoconfigure the datatable parameters (paging stuff, columns, #rows, etc)
 		if (!this.configured) {
 			this.configureFromData(xd);
 		}
-
 		xd = this.parseResponse(xd, getCompleteEvtArgs);
 		
 		xd = this.assignRowIds(xd);
@@ -1506,9 +1500,11 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 		}
 	
 		var parentField = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("parentfield");
+		var primaryField = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("primaryfield");
 		var parentValue = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("parentvalue");
 		this.parentField = parentField || "";
 		this.parentValue = parentValue || "";
+		this.primaryField = primaryField || "";
 		
 		this.updateFromDescriptor(getCompleteEvtArgs)
 		
@@ -2064,7 +2060,6 @@ nitobi.data.DataTable.prototype.mergeFromXmlGetComplete = function(xmlDoc, callb
 		nitobi.data.mergeEbaXmlXslProc.addParameter('startRowIndex',startRowIndex,'');
 		nitobi.data.mergeEbaXmlXslProc.addParameter('endRowIndex',endRowIndex,'');
 		nitobi.data.mergeEbaXmlXslProc.addParameter('guid',nitobi.component.getUniqueId(),'');
-console.log(this.uid + ' mergeFromXmlGetComplete');
 		this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, nitobi.xml.transformToString(this.xmlDoc, nitobi.data.mergeEbaXmlXslProc,"xml"));
 		
 		newDataNode = nitobi.xml.createElement(this.log, "newdata");

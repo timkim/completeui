@@ -6172,7 +6172,8 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	surface.onBeforeExpand.notify();
 	this.loadingScreen.show();
 	var topBlock;
-	if (rowIndex == this.datatable.totalRowCount - 1)
+	// Check if expanding last row in treegrid.
+	if (rowIndex == surface.displayedRowCount - 1)
 	{
 		topBlock = surface.view.midcenter.getBlocks(rowIndex, rowIndex)[0];
 	}

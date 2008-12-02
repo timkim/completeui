@@ -114,7 +114,8 @@ End Class
 	EBA_GetHandlerFields = 0
 	' * array of field names
 	dim EBA_GetHandlerFieldNames(1000)
-
+	dim EBA_PrimaryKey
+	EBA_PrimaryKey=""
 	' * string used to pass message back with Response.
 	dim EBA_HandlerErrorMessage
 	EBA_HandlerErrorMessage=""
@@ -290,7 +291,7 @@ function EBASaveHandler_ReturnColumnCount()
 	dim ResultColumnCount
 
 	ResultColumnCount = 0
-	
+	f
 	dim EBALoop
 	
 	ResultColumnCount = ubound(EBA_updategramRecords(0).Values)+1
@@ -419,6 +420,10 @@ function EBAGetHandler_DefineField(FieldName)
 	EBA_GetHandlerFieldNames(EBA_GetHandlerFields) = FieldName
 	EBA_GetHandlerFields = EBA_GetHandlerFields + 1
 	
+end function
+
+function EBAGetHandler_SetPrimaryKey(key)
+	EBA_Converter.SetPrimaryKey(key)
 end function
 
 ' *****************************************************************************
@@ -635,7 +640,9 @@ function EBASaveHandler_SetRecordKey(recordNumber, key)
 		end if
 	next
 end function
-
+function EBASaveHandler_SetPrimaryKey(key)
+	EBA_PrimaryKey = key
+end function
 ' *****************************************************************************
 ' * function EBASaveHandler_CompleteSave()
 ' *****************************************************************************
@@ -651,12 +658,12 @@ function EBASaveHandler_CompleteSave()
 	Response.Clear()
 
 	if EBA_HandlerErrorMessage = "" then
-		Response.Write("<root>")
+		Response.Write("<root primaryfield=""" & EBA_PrimaryKey & """>")
 	else
 		Dim errorstring
 		'errorstring = EncodeXMLString(EBA_HandlerErrorMessage)
 		errorstring = Server.HTMLEncode(EBA_HandlerErrorMessage)
-		Response.Write("<root error=""" & errorstring & """>")
+		Response.Write("<root primaryfield=""" & EBA_PrimaryKey & """ error=""" & errorstring & """ >")
 	end if
 
 	dim ReturnCompleteSaveLoop
@@ -1006,7 +1013,7 @@ Class EBAXMLConverter
 	Private m_NumForeignKeys
 	Private m_ForeignKeyNames()
 	Private m_ForeignKeyValue
-
+	Private m_PrimaryKey
 	' *****************************************************************************
 	' * Function Initialize
 	' *****************************************************************************
@@ -1020,6 +1027,7 @@ Class EBAXMLConverter
 		m_TotalRowCount = ""
 		m_NumForeignKeys = 0
 		m_ForeignKeyValue = ""
+		m_PrimaryKey = ""
 	End Function
 
 	'''/// <property name="TotalRowCount" type="string" access="public" readwrite="readwrite">
@@ -1094,7 +1102,9 @@ Class EBAXMLConverter
 	Public Function DefineForeignKeyValue(fkValue)
 		m_ForeignKeyValue = fkValue
 	End Function
-	
+	Public Function SetPrimaryKey(key)
+		m_PrimaryKey = key
+	End Function
 	' *****************************************************************************
 	' * Function ClearFields
 	' *****************************************************************************
@@ -1263,7 +1273,8 @@ Class EBAXMLConverter
 		' set codePage for output.  The ilocaleConverter may have set the code Page to another value
 		Session.CodePage = 65001
 
-		s = "<?xml version='1.0' encoding='UTF-8'?><root xml:lang="""
+		s = "<?xml version='1.0' encoding='UTF-8'?><root "
+		s = s & "primaryfield=""" & m_PrimaryKey & """ xml:lang="""
 		s = s & m_DataLangauge & """ fields="""
 		pipe = ""
 		
