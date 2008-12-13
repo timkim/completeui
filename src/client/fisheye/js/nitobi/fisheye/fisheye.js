@@ -67,6 +67,7 @@ nitobi.fisheye.FishEye = function(id)
 	{
 		this.theme = "nitobi"
 	}
+
 	
 	if (this.yBoundary == 0) {
 	  this.yBoundary = this.iconWidth;
@@ -150,8 +151,6 @@ nitobi.fisheye.FishEye = function(id)
 	 * @private
 	 */
 	this.startedIKillTimer = false;
-	
-	this.bounceOnClick = true;
 	
 	/**
 	 * @private
@@ -259,7 +258,7 @@ nitobi.fisheye.FishEye.continuousPositionCheck = function()
  */
 nitobi.fisheye.FishEye.prototype.renderContainers = function()
 {
-	var containerDiv = $(this.getId());
+	var containerDiv = $ntb(this.getId());
 		
 	this.labelObj = nitobi.fisheye.FishEye.createLabel(); 
 	this.labelObj.setAttribute("id", this.getId() + ".label");
@@ -409,8 +408,7 @@ nitobi.fisheye.FishEye.prototype.renderItems = function()
 			item.currentWidth = myWidth;
 			item.currentHeight = myHeight;
 			item.img.onclick = function(){
-				if(obj.bounceOnClick)
-					obj.bounceItem(obj.highindex,5000);  
+				obj.bounceItem(obj.highindex,5000);  
 				obj.get(obj.highindex).onClick.notify();
 			};
 			
@@ -875,3 +873,4 @@ function handleMouse(event)
 		}		
 	}
 }
+
