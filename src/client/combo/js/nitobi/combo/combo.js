@@ -44,7 +44,7 @@ nitobi.combo.loadDelayMultiplier=10;
  */
 nitobi.getCombo = function(id)
 {
-	return $(id).jsObject;
+	return $ntb(id).jsObject;
 }
 
 /**
@@ -109,7 +109,7 @@ nitobi.initCombo = function(el)
 	var tag;
 	if (typeof(el) == "string")
 	{
-		tag = $(el);
+		tag = $ntb(el);
 	}
 	else
 	{
@@ -151,7 +151,7 @@ nitobi.initCombos = function()
 			if (i>=nitobi.combo.numCombosToLoadInitially)
 			{
 				var delay=i*nitobi.combo.loadDelayMultiplier;
-				window.setTimeout("try{$('"+combos[i].id+"').object = new nitobi.combo.Combo($('"+combos[i].id+"'));$('"+combos[i].id+"').object.Initialize();}catch(err){alert(err.message);}",delay);
+				window.setTimeout("try{$ntb('"+combos[i].id+"').object = new nitobi.combo.Combo($ntb('"+combos[i].id+"'));$ntb('"+combos[i].id+"').object.Initialize();}catch(err){alert(err.message);}",delay);
 				
 			}
 			else
@@ -284,7 +284,7 @@ nitobi.combo.resize = function()
 				var textbox = combo.GetTextBox();
 				var list = combo.GetList();
 				
-				var container = $(combo.GetId());
+				var container = $ntb(combo.GetId());
 				var containerWidth = parseInt(combo.GetWidth());
 				if ((!nitobi.browser.IE) && nitobi.Browser.GetMeasurementUnitType(combo.GetWidth()) == "px")
 				{
@@ -293,7 +293,7 @@ nitobi.combo.resize = function()
 					containerWidth = parseInt(combo.GetWidth());
 				}
 				
-				var buttonTag = $("EBAComboBoxButtonImg" + uniqueId);
+				var buttonTag = $ntb("EBAComboBoxButtonImg" + uniqueId);
 
 				var buttonWidth;
 				if (null != buttonTag)
@@ -1302,7 +1302,7 @@ nitobi.combo.Combo.prototype.GetDataTextField = function()
 nitobi.combo.Combo.prototype.SetDataTextField = function(DataTextField)
 {
 	this.m_DataTextField = DataTextField;
-	var hiddenField = $(this.GetId() + "DataTextFieldIndex");
+	var hiddenField = $ntb(this.GetId() + "DataTextFieldIndex");
 	if (null != hiddenField)
 	{
 		var index = this.GetList().GetXmlDataSource().GetColumnIndex(DataTextField);
@@ -1338,7 +1338,7 @@ nitobi.combo.Combo.prototype.SetDataValueField = function(DataValueField)
 	this.m_DataValueField = DataValueField;
 	// I don't think there is support to switch DataValueField midstream, but i put it
 	// here for future use.
-	var hiddenField = $(this.GetId() + "DataValueFieldIndex");
+	var hiddenField = $ntb(this.GetId() + "DataValueFieldIndex");
 	if (null != hiddenField)
 	{
 		var index = this.GetList().GetXmlDataSource().GetColumnIndex(DataValueField);
@@ -1731,8 +1731,8 @@ nitobi.combo.Combo.prototype.Initialize = function()
 
 	// Insert all the required HTML and then allow the object to set its HTML OBJECT.
 	var html = "<span id='EBAComboBox" + uniqueId + "' class='ntb-combo-reset " + this.GetCSSClassName() + "' "
-		+ "onMouseOver='$(\"" + this.GetId() + "\").object.m_Over=true' "
-		+ "onMouseOut='$(\"" + this.GetId() + "\").object.m_Over=false'>"
+		+ "onMouseOver='$ntb(\"" + this.GetId() + "\").object.m_Over=true' "
+		+ "onMouseOut='$ntb(\"" + this.GetId() + "\").object.m_Over=false'>"
 		+ "<span id='EBAComboBoxTextAndButton" + uniqueId + "' class='ComboBoxTextAndButton'><nobr>";
 
 	// Write out the hidden fields that display the "key" values.
@@ -1776,7 +1776,7 @@ nitobi.combo.Combo.prototype.Initialize = function()
 
 	nitobi.html.insertAdjacentHTML(this.m_userTag,'beforeEnd',html);
 
-	this.SetHTMLTagObject($('EBAComboBox'+uniqueId));
+	this.SetHTMLTagObject($ntb('EBAComboBox'+uniqueId));
 
 	// Now that we have tags for the html object initialize the EBA object.
 

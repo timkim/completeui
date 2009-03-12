@@ -21,7 +21,7 @@ nitobi.form.Text = function()
 	ph.style.left="-5000px";
 
 	// width is required to be able to fit the textbox to its parent width the first time
-	var tc = this.control = nitobi.html.createElement('input', {"id":"ntb-textbox"}, {width:"100px"});
+	var tc = this.control = nitobi.html.createElement('input', {"id":"ntb-textbox"}, {"style":"width: 100px;"});
 	//align
 	//maxlength
 	tc.setAttribute("maxlength", 255);
@@ -70,7 +70,7 @@ nitobi.form.Text.prototype.bind = function(owner, cell, initialKeyChar)
 
 	this.control.setAttribute("maxlength", columnModel.getAttribute('MaxLength'));
 
-	// Add the column specific styles to the editor
+  // Add the column specific styles to the editor
 	// Remember to remove it when we deactivate
 	nitobi.html.Css.addClass(this.control, "ntb-column-data"+this.owner.uid+"_"+(this.cell.getColumn()+1));
 }
@@ -81,12 +81,25 @@ nitobi.form.Text.prototype.bind = function(owner, cell, initialKeyChar)
  */
 nitobi.form.Text.prototype.mimic = function()
 {
-	this.align();
+  /*
+   * In FF and Safari, the Text Area has does not acknowledge the 
+   * proper cell.  We need to grab the width from the cell, then just
+   * resize the text area
+   */
 
-	// Now we need to adjust the editor width for padding / borders etc
+  if (nitobi.browser.MOZ || nitobi.browser.SAFARI)
+  {
+    // This is very dirty, but this needs to be done off-screen
+    var cellDom = this.cell.getDomNode();
+    this.control.style.width = cellDom.clientWidth + "px";
+  }
+
+  this.align();
+
+  // Now we need to adjust the editor width for padding / borders etc
 	nitobi.html.fitWidth(this.placeholder, this.control);
-
-	this.selectText();
+	
+  this.selectText();
 }
 
 /**

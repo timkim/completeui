@@ -122,7 +122,7 @@ nitobi.form.Control.prototype.hide = function()
  */
 nitobi.form.Control.prototype.attachToParent = function(element)
 {
-	element.appendChild(this.placeholder);
+  element.appendChild(this.placeholder);
 }
 
 /**
@@ -149,7 +149,7 @@ nitobi.form.Control.prototype.align = function()
 {
 	var oY = 1, oX = 1, oH = 1, oW = 1;
 
-	if (nitobi.browser.MOZ) 
+	if (nitobi.browser.MOZ && !nitobi.browser.FF3) 
 	{
 		var scollSurface = this.owner.getScrollSurface();
 		var activeRegion = this.owner.getActiveView().region;
@@ -204,7 +204,7 @@ nitobi.form.Control.prototype.handleKey = function(evt)
 {
 	var k = evt.keyCode;
 
-	if (this.onKeyDown.notify(evt) == false) return;
+  if (this.onKeyDown.notify(evt) == false) return;
 
 	var K = nitobi.form.Keys;
 

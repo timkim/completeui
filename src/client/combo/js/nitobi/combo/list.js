@@ -620,7 +620,7 @@ nitobi.combo.List.prototype.SetCustomHTMLHeader = function(CustomHTMLHeader)
 /**
  * Returns the parent combo object.
  * This returns a handle to the Combo that owns the list.  
- * This is equivalent to the statement: <code>$("ComboID").jsObject</code>.
+ * This is equivalent to the statement: <code>$ntb("ComboID").jsObject</code>.
  * @type nitobi.combo.Combo
  */  
 nitobi.combo.List.prototype.GetCombo = function()

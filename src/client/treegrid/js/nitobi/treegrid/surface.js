@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * @private
  */
@@ -60,7 +67,7 @@ nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
 	 * @private
 	 */
 	this.rows = 0;
-	
+	this.displayedRowCount = 0;
 	/**
 	 * All subsurfaces sort on the server, but the root surface has
 	 * the option to sort locally.  This will be set in #nitobi.grid.Scroller
@@ -260,8 +267,8 @@ nitobi.grid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMo
 		lastVisibleRow = firstVisibleRow + Math.floor(this.view.midcenter.surface.offsetHeight/this.rowHeight) + lookAhead;
 	}
 	// TODO: this used to be this.rows-1 since lastVisibleRow is zero based.
-	lastVisibleRow = Math.min(lastVisibleRow,this.rows - 1);
-	firstVisibleRow = Math.max(Math.min(firstVisibleRow, this.rows - 1), 0);
+	lastVisibleRow = Math.min(lastVisibleRow,this.displayedRowCount - 1);
+	firstVisibleRow = Math.max(Math.min(firstVisibleRow, this.displayedRowCount - 1), 0);
 
 	// We check if standard paging is being used, and if so apply an offset 
 	// of the page size * the current page to the first visible row.
@@ -740,6 +747,9 @@ nitobi.grid.Surface.prototype.initialize = function(eventArgs)
 	this.onRenderComplete.notify(this.rows);
 	this.dataTable.subscribe("DataReady",nitobi.lang.close(this,this.handleDataReady));
 	this.performRender({first:eventArgs.firstRow, last:(eventArgs.lastRow > this.rows?this.rows:eventArgs.lastRow)});
+	if (this.rows == 0) {
+		this.insertRow(0);
+	}
 	this.onSetVisible.subscribeOnce(this.grid.handleToggleSurface, this.grid);
 	this.setVisible(true);
 	nitobi.event.unsubscribe("DataReady" + this.dataTable.uid, this.tempGuid);
@@ -1052,6 +1062,11 @@ nitobi.grid.Surface.prototype.insertRow = function(index)
 			defaultRow.setAttribute(att, initialValue);
 		}
 	}
+	// Check if adding a placeholder row.
+	if (this.rows == 0 && index == 0)
+	{
+		defaultRow.setAttribute('placeholder','true');
+	}
 	this.displayedRowCount++;
 	this.clear();
 	this.grid.selection.clearBoxes();
@@ -1137,9 +1152,55 @@ nitobi.grid.Surface.prototype.save = function()
 	}
 	if (this.dataTable.log.selectNodes("//"+nitobi.xml.nsPrefix+"data/*").length == 0)
 		return;
-
-	this.dataTable.save(nitobi.lang.close(this.grid, this.grid.saveCompleteHandler), this.grid.getOnBeforeSaveEvent());
+	// Check if a placeholder row exists and that it is not empty.
+	this.insertedXis = this.dataTable.log.selectNodes("//"+nitobi.xml.nsPrefix+"e[@xac='i']/@xi");
+	var placeHolder = this.dataTable.log.selectSingleNode("//"+nitobi.xml.nsPrefix+"e[@placeholder='true']");
+	var emptyPlaceholder = null;
+	if (placeHolder != null) {
+		emptyPlaceholder = true;
+		for (var field in this.dataTable.fieldMap) {
+			if (placeHolder.getAttribute(this.dataTable.fieldMap[field].substr(1))!="") {
+				emptyPlaceholder = false;
+				break;
+			}
+		}
+	}
+	//this.dataTable.save(nitobi.lang.close(this.grid, this.grid.saveCompleteHandler), this.grid.getOnBeforeSaveEvent());
+	if (!emptyPlaceholder && this.dataTable.log.selectNodes("//" + nitobi.xml.nsPrefix + "data/*").length > 0) {
+		this.dataTable.save(nitobi.lang.close(this, this.handleAfterSave), this.grid.getOnBeforeSaveEvent());
+	}
 };
+
+nitobi.grid.Surface.prototype.handleAfterSave = function(eventArgs)
+{
+	// Sync it
+	this.rows = this.displayedRowCount;
+	// If the primary key field is a visible column, make sure the propagated primary key from server save is displayed properly.
+	var primaryColIndex = null;
+	var primaryField = this.dataTable.primaryField;
+	var primaryAttribute = this.dataTable.fieldMap[primaryField].substr(1);
+	var colMap = this.grid.getColumnMap(null,null,this.key);
+	for (var j = 0; j < colMap.length; j++) {
+		if (colMap[j] == primaryAttribute) {
+			primaryColIndex = j;
+			break;
+		}
+	}
+	if (primaryColIndex != null) {
+		for (var i = 0; i < this.insertedXis.length; i++) {
+			var curXi = this.insertedXis[i].value;
+			var curRecord = this.dataTable.xmlDoc.selectSingleNode("//"+nitobi.xml.nsPrefix+"e[@xi='" + curXi + "']");
+			var key = curRecord.getAttribute(primaryAttribute);
+			// Have to mess with the DOM node because the data is there, and setValue() checks the data and returns if it exists.
+			var cellDom = this.getCellObject(curXi,primaryColIndex).DomNode;
+			var elem = nitobi.html.getFirstChild(cellDom);
+			elem.innerHTML = key; 
+			elem.setAttribute("title", key);
+			cellDom.setAttribute("value", value);
+		}
+	}
+	this.grid.saveCompleteHandler(eventArgs);
+}
 
 /**
  * Calculates the width of the surface based on the visible columns.

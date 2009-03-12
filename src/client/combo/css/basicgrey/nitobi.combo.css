@@ -5,9 +5,9 @@
 {
 	float:left; 
 	padding-left:3px; 
-	padding-top:2px; 
-	padding-bottom:0px; 
+	padding-bottom:0px;
 	margin:0px; 
+	height: 15px;
 }
 
 .basicgrey .ntb-combobox-text-container
@@ -31,7 +31,7 @@
 
 .basicgrey .ntb-combobox-text-ie
 {
-	height:10px;
+	height:12px;
 }
 
 .basicgrey .ntb-combobox-text-moz
@@ -56,7 +56,7 @@
 .basicgrey .ntb-combobox-button-img-pressed
 {
 	background:url("button.gif");
-	vertical-align:text-bottom;
+	vertical-align: text-bottom;
 	/* width/height necessary to size the transparent 1x1pixel gif to allow
 		the above background to show */
 	width:15px;
@@ -65,8 +65,7 @@
 
 .basicgrey .ntb-combobox-button-img-pressed
 {
-	background:url("button_pressed.gif");
-	
+	background:url("button_pressed.gif");	
 }
 
 

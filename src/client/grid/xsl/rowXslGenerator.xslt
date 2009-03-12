@@ -45,7 +45,7 @@
 				</xsl:if>
 				<xsl:for-each select="*/*">
 					<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
-						&lt;td id="columnheader_<xsl:value-of select="position()-1"/>_<xsl:value-of select="$uniqueId" />" ebatype="columnheader" xi="<xsl:value-of select="position()-1"/>" col="<xsl:value-of select="position()-1"/>" onmouseover="$('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOver(this);" onmouseout="$('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);"&gt;
+						&lt;td id="columnheader_<xsl:value-of select="position()-1"/>_<xsl:value-of select="$uniqueId" />" ebatype="columnheader" xi="<xsl:value-of select="position()-1"/>" col="<xsl:value-of select="position()-1"/>" onmouseover="$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOver(this);" onmouseout="$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);"&gt;
 							&lt;xsl:variable name="sortString<xsl:value-of select="position()-1"/>"&gt;
 								&lt;xsl:choose&gt;
 									&lt;xsl:when test="$sortColumn=<xsl:value-of select="position()-1"/> and $sortDirection='Asc'"&gt;ascending&lt;/xsl:when&gt;

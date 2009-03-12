@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 EBAScroller_RENDERTIMEOUT=100;
 EBAScroller_VIEWPANES = new Array("topleft","topcenter","midleft","midcenter");
 
@@ -321,6 +328,47 @@ nitobi.grid.Scroller3x3.prototype.renderGap = function(low,high)
 		ml.renderGap(low,high);
 	}
 }
+
+nitobi.grid.Scroller3x3.prototype.renderSpecified = function (low,high) 
+{
+	var rows = high - low + 1;
+	var visibleRows = this.getUnrenderedBlocks();
+	var datatable = this.getDataTable();
+
+	// If not all data is in cache we must issue a get
+	if (!datatable.inCache(low, rows)) {
+		if (low==null || rows==null) {
+			alert("low or rows =null")
+		}
+		if (this.implementsStandardPaging())
+		{
+			var firstRow = this.getCurrentPageIndex() * this.getRowsPerPage();
+			var lastRow = firstRow + this.getRowsPerPage();
+			datatable.get(firstRow, lastRow);
+		}
+		else
+		{
+			datatable.get(low, rows);
+		}
+		// We may already have at least some of the data ... so render what we got
+		var cached = datatable.cachedRanges(low,high);
+		for (var i=0;i<cached.length;i++) {
+			var subGaps = this.cacheMap.gaps(cached[i].low,cached[i].high);
+			for (var j=0;j<subGaps.length;j++) {
+				visibleRows.first = subGaps[j].low;
+				visibleRows.last = subGaps[j].high;
+
+				this.renderGap(subGaps[j].low,subGaps[j].high);
+			}
+		}
+		return false;
+	} else {
+		//this.cacheMap.insert(low, high);
+		this.renderGap(low, high);
+	}
+	
+}
+
 // TODO: This is different from flushCache that used to call flushCache in viewport
 nitobi.grid.Scroller3x3.prototype.flushCache = function()
 {

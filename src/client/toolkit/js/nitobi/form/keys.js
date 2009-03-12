@@ -15,5 +15,7 @@ nitobi.form.Keys = {
 	DOWN: 40,
 	ENTER: 13,
 	TAB: 9,
-	ESC: 27
+	ESC: 27,
+  RIGHT: 39,
+  LEFT: 37
 }

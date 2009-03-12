@@ -1,10 +1,10 @@
- /*
-  * Nitobi Treegrid
-  * Copyright 2008 Nitobi (http://www.nitobi.com)
-  * This code is covered by the GNU GPL V3
-  * Licence can be found at http://www.nitobi.com/licence
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
  */
-
 nitobi.lang.defineNs("nitobi.grid");
 
 if (false)
@@ -6172,7 +6172,8 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	surface.onBeforeExpand.notify();
 	this.loadingScreen.show();
 	var topBlock;
-	if (rowIndex == this.datatable.totalRowCount - 1)
+	// Check if expanding last row in treegrid.
+	if (rowIndex == surface.displayedRowCount - 1)
 	{
 		topBlock = surface.view.midcenter.getBlocks(rowIndex, rowIndex)[0];
 	}
@@ -6443,4 +6444,3 @@ nitobi.grid.TreeGrid.prototype.dispose = function()
  * @private
  */
 nitobi.Grid = nitobi.grid.Grid;
->>>>>>> .merge_file_B0fU2a

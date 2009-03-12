@@ -375,7 +375,7 @@ nitobi.html.Css.findInSheet = function(cssClass, sheet, level)
 			if (inImport)
 				return inImport;
 		}
-		else if (selectorText != null && selectorText.toLowerCase().indexOf(cssClass) > -1) {
+		else if (selectorText != null && selectorText.toLowerCase()== cssClass) {
 			if (nitobi.browser.IE)
 			{
 				// We create a dummy rule object that includes the parentStyleSheet field.
@@ -412,8 +412,7 @@ nitobi.html.Css.findInSheet = function(cssClass, sheet, level)
  * @param {Boolean} ignoreCache Ignore the performance cache and re-obtain the style object.
  * @type Map
  */
-nitobi.html.Css.getClass = function(cssClass, ignoreCache)
-{
+nitobi.html.Css.getClass = function(cssClass, ignoreCache){
 	// TODO: We need to cache this stuff here ... 
 	cssClass = cssClass.toLowerCase();
 	if (cssClass.indexOf(".") !== 0)
@@ -523,6 +522,7 @@ nitobi.html.Css.setStyle = function (el, rule, value)
  * @param {HTMLElement} oElem The HTML element one wants the style value for.
  * @param {String} sCssRule The style property one wants the value for.
  * @type String
+ *
  */
 nitobi.html.Css.getStyle = function (oElm, sCssRule){
     var strValue = "";
@@ -533,7 +533,8 @@ nitobi.html.Css.getStyle = function (oElm, sCssRule){
     	sCssRule = sCssRule.replace(/([A-Z])/g, function ($1){
             return "-" + $1.toLowerCase();
         });
-        strValue = document.defaultView.getComputedStyle(oElm, "").getPropertyValue(sCssRule);
+        strStyle = document.defaultView.getComputedStyle(oElm, null);
+        strValue = strStyle.getPropertyValue(sCssRule);
     }
     else if(oElm.currentStyle){
         sCssRule = sCssRule.replace(/\-(\w)/g, function (strMatch, p1){

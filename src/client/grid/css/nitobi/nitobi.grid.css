@@ -185,6 +185,28 @@
     z-index:20;
 }
 
+/*
+ * The hidden text area that triggers the context menu
+ */
+
+.nitobi .ntb-grid-selection-hta
+{
+  height: 100%;
+  width: 100%;
+  filter:alpha(opacity=0);
+  -moz-opacity:0;
+  opacity: 0;
+}
+
+.nitobi .ntb-ctxmenu
+{
+  background-color:#666666;
+  border: 1px solid #000000;
+  display: none;
+  z-index: 50;
+}
+
+
 .nitobi .ntb-grid-selection-border {
     border: 1px solid #000000;
 }
@@ -244,13 +266,11 @@
 }
 
 .nitobi input, .nitobi textarea, .nitobi select, .nitobi .ntb-input {
-	/*NOTE: Inputs don't inherit front styles*/
 	color:#333333;
 	font-family:Tahoma, Arial, Verdana;
 	font-size: 12px;
     border:0px solid #000000;
     padding:0px 2px 0px 4px;
-    width: 100px;
 	background-color: transparent;
 }
 

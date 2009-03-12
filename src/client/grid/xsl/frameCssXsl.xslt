@@ -91,7 +91,7 @@
 	.ntb-scroller {padding:0px;}
 	.ntb-scrollcorner {padding:0px;}
 
-	.ntb-hscrollbar<xsl:value-of select="$u" /> {<xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)">display:block;</xsl:when><xsl:otherwise>display:none;</xsl:otherwise></xsl:choose>}
+	.ntb-hscrollbar<xsl:value-of select="$u" /> {<xsl:choose><xsl:when test="($total-columns-width &gt; $scrollerWidth)">display:block;</xsl:when><xsl:otherwise>display:none;</xsl:otherwise></xsl:choose>}
 
 	.ntb-input-border {
 		table-layout:fixed;
@@ -119,7 +119,7 @@
 		white-space: nowrap;    
 	}
 
-	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@RowHeight" />px;line-height:<xsl:value-of select="$g/@RowHeight" />px;margin:0px;}
+	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
 	.ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
 
 	<xsl:apply-templates select="state/nitobi.grid.Columns" />

@@ -3,7 +3,7 @@
 	<xsl:output method="xml" omit-xml-declaration="yes"/>
 	<xsl:param name="defaultAction"></xsl:param>
 	<xsl:param name="startXid" select="100" ></xsl:param>
-	<xsl:key name="newData" match="/ntb:grid/ntb:newdata/ntb:data/ntb:e" use="@xid" />
+	<xsl:key name="newData" match="/ntb:grid/ntb:newdata/ntb:e" use="@xid" />
 	<xsl:key name="oldData" match="/ntb:grid/ntb:datasources/ntb:datasource/ntb:data/ntb:e" use="@xid" />
 
 	
@@ -23,7 +23,7 @@
 	<xsl:template match="/ntb:grid/ntb:datasources/ntb:datasource/ntb:data">
 		<xsl:copy>
 			<xsl:apply-templates select="@*|node()" />
-			<xsl:for-each select="/ntb:grid/ntb:newdata/ntb:data/ntb:e">
+			<xsl:for-each select="/ntb:grid/ntb:newdata/ntb:e">
 				<xsl:copy>
 					<xsl:copy-of select="@*" />
 					<xsl:if test="$defaultAction">

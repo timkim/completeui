@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * Constructs a Selection object.
  * @class A Selection represents the cells of a Grid that are currently
@@ -88,6 +95,8 @@ nitobi.grid.Selection = function(owner, dragFillEnabled)
 	 * @private
 	 */
 	this.dragFillEnabled = dragFillEnabled || false;
+	
+	this.firstCellClick = false;
 };
 
 nitobi.lang.extend(nitobi.grid.Selection, nitobi.collections.CellSet);
@@ -268,9 +277,14 @@ nitobi.grid.Selection.prototype.handleGrabbyMouseUp = function(evt)
 	{
 		// This event will bubble up to the selection mouseUp event where it will stop the selecting
 		this.selecting = false;
-		this.setExpanding(false);
+		
+		// We need to properly set the Horizontal/Vertical lines here.
+		(this._startRow == this._endRow)? this.setExpanding(false, "horiz") : this.setExpanding(false);
+
 		this.onAfterExpand.notify(this);
+
 	}
+
 }
 
 /**
@@ -505,6 +519,7 @@ nitobi.grid.Selection.prototype.startSelecting = function (startCell, endCell)
  	this.selecting = true;
  	this.setRangeWithDomNodes(startCell,endCell);
  	this.shrink();
+	
 // 	document.body.attachEvent('onselectstart',function() {return false;});
 };
 
@@ -687,7 +702,7 @@ nitobi.grid.Selection.prototype.handleSelectionClick = function(evt)
 {
 	if (!this.selected())
 	{
-		if (NTB_SINGLECLICK == null)
+		if (NTB_SINGLECLICK == null && !(this.firstCellClick))
 		{
 			if (nitobi.browser.IE)
 				evt = nitobi.lang.copy(evt);
@@ -698,6 +713,7 @@ nitobi.grid.Selection.prototype.handleSelectionClick = function(evt)
 		// Get the coords of the click and relate that to an underlying cell ...
 		this.collapse();
 		this.owner.focus();
+		this.firstCellClick = false;
 	}
 };
 
@@ -763,9 +779,9 @@ nitobi.grid.Selection.prototype.handleSelectionMouseUp = function(evt)
 	if (this.expanding) {
 		this.handleGrabbyMouseUp(evt);
 	}
-
-	this.stopSelecting();
-
+		
+	this.stopSelecting(evt);
+	
 	this.onMouseUp.notify(this);
 };
 
@@ -776,15 +792,21 @@ nitobi.grid.Selection.prototype.handleSelectionMouseDown = function(evt) {
 	// This is commented out for Safari
 	//nitobi.html.cancelEvent(evt);
 	//this.selecting = true;
+	this.firstCellClick = true;
 }
 
-nitobi.grid.Selection.prototype.stopSelecting = function()
+nitobi.grid.Selection.prototype.stopSelecting = function(evt)
 {
 	this.owner.waitt=false;
-	this.selecting = true;
 	if (!this.selected())
-		this.collapse(this.startCell);
-	this.selecting = false;
+  	{
+		var cell = this.owner.findActiveCell(evt.srcElement) || this.startCell;
+		
+		var theCell = nitobi.grid.Cell;
+		this.owner.selectCellByCoords(theCell.getRowNumber(cell),theCell.getColumnNumber(cell));
+    	this.collapse(cell);
+  	}
+  	this.selecting = false;
 }
 
 /**

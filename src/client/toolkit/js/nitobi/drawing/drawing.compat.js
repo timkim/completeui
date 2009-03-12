@@ -85,7 +85,7 @@ nitobi.drawing.align = function(source,target,AlignBit_HWTBLRCM,oh,ow,oy,ox)
 	var a=AlignBit_HWTBLRCM;
 	var td,sd,tt,tb,tl,tr,th,tw,st,sb,sl,sr,sh,sw;
 
-	if (nitobi.browser.IE)
+	if (target.getBoundingClientRect)
 	{
 		//	this is for IE
 		td=target.getBoundingClientRect();
@@ -103,9 +103,10 @@ nitobi.drawing.align = function(source,target,AlignBit_HWTBLRCM,oh,ow,oy,ox)
 		sh=Math.abs(sb-st);
 		sw=Math.abs(sr-sl);
 	}
-	else if (nitobi.browser.MOZ)
+	else if (document.getBoxObjectFor)
 	{
 		//	this is for Mozilla
+    console.log('Firefox 2');
 		td = document.getBoxObjectFor(target);
 		sd = document.getBoxObjectFor(source);
 
@@ -121,7 +122,8 @@ nitobi.drawing.align = function(source,target,AlignBit_HWTBLRCM,oh,ow,oy,ox)
 	}
 	else
 	{
-		td = nitobi.html.getCoords(target);
+    //Safari 
+    td = nitobi.html.getCoords(target);
 		sd = nitobi.html.getCoords(source);
 
 		tt = td.y;

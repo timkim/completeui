@@ -942,7 +942,8 @@
 			<event name="OnHitRowEndEvent" model="OnHitRowEndEvent" type="String" access="public" default="&quot;&quot;" readwrite="readwrite" htmltag="onhitrowendevent" persist="event"></event>
 			<event name="OnHitRowStartEvent" model="OnHitRowStartEvent" type="String" access="public" default="&quot;&quot;" readwrite="readwrite" htmltag="onhitrowstartevent" persist="event"></event>
 			<event name="OnAfterDragFillEvent" model="OnAfterDragFillEvent" type="String" access="public" default="&quot;&quot;" readwrite="readwrite" htmltag="onafterdragfillevent" persist="event"></event>
-		</events>
+      <event name="OnBeforeDragFillEvent" model="OnBeforeDragFillEvent" type="String" access="public" default="&quot;&quot;" readwrite="readwrite" htmltag="onbeforedragfillevent" persist="event"></event>
+    </events>
 	</interface>
 
 </interfaces>

@@ -7,11 +7,11 @@
 	<xsl:param name="start" select="0"></xsl:param>
 	<xsl:param name="id" select="'_default'"></xsl:param>
 	<xsl:param name="xkField" select="'a'"></xsl:param>
-	
+	<xsl:param name="totalRowCount" select="//root/@totalrowcount"/>
 	<xsl:template match="//root">
 		<ntb:grid xmlns:ntb="http://www.nitobi.com">
 			<ntb:datasources>
-				<ntb:datasource id="{$id}">
+				<ntb:datasource id="{$id}" totalrowcount="{$totalRowCount}">
 					<xsl:if test="@error">
 						<xsl:attribute name="error"><xsl:value-of select="@error" /></xsl:attribute>
 					</xsl:if>

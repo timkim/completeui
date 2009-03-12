@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 nitobi.lang.defineNs("nitobi.ui");
 
 /**
@@ -319,12 +326,9 @@ nitobi.ui.Toolbars.prototype.resize = function()
 {
 	var standardWidth = this.getWidth();
 	if (this.visibleToolbars & nitobi.ui.Toolbars.VisibleToolbars.PAGING) {
-		//standardWidth = standardWidth - 2 - parseInt(this.pagingToolbar.getWidth());
-		//standardWidth = standardWidth - parseInt(this.pagingToolbar.getWidth());
 		this.standardToolbar.setHeight(this.getHeight());
 	}
 	if (this.visibleToolbars & nitobi.ui.Toolbars.VisibleToolbars.STANDARD) {
-		//this.standardToolbar.setWidth(standardWidth)
 		this.standardToolbar.setHeight(this.getHeight());
 	}
 }

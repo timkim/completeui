@@ -32,8 +32,8 @@ nitobi.form.Lookup = function()
 					{type:"keyup",handler:this.filter}, 
 					{type:"keypress",handler:this.handleKeyPress},
 					{type:"change",handler:this.handleChange},
-					{type:"blur",handler:function(){console.log('blur');}},
-					{type:"focus",handler:function(){console.log('focus');}}];
+					{type:"blur",handler:function(){/*console.log('blur');*/}},
+					{type:"focus",handler:function(){/*console.log('focus');*/}}];
 
 	ph.rows[0].cells[0].appendChild(tc);
 

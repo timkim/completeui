@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 nitobi.data.GetCompleteEventArgs = function(firstRow, lastRow, startXi, pageSize, ajaxCallback, dataTable, obj, callback, numRowsReturned)
 	{
 		//	This is the first row to be rendered by the RowRenderer

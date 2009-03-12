@@ -5,7 +5,8 @@
 	uniqueID="_hkj342">
     <nitobi.grid.Grid
     	Theme="nitobi"
-    	CellBorder="0" 
+    	CellBorder="0"
+		CellBorderHeight="1" 
 		Height="300"
 		Width="700"
 
@@ -21,7 +22,8 @@
 		ToolbarHeight="25"
 		
 		top="23"
-		left="0"
+    left="100"
+    bottom="23"
 
 		minHeight="60"
 		minWidth="250"
@@ -65,7 +67,7 @@
 		MultiRowSelectEnabled="0"
 		AutoKeyEnabled="0"	
 		ToolbarContainerEmpty="false"	
-		ToolTipsEnabled="0"
+		ToolTipsEnabled="1"
 		RowIndicatorsEnabled="0"
 		ColumnIndicatorsEnabled="1"
 		HScrollbarEnabled="1"
@@ -141,6 +143,7 @@
     	MinWidth="20" 
     	MinHeight="0"
     	DragFillEnabled="1"
+		RightClickCopyEnabled="0"
 	>
     </nitobi.grid.Grid>
     <nitobi.grid.Columns>

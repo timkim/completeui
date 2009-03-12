@@ -53,8 +53,8 @@
 					<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 						<td ebatype="columnheader" xi="{position()-1}" col="{position()-1}">
 						<xsl:attribute name="id">columnheader_<xsl:value-of select="position()-1"/>_<xsl:value-of select="$uniqueId" /></xsl:attribute>
-						<xsl:attribute name="onmouseover">$('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOver(this);</xsl:attribute>
-						<xsl:attribute name="onmouseout">$('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);</xsl:attribute>
+						<xsl:attribute name="onmouseover">$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOver(this);</xsl:attribute>
+						<xsl:attribute name="onmouseout">$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);</xsl:attribute>
 						<!-- note that the ntb-columnUID_POSITION class is for a safari bug -->
 						<xsl:attribute name="class">ntb-column-indicator-border<xsl:choose><xsl:when test="$sortColumn=position()-1 and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=position()-1 and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
 							<div class="ntb-column-indicator">

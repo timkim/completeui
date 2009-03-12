@@ -371,6 +371,7 @@ nitobi.tabstrip.TabStrip.handleEvent = function(id, event, targetId, cancelBubbl
 }
 
 /**
+ * Precaches images found in the tabstrip's stylesheets.  Calling this function before loading
  * a tabstrip component will ensure that all the tabstrip's images are loaded before the tabstrip is rendered.
  * @param {String} url an optional url for your own tabstrip css file (just the filename)
  * @private
@@ -389,3 +390,4 @@ nitobi.tabstrip.TabStrip.precacheImages = function(url)
  * @ignore
  */
 nitobi.TabStrip = nitobi.tabstrip.TabStrip;
+

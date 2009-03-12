@@ -28,7 +28,7 @@
 			</xsl:otherwise>		
 		</xsl:choose>
 	</xsl:variable>
-	<xsl:variable name="root-locator" select="concat('$(',&quot;'&quot;,/ntb:tree/@id,&quot;'&quot;,').jsObject')" />
+	<xsl:variable name="root-locator" select="concat('$ntb(',&quot;'&quot;,/ntb:tree/@id,&quot;'&quot;,').jsObject')" />
 	<xsl:variable name="expanded-default">
 		<xsl:choose>
 			<xsl:when test="$expanded and ($expanded = 'false')">
@@ -110,7 +110,7 @@
 
 	<xsl:template name="inner-tree">
 		<xsl:apply-templates select="ntb:children">
-			<xsl:with-param name="locator">$('<xsl:value-of select="@id" />').jsObject</xsl:with-param>
+			<xsl:with-param name="locator">$ntb('<xsl:value-of select="@id" />').jsObject</xsl:with-param>
 			<xsl:with-param name="hierarchy">
 				<xsl:call-template name="dummy" />
 			</xsl:with-param>
@@ -526,7 +526,7 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		var tree = $('<xsl:value-of select="//ntb:tree/@id"/>');
+		var tree = $ntb('<xsl:value-of select="//ntb:tree/@id"/>');
 		if (tree == null)
 		{
 		nitobi.lang.throwError("The tree event could not find the component object.  The element with the specified id could not be found on the page.");
@@ -535,7 +535,7 @@
 		tree.notify(event,'<xsl:value-of select="$_id"/>',null,<xsl:value-of select="$bubble" />);
 	</xsl:template>
 	<xsl:template match="ntb:tree" mode="locator">
-		<xsl:value-of select="concat('$(',&quot;'&quot;,@id,&quot;'&quot;,').jsObject')" />
+		<xsl:value-of select="concat('$ntb(',&quot;'&quot;,@id,&quot;'&quot;,').jsObject')" />
 	</xsl:template>
 	<xsl:template match="ntb:children" mode="locator">
 		<xsl:apply-templates select="parent::node()" mode="locator" />

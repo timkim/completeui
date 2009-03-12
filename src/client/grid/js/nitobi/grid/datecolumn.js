@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * Creates a DateColumn.
  * @class A column type used by the Nitobi Grid component to handle date input.

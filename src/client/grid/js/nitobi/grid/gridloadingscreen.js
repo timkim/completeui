@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 /**
  * @class
  * @private
@@ -39,7 +46,7 @@ nitobi.grid.LoadingScreen.prototype.attachToElement = function(element)
 
 nitobi.grid.LoadingScreen.prototype.findCssUrl = function()
 {
-	var sheet = nitobi.html.findParentStylesheet(".ntb-loading-Icon");
+	var sheet = nitobi.html.findParentStylesheet("." + this.grid.getTheme() + " .ntb-loading-Icon");
 	if (sheet==null)
 	{
 		return null;

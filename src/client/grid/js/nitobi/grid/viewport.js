@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 //	This is to help with selection by scrolling a bit more than needed
 //	so that the user can mouseover the next cell easily enough
 //	TODO: this should vary as we scroll over otherwise it goes _really_ fast.

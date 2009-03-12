@@ -218,7 +218,7 @@ nitobi.data.DataTable.prototype.isAutoKeyEnabled = function()
 nitobi.data.DataTable.prototype.initializeXml = function(oXml)
 {
 	this.replaceData(oXml);
-
+	
 	// in the case that the xml also has actual data in it (not just schema)
 	// then we need to setup the data
 	var rows = this.xmlDoc.selectNodes('//'+nitobi.xml.nsPrefix+'e').length;
@@ -241,7 +241,22 @@ nitobi.data.DataTable.prototype.initializeXml = function(oXml)
 
 	// TODO: this should be integrated back into the descriptor
 	this.setRemoteRowCount(rows);
+
 	this.fire("DataInitalized");
+
+	// Set total row count from the xml field
+	var totalRowCount = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("totalrowcount");
+	totalRowCount = parseInt(totalRowCount);
+			
+	if (!isNaN(totalRowCount))
+	{
+		this.totalRowCount = totalRowCount;
+	}
+	
+	// TODO: Should fire an event here to notify all interested parties that we have
+	// all the rows
+	this.fire("TotalRowCountReady", this.totalRowCount);	
+	
 }
 
 /**
@@ -376,6 +391,8 @@ nitobi.data.DataTable.prototype.getTemplateNode = function(values)
 	}
 	return templateNode;
 }
+
+
 /**
  * Clear the data and data log.
  * @public
@@ -930,7 +947,7 @@ nitobi.data.DataTable.prototype.save = function(callback, beforeSaveEvent)
 
 			if (this.isAutoKeyEnabled() && this.version < 3)
 			{
-				console.log("AutoKey is not supported in this schema version. You must upgrade to Nitobi Grid Xml Schema version 3 or greater.");
+				//console.log("AutoKey is not supported in this schema version. You must upgrade to Nitobi Grid Xml Schema version 3 or greater.");
 			}
 			
 			this.ajaxCallback.post(this.log);
@@ -1409,7 +1426,7 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 			ntbAssert(rowNodes[0].getAttribute("xi") == (getCompleteEvtArgs.startXi),"The gethandler returned a different first row than requested.");
 
 //			lastRowReturned = getCompleteEvtArgs.lastRow;
-			//	Here we check if the zero based index (xi) of the last record returned from the server 
+			//	Here we check if the zero bas
 			//	is equal to the requested pageSize plus the starting xi minus 1...
 	//			if (rowNodes[rowNodes.length-1].getAttribute("xi") != (getCompleteEvtArgs.pageSize+getCompleteEvtArgs.startXi-1))
 	//			{
@@ -1485,11 +1502,12 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 		  	}
 	*/
 		}
-	
+
 		if (!this.totalRowCount)
 		{
 			var totalRowCount = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("totalrowcount");
 			totalRowCount = parseInt(totalRowCount);
+			
 			if (!isNaN(totalRowCount))
 			{
 				this.totalRowCount = totalRowCount;
@@ -2061,13 +2079,17 @@ nitobi.data.DataTable.prototype.mergeFromXmlGetComplete = function(xmlDoc, callb
 		nitobi.data.mergeEbaXmlXslProc.addParameter('endRowIndex',endRowIndex,'');
 		nitobi.data.mergeEbaXmlXslProc.addParameter('guid',nitobi.component.getUniqueId(),'');
 		this.xmlDoc = nitobi.xml.loadXml(this.xmlDoc, nitobi.xml.transformToString(this.xmlDoc, nitobi.data.mergeEbaXmlXslProc,"xml"));
-		
 		newDataNode = nitobi.xml.createElement(this.log, "newdata");
-
+		var changedNodes = xmlDoc.selectNodes('//'+nitobi.xml.nsPrefix+'e');
+		var changedIndex = 0;
+		for (var i = 0; i < changedNodes.length; i++) {
+			changedIndex = changedNodes[i].attributes.getNamedItem('xi').value;
+			newDataNode.appendChild(this.xmlDoc.selectSingleNode('/'+nitobi.xml.nsPrefix+'grid/'+nitobi.xml.nsPrefix+'datasources/'+nitobi.xml.nsPrefix+'datasource/'+nitobi.xml.nsPrefix+'data/'+nitobi.xml.nsPrefix+'e[@xi='+changedIndex+']').cloneNode(true))
+		}
+		//newDataNode.appendChild(xmlDoc.documentElement.cloneNode(true));
 		this.log.documentElement.appendChild(nitobi.xml.importNode(this.log, newDataNode, true));
-
-		newDataNode.appendChild(this.xmlDoc.selectSingleNode('//'+nitobi.xml.nsPrefix+'newdata').firstChild.cloneNode(true));
-
+		
+		nitobi.data.mergeEbaXmlToLogXslProc.addParameter('defaultAction','u','');
 		this.log = nitobi.xml.loadXml(this.log, nitobi.xml.transformToString(this.log, nitobi.data.mergeEbaXmlToLogXslProc,"xml"));
 
 		this.xmlDoc.documentElement.removeChild(this.xmlDoc.selectSingleNode('//'+nitobi.xml.nsPrefix+'newdata'));

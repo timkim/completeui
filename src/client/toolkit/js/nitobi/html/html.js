@@ -82,16 +82,33 @@ nitobi.html.setBgImage = function(elem, src) {
  * @param {HTMLElement} parent The element that the <code>child</code> element width should fill.
  * @param {HTMLElement} child The element that should have the width changed on to fit inside the <code>parent</code> element.
  */
-nitobi.html.fitWidth = function(parent, child) 
-{
+nitobi.html.fitWidth = function(parent, child){
 	var w;
 	var C = nitobi.html.Css;
-	if (nitobi.browser.IE && !nitobi.lang.isStandards())
-		w = (parseInt(C.getStyle(parent, "width")) - parseInt(C.getStyle(parent, "paddingLeft")) - parseInt(C.getStyle(parent, "paddingRight")) - parseInt(C.getStyle(parent, "borderLeftWidth")) - parseInt(C.getStyle(parent, "borderRightWidth"))) + "px";
-	else if (nitobi.lang.isStandards())
-		w = (parseInt(C.getStyle(parent, "width")) - (child.offsetWidth - parseInt(C.getStyle(child, "width")))) + "px";
-	else
-		w = parseInt(C.getStyle(parent, "width")) + "px";
+	if (nitobi.browser.IE && !nitobi.lang.isStandards()) {
+		var theWidth = (parseInt(C.getStyle(parent, "width")) - parseInt(C.getStyle(parent, "paddingLeft")) - parseInt(C.getStyle(parent, "paddingRight")) - parseInt(C.getStyle(parent, "borderLeftWidth")) - parseInt(C.getStyle(parent, "borderRightWidth")));
+		if (theWidth < 0) 
+			theWidth = 0;
+		w = theWidth + "px";
+	}
+	else {
+		if (nitobi.lang.isStandards()) {
+			if (nitobi.browser.IE) {
+				//TO-DO: Fix this so it uses nitobi.html.Css
+				var theWidth = (parseInt(parent.clientWidth)) - (child.offsetWidth - child.clientWidth);
+			}
+			else {
+				var theWidth = (parseInt(parent.style.width) - (child.offsetWidth - parseInt(parent.style.width)));
+			}
+			
+			if (theWidth < 0) 
+				theWidth = 0;
+			w = theWidth + "px";
+		}
+		else {
+			w = parseInt(parent.style.width) + "px";
+		}
+	}
 	child.style.width = w;
 }
 
@@ -306,6 +323,7 @@ if (typeof($ntb) == "undefined")
 {
   $ntb = nitobi.html.getElement;
 }
+
 
 if (typeof($F) == "undefined")
 {

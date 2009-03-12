@@ -1,3 +1,10 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
 EBAScroller_RENDERTIMEOUT=100;
 EBAScroller_VIEWPANES = new Array("topleft","topcenter","midleft","midcenter");
 
@@ -305,6 +312,9 @@ nitobi.grid.Scroller3x3.prototype.createRenderers = function(data)
  */
 nitobi.grid.Scroller3x3.prototype.getSurface = function(path)
 {
+	if (path == null) {
+		return null;
+	}
 	if (this.surfaceMap[path] != null)
 	{
 		return this.surfaceMap[path];

@@ -382,11 +382,11 @@ nitobi.combo.Button.prototype.GetHTMLRenderString = function ()
 				"style='" + (null!=w && ""!=w ? "width:"+w+";" : "") + (null!=h && ""!=h ? "height:"+h+";" : "") + "'>" +
 				// Note: the img tag has a default src that may not exist; we replace it in initialize.
 				"<img src='javascript:void(0);' class='ntb-combobox-button-img' id='EBAComboBoxButtonImg" + uid + "' " +
-				"onmouseover='$(\"" + comboId + "\").object.GetButton().OnMouseOver(this, true)' "+
-				"onmouseout='$(\"" + comboId + "\").object.GetButton().OnMouseOut(this, true)' "+
+				"onmouseover='$ntb(\"" + comboId + "\").object.GetButton().OnMouseOver(this, true)' "+
+				"onmouseout='$ntb(\"" + comboId + "\").object.GetButton().OnMouseOut(this, true)' "+
 				// use onmousedown now: solves button image dragging bug (i.e. list stays open on blur)
-				"onmousedown='$(\"" + comboId + "\").object.GetButton().OnMouseDown(this);return false;' "+
-				"onmouseup='$(\"" + comboId + "\").object.GetButton().OnMouseUp(this)' "+
+				"onmousedown='$ntb(\"" + comboId + "\").object.GetButton().OnMouseDown(this);return false;' "+
+				"onmouseup='$ntb(\"" + comboId + "\").object.GetButton().OnMouseUp(this)' "+
 				"onmousemove='return false;' "+
 				"></img></span>";
 	} else {
@@ -395,11 +395,11 @@ nitobi.combo.Button.prototype.GetHTMLRenderString = function ()
 					"style='" + (null!=w && ""!=w ? "width:"+w+";" : "") + (null!=h && ""!=h ? "height:"+h+";" : "") + "'>" +
 					// Note: the img tag has a default src that may not exist; we replace it in initialize.
 					"<img class='ntb-combobox-button-img' id='EBAComboBoxButtonImg" + uid + "' " +
-					"onmouseover='$(\"" + comboId + "\").object.GetButton().OnMouseOver(this, true)' "+
-					"onmouseout='$(\"" + comboId + "\").object.GetButton().OnMouseOut(this, true)' "+
+					"onmouseover='$ntb(\"" + comboId + "\").object.GetButton().OnMouseOver(this, true)' "+
+					"onmouseout='$ntb(\"" + comboId + "\").object.GetButton().OnMouseOut(this, true)' "+
 					// use onmousedown now: solves button image dragging bug (i.e. list stays open on blur)
-					"onmousedown='$(\"" + comboId + "\").object.GetButton().OnMouseDown(this);return false;' "+
-					"onmouseup='$(\"" + comboId + "\").object.GetButton().OnMouseUp(this)' "+
+					"onmousedown='$ntb(\"" + comboId + "\").object.GetButton().OnMouseDown(this);return false;' "+
+					"onmouseup='$ntb(\"" + comboId + "\").object.GetButton().OnMouseUp(this)' "+
 					"onmousemove='return false;' "+
 					"></img></span>";
 	}
@@ -414,8 +414,8 @@ nitobi.combo.Button.prototype.Initialize = function ()
 {
 	var combo = this.GetCombo();
 	var uid = combo.GetUniqueId();
-	this.SetHTMLTagObject($("EBAComboBoxButton" + uid));
-	var img = $("EBAComboBoxButtonImg" + uid);
+	this.SetHTMLTagObject($ntb("EBAComboBoxButton" + uid));
+	var img = $ntb("EBAComboBoxButtonImg" + uid);
 
 	// The browser requires that every img tag has a src.  We use the backgound-image
 	// in the CSS to display the button.gif. However, this causes an image not found
