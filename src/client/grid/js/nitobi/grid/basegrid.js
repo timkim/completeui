@@ -2023,8 +2023,15 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	// http://portal:8090/cgi-bin/trac.cgi/ticket/522
 	this.updateCellRanges();
 
-	// This is ridiculous ... IE 7 has issues with changing rules directly!!!
-	if (nitobi.browser.IE7)
+	/*
+	 * This is absolutely stupid!  Not only does IE7 have issues with properly generating CSS, 
+	 * but Firefox can't find style descriptors for styles that have both an ID and a style!
+	 * 
+	 * TODO: File a bug in Bugzilla and remove this check when 3.1 comes out?
+	 * 
+	 * Gecko FAIL!
+	 */
+	if (nitobi.browser.IE7 || nitobi.browser.FF3)
 	{
 		this.generateCss();
 	}
