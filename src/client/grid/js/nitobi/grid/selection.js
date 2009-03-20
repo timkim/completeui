@@ -97,6 +97,9 @@ nitobi.grid.Selection = function(owner, dragFillEnabled)
 	this.dragFillEnabled = dragFillEnabled || false;
 	
 	this.firstCellClick = false;
+	
+	this.multiSelect = false;
+	
 };
 
 nitobi.lang.extend(nitobi.grid.Selection, nitobi.collections.CellSet);
@@ -803,7 +806,9 @@ nitobi.grid.Selection.prototype.stopSelecting = function(evt)
 		var cell = this.owner.findActiveCell(evt.srcElement) || this.startCell;
 		
 		var theCell = nitobi.grid.Cell;
-		this.owner.selectCellByCoords(theCell.getRowNumber(cell),theCell.getColumnNumber(cell));
+		if (this.owner.activeCell != cell) {
+			this.owner.setActiveCell(cell, evt.ctrlKey || evt.metaKey);
+		}
     	this.collapse(cell);
   	}
   	this.selecting = false;
