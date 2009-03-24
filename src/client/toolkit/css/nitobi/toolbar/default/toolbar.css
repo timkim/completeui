@@ -29,3 +29,9 @@
 {
 	background-color: #a8abb9;
 }
+
+.ntb-toolbar-text
+{
+  float: left;
+  line-height: 10px;
+}

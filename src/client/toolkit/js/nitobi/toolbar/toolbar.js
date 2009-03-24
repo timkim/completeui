@@ -18,6 +18,34 @@
 
 nitobi.ui.ToolbarDivItemXsl ="<xsl:template match=\"div\"><xsl:copy-of select=\".\"/></xsl:template>";
 
+/// </summary>
+nitobi.ui.RowCountXsl = 
+   "<xsl:template match=\"//text\">"+
+    "<div class=\"ntb-toolbar-text\" style=\"z-index:800\" padding=\"0px\" margin=\"0px\">"+ 
+	"<xsl:attribute name=\"id\">"+
+            "<xsl:value-of select=\"@id\" />"+
+         "</xsl:attribute>"+
+	"<xsl:attribute name=\"style\">"+
+			"<xsl:value-of select=\"concat('margin-top: 5','px; margin-bottom: 0','px')\" />"+
+	 "</xsl:attribute>"+
+	"&#xa0;<xsl:value-of select=\"@value\"/>"+
+	"</div>" +
+   "</xsl:template>";
+
+nitobi.ui.InputXsl = 
+
+   "<xsl:template match=\"//inputtext\">"+
+	 "<input=\"text\" class=\"ntb-toolbar-input-text\" gridInput=\"true\" VALUE=\"\">"+
+	 "<xsl:attribute name=\"id\" >"+
+            "<xsl:value-of select=\"@id\" />"+
+         "</xsl:attribute>"+
+		 "<xsl:attribute name=\"style\">"+
+			"<xsl:value-of select=\"concat('margin-top:3','px; margin-bottom:0','px')\" />"+
+	 "</xsl:attribute>"+
+	"</input>"+
+   "</xsl:template>";
+
+
 nitobi.ui.ToolbarXsl = 
 
    "<xsl:template match=\"//toolbar\">"+
@@ -31,6 +59,7 @@ nitobi.ui.ToolbarXsl =
          "<xsl:apply-templates />"+
       "</div>"+
    "</xsl:template>"+
+   nitobi.ui.RowCountXsl+
    nitobi.ui.ToolbarDivItemXsl +
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
@@ -68,6 +97,7 @@ nitobi.ui.pagingToolbarXsl =
          "<xsl:apply-templates />"+
       "</div>"+
    "</xsl:template>"+
+   nitobi.ui.RowCountXsl+ 
    nitobi.ui.ToolbarDivItemXsl +
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
@@ -138,7 +168,7 @@ nitobi.ui.Toolbar.prototype.attachButtonObjects = function ()
 	if (!this.m_UiElements)
 	{
 		this.m_UiElements = new Array();
-		var tag = this.getHtmlElementHandle();
+    var tag = this.getHtmlElementHandle();
 		var children = tag.childNodes;
 
 		for (var i = 0; i < children.length; i++)
