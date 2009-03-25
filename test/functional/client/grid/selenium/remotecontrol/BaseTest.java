@@ -14,6 +14,8 @@ public class BaseTest extends TestCase {
 	protected String browser = "*firefox";
 	protected boolean standards = true;
 	
+	protected String baseuri = "/gitcui";
+	
 	public void setUp() throws Exception{
 		super.setUp();
 

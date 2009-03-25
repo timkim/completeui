@@ -14,12 +14,14 @@ public class ColumnResizeTest extends BaseTest {
 		this.declarationId = "EditorsGrid";
 
 		// Call start session
-		startSession("/completeui/samples/client/grid/php/editors/index.html", "http://localhost");
+		startSession(this.baseuri + "/samples/client/grid/php/editors/index.html", "http://localhost");
 	}
 
 	public void testColumnResize() throws Exception {
 		int origWidth = getColumnWidth(2);
 		resizeColumn(2, 100);
+    // We should wait for the resize to update the dom before testing this
+    pause("1000");
 		assertEquals(origWidth + 100, getColumnWidth(2));
 	}
 	

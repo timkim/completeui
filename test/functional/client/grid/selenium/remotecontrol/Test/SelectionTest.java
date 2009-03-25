@@ -14,7 +14,7 @@ public class SelectionTest extends BaseTest {
 		this.declarationId = "EditorsGrid";
 
 		// Call start session
-		startSession("/completeui/samples/client/grid/php/editors/index.html", "http://localhost");
+		startSession(this.baseuri + "/samples/client/grid/php/editors/index.html", "http://localhost");
 	}
 
 	public void testSelection() throws Exception {

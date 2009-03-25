@@ -41,11 +41,14 @@ nitobi.testframework.includeJs = function(file)
 
 function initTest(showDebugTools)
 {
+	
 	nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/jsunit/app/jsUnitCore.js");
-	nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/selenium-browserdetect.js");
+  nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/selenium-browserdetect.js");
 	nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/selenium-browserbot.js");
 	nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/selenium-logging.js");
-	nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/htmlutils.js");
+	
+  nitobi.testframework.includeJs(nitobi.testframework.testFrameworkBaseDir + "/selenium/scripts/htmlutils.js");
+	
 	nitobi.testframework.includeSource();
 	/*if (showDebugTools == true)
 	{

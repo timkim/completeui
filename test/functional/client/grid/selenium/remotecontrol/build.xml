@@ -1,6 +1,8 @@
 <project default="test" basedir=".">
 
-    <property name="logsdir" value=""/>
+  <property name="logsdir" value=""/>
+
+  <property name="test" value="*.class"/>
     
 	<!-- property name="remotecontrol.home" value="C:/bin/seleniumrc" / -->
 	<property name="remotecontrol.java.client.driver" value="..\..\..\..\..\testframework\selenium\client" />
@@ -47,7 +49,7 @@
 		<junit fork="yes" haltonfailure="no">
 			<batchtest todir="${log.directory}" unless="testname">				
 				<fileset dir="${basedir}">
-					<include name="RemoteControl/Test/*.class"/>
+          <include name="RemoteControl/Test/${test}"/>
 				</fileset>
 			</batchtest>
 			<formatter type="xml" extension=".iexplore.standards.xml"/>
@@ -62,7 +64,7 @@
 		<junit fork="yes" haltonfailure="no">
 			<batchtest todir="${log.directory}" unless="testname">				
 				<fileset dir="${basedir}">
-					<include name="RemoteControl/Test/*.class"/>
+          <include name="RemoteControl/Test/${test}"/>
 				</fileset>
 			</batchtest>
 			<formatter type="xml" extension=".iexplore.quirks.xml"/>
@@ -76,7 +78,7 @@
 		<junit fork="yes" haltonfailure="no">
 			<batchtest todir="${log.directory}" unless="testname">				
 				<fileset dir="${basedir}">
-					<include name="RemoteControl/Test/*.class"/>
+					<include name="RemoteControl/Test/${test}"/>
 				</fileset>
 			</batchtest>
 			<formatter type="xml" extension=".firefox.standards.xml"/>
@@ -90,7 +92,7 @@
 		<junit fork="yes" haltonfailure="no">
 			<batchtest todir="${log.directory}" unless="testname">				
 				<fileset dir="${basedir}">
-					<include name="RemoteControl/Test/*.class"/>
+					<include name="RemoteControl/Test/${test}"/>
 				</fileset>
 			</batchtest>
 			<formatter type="xml" extension=".firefox.quirks.xml"/>

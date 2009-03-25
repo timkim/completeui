@@ -20,7 +20,7 @@ public class RenderTest extends BaseTest {
 		//this.standards = false;
 
 		// Call start session
-		startSession("/completeui/samples/client/grid/php/editors/index.html", "http://localhost");
+		startSession(this.baseuri + "/samples/client/grid/php/editors/index.html", "http://localhost");
 	}
 
 	public void testOnCellClick() throws Exception {
