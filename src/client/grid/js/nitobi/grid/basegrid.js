@@ -2278,6 +2278,10 @@ nitobi.grid.Grid.prototype.bindComplete=function()
 	// TODO: this setRowCount should not be here ...
 	// TODO: But this is in conflict with grouping grid / block rendering mechanism so I am leaving it.  
 	this.setRowCount(this.datatable.getRemoteRowCount());
+	
+	// TODO: This toolbar calc should not be here either
+	this.toolbars.calculateRange();
+	
 	// The bound property indicates that events from the datasource to which
 	// we are bound will now be able to cause re-renders of our interface
 	this.setBound(true);
@@ -5516,6 +5520,7 @@ nitobi.grid.Grid.prototype.setDisplayedRowCount= function(newVal)
 		this.Scroller.view.midcenter.rows = newVal;
 		this.Scroller.view.midleft.rows	= newVal;
 	}
+	
 	this.displayedRowCount = newVal;
 }
 
