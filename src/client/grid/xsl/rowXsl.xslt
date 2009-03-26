@@ -57,7 +57,8 @@
 						<xsl:attribute name="onmouseout">$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);</xsl:attribute>
 						<!-- note that the ntb-columnUID_POSITION class is for a safari bug -->
 						<xsl:attribute name="class">ntb-column-indicator-border<xsl:choose><xsl:when test="$sortColumn=position()-1 and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=position()-1 and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
-							<div class="ntb-column-indicator">
+							<div>
+								<xsl:attribute name="class">ntb-column-indicator ntb-column-indicator<xsl:value-of select="$uniqueId" /></xsl:attribute>
 								<xsl:choose>
 									<xsl:when test="@Label and not(@Label = '') and not(@Label = ' ')"><xsl:value-of select="@Label" /></xsl:when>
 									<xsl:when test="ntb:label and not(ntb:label = '') and not(ntb:label = ' ')"><xsl:value-of select="ntb:label" /></xsl:when>
