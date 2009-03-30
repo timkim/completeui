@@ -2024,16 +2024,12 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	this.updateCellRanges();
 
 	/*
-	 * This is absolutely stupid!  Not only does IE7 have issues with properly generating CSS, 
-	 * but Firefox can't find style descriptors for styles that have both an ID and a style!
-	 * 
-	 * TODO: File a bug in Bugzilla and remove this check when 3.1 comes out?
-	 * 
-	 * Gecko FAIL!
-	 */
-	if (nitobi.browser.IE7 || nitobi.browser.FF3)
+	 * Found the stupidity in the CSS class that should fix this.  This code
+   * depends on nitobi.html.Css.getRule.
+   */
+	if (nitobi.browser.IE7)
 	{
-		this.generateCss();
+      this.generateCss();
 	}
 	else
 	{
@@ -2068,6 +2064,23 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 }
 
 
+nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
+{
+  	var C = nitobi.html.Css;
+		// Things are different if we are resizing a frozen or unfrozen column
+		if (columnIndex < this.getFrozenLeftColumnCount())
+		{
+			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
+			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
+		}
+		else
+		{
+			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
+		}
+}
 /**
  * Loads the Grid Model from XML. The Model is essentially a serialization of the Grid state which contains all the property values and 
  * child object information.
