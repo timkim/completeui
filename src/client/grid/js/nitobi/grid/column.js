@@ -310,7 +310,7 @@ nitobi.grid.Column.prototype.show = function()
   var classDef = nitobi.html.getClass(className);
   classDef.display = "";
   this.grid.resizePanes(width, this.column + 1);
-  this.grid.adjustHorizonatalScrollBars();
+  this.grid.adjustHorizontalScrollBars();
 }
 
 /**
