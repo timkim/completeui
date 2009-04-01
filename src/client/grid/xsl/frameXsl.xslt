@@ -95,7 +95,12 @@
 	            &lt;div id="ntb-column-resizeline<xsl:value-of select="$u" />" class="ntb-column-resizeline"&gt;&lt;/div&gt;
 	            &lt;div id="ntb-grid-resizebox<xsl:value-of select="$u" />" class="ntb-grid-resizebox"&gt;&lt;/div&gt;
 			&lt;/div&gt;
-        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div id="ntb-grid-showhide<xsl:value-of select="$u" />" class="ntb-showhide" style="display:none;" &gt;
+      &lt;ul id="ntb-grid-colcheck<xsl:value-of select="$u" />"&gt;
+      &lt;/ul&gt;
+      &lt;/div&gt;
 
 		<xsl:if test="$resizeEnabled = 1">
 	        &lt;div id="ntb-grid-resizecontainer<xsl:value-of select="$u"/>" style="height:0px;position:relative;"&gt;
