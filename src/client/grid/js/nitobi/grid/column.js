@@ -291,6 +291,29 @@ nitobi.grid.Column.prototype.getEditor = function()
 }
 
 /**
+ * Hides the column
+ */ 
+nitobi.grid.Column.prototype.hide = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + this.column;
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "none";
+  this.grid.resizePanes(-width, this.column - 1 );
+  this.grid.adjustHorizontalScrollBars();
+ }
+
+nitobi.grid.Column.prototype.show = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + this.column;
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "";
+  this.grid.resizePanes(width, this.column + 1);
+  this.grid.adjustHorizonatalScrollBars();
+}
+
+/**
  * @private
  */
 nitobi.grid.Column.prototype.xGET = function()
