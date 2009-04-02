@@ -284,6 +284,13 @@ nitobi.ui.Toolbars.prototype.render= function()
 		}
 
 		switch (eachPbutton) {
+			case "firstPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("FirstPage");		
+					};
+			break;
 			case "previousPage"+this.uid:
 				buttonsPaging[eachPbutton].onClick = 
 					function()
@@ -297,6 +304,13 @@ nitobi.ui.Toolbars.prototype.render= function()
 					function()
 					{
 						_this.fire("NextPage");
+					};
+			break;
+			case "lastPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("LastPage");			
 					};
 			break;
 			default:
