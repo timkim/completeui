@@ -82,7 +82,7 @@
             &lt;/td&gt;
             &lt;td class="ntb-grid-vscrollshow<xsl:value-of select="$u" /> ntb-scrollcorner" &gt;&lt;/td&gt;
         &lt;/tr&gt;
-    &lt;/table&gt;
+        &lt;/table&gt;
 
 		&lt;div id="toolbarContainer<xsl:value-of select="$u" />" style="overflow:hidden;" class="ntb-grid-toolbarshow<xsl:value-of select="$u" /> ntb-grid-toolbarheight<xsl:value-of select="$u" /> ntb-grid-width<xsl:value-of select="$u" /> ntb-toolbar<xsl:value-of select="$u" /> ntb-toolbar"&gt;&lt;/div&gt;
 
@@ -93,7 +93,8 @@
 	        &lt;/div&gt;
 	        &lt;div style="position:relative;"&gt;
 	            &lt;div id="ntb-column-resizeline<xsl:value-of select="$u" />" class="ntb-column-resizeline"&gt;&lt;/div&gt;
-	            &lt;div id="ntb-grid-resizebox<xsl:value-of select="$u" />" class="ntb-grid-resizebox"&gt;&lt;/div&gt;
+              &lt;div id="ntb-grid-resizebox<xsl:value-of select="$u" />" class="ntb-grid-resizebox"&gt;&lt;/div&gt;
+              &lt;div id="ntb-column-dragbox<xsl:value-of select="$u" />" class="ntb-column-dragbox"&gt;&lt;/div&gt;
 			&lt;/div&gt;
       &lt;/div&gt;
 
