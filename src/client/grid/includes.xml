@@ -46,7 +46,8 @@
 	<jsfile path="js/nitobi/grid/gridresizer.js" />
 	<jsfile path="js/nitobi/grid/dataformatconverter.js" />
 	<jsfile path="js/nitobi/grid/datecolumn.js" />
-	<jsfile path="js/nitobi/grid/declaration.js" />
+  <jsfile path="js/nitobi/grid/declaration.js" />
+  <jsfile path="js/nitobi/grid/dragdrop.js" />
 	<jsfile path="js/nitobi/grid/editcompleteeventargs.js" />
 	<jsfile path="js/nitobi/grid/getcompleteeventargs.js" />
 	<jsfile path="js/nitobi/grid/grid.js" />
