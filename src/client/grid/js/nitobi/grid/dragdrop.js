@@ -43,7 +43,7 @@ nitobi.grid.DragDropColumn = function(grid)
 
 }
 
-nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeaderEvent, evt)
+nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeaderElement, evt)
 {
   this.grid = grid;
   this.column = column;
@@ -64,10 +64,8 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 // First make the resize line visible
 	this.boxstyle.display = "block";
 
-	// The div containing the resize line is a child of the grid's html, not the body
-	// so we need to offset the position of the resize line by the Grid's x coord.
-	var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
-	this.boxstyle.left = x - gridLeft + "px";
+  // Make sure that it is offset to the same area as the column we're dragging
+	this.boxstyle.left = colObject.getHeaderElement().offsetLeft + "px";
 
  	// Fit the line in the viewable area. 26 for the scrollbar
 	this.boxstyle.height = this.grid.Scroller.scrollSurface.offsetHeight + "px";
@@ -75,20 +73,24 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 
 
   // Align the resize line to the column header element.
- 	nitobi.drawing.align(this.line,columnHeaderElement,nitobi.drawing.align.ALIGNTOP,0,0,nitobi.html.getHeight(columnHeaderElement) + 1);
+ 	nitobi.drawing.align(this.dragbox,columnHeaderElement,nitobi.drawing.align.ALIGNTOP,0,0,nitobi.html.getHeight(columnHeaderElement) + 1);
 
-  
+  nitobi.ui.startDragOperation(this.dragbox, evt, false, true, this, this.drop);
+
 }
 
 nitobi.grid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
 {
-  var x = dragStopEventArgs.x;
-  var y = dragStopEventArgs.y;
-	
+
+  this.x = dragStopEventArgs.x;
+  this.y = dragStopEventArgs.y;
+
   if (nitobi.browser.IE)
 	{
 		this.surface.style.display="none";
 	}
+
+  var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
 
   var ls = this.boxstyle;
 	ls.display="none";

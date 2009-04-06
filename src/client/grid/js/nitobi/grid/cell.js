@@ -511,5 +511,5 @@ nitobi.grid.Cell.getRowNumber = function(element)
  */
 nitobi.grid.Cell.getColumnNumber = function(element)
 {
-	return parseInt(element.getAttribute("col"));
+  return parseInt(element.getAttribute("col"));
 }

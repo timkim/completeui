@@ -956,8 +956,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseDown=function(evt)
 	}
 	else
 	{
-		this.headerClicked(colNumber);
-		this.fire("HeaderDown", colNumber);
+    // Do the cell move here
+	  this.dragDropColumn.pickUp(this, colNumber, cell, evt);
+    this.fire("HeaderDown", colNumber);
 	}
 }
 
@@ -1026,8 +1027,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseUp = function(evt)
 		this.focus();
 		return;
 	}
-	var columnNumber = parseInt(domMouseUpCell.getAttribute("xi"));
-	this.fire("HeaderUp",columnNumber);
+	var columnNumber = parseInt(domMouseUpCell.getAttribute("col"));
+  var hover = this.headerResizeHover(evt,cell);
+ 	this.fire("HeaderUp",columnNumber);
 }
 
 /**
@@ -1551,7 +1553,13 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	 */
 	var cr = new nitobi.grid.ColumnResizer(this);
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
-	this.columnResizer = cr;
+  this.columnResizer = cr;
+
+  // This is the drag/drop column, this is for resorting columns
+
+  var db = new nitobi.grid.DragDropColumn(this);
+  db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  this.dragDropColumn = db;
 
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
@@ -2004,6 +2012,25 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 	this.columnResize(col, prevWidth + resizer.dx);
 }
 
+/** 
+ * Executes after a user initiated column move event occurs
+ * @param {Object} 
+ * @private
+ */
+nitobi.grid.Grid.prototype.afterDragDropColumn = function(dragbox)
+{
+  var source = this.getColumnObject(dragbox.column);
+  var target = this.findColumnWithX(dragbox.x);
+  if (source == target || target == null)
+  {
+    this.headerClicked(dragbox.column);
+  }
+  else
+  {
+    this.moveColumns(source, target);
+  }
+}
+
 /**
  * Resizes the grid column to the specified width. 
  * @param {Number} width The width (in pixels) of the column.
@@ -2063,6 +2090,34 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
+nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
+{
+  var headerRow = source.getHeaderElement().parentNode;
+  var srcNode = source.getHeaderElement();
+  var srcIndex = source.column;
+  var destNode = dest.getHeaderElement();
+  var destIndex = dest.column;
+  headerRow.insertBefore(srcNode, destNode);
+  // This manipulates the Grid XML
+  var columns = this.Declaration.columns.firstChild;
+  var destCol = columns.childNodes[destIndex];
+  var srcCol = columns.childNodes[srcIndex];
+  var tmpNode = srcCol.cloneNode(true);
+  columns.removeChild(srcCol);
+  columns.insertBefore(tmpNode, destCol);
+  this.defineColumns(columns);
+  this.bind();
+}
+
+nitobi.grid.Grid.prototype.findColumnWithX = function(x)
+{
+  for (var i = 0; i < this.getColumnCount(); ++i)
+  {
+    if( this.getColumnObject(i).inRange(x) )
+      return this.getColumnObject(i);
+  }
+  return null;
+}
 
 nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
 {

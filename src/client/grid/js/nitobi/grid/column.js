@@ -420,3 +420,10 @@ nitobi.grid.Column.getColumnHeaderElement = function(grid, column)
 {
 	return $ntb('columnheader_'+column+'_'+grid.uid);
 }
+
+nitobi.grid.Column.prototype.inRange = function(x)
+{
+  var left = this.getHeaderElement().offsetLeft;
+  var right = left + this.getWidth();
+  return left < x && x < right;
+}
