@@ -2121,7 +2121,7 @@ nitobi.grid.Grid.prototype.findColumnWithX = function(x)
   }
   else
   {
-	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
+	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.uid).width);
   }
   var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
   // The header width will be the same as the grid width

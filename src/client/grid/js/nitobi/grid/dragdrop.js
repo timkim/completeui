@@ -49,10 +49,11 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 {
  	var C = nitobi.html.Css;
 
- 
   this.grid = grid;
   this.column = column;
+ 
   
+  var scrollLeft = this.grid.scroller.getScrollLeft(); 
   var colObject = grid.getColumnObject(column);
   var colHdr = colObject.getHeaderElement();
   if (nitobi.browser.IE)
@@ -88,13 +89,12 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
     //var colLeft = nitobi.html.getBoundingClientRect(colHdr).left;
     // Note: This is not a perfect solution, but it's good enough for look and feel
     var colOffsetLeft = colHdr.offsetLeft;
-    var scrollLeft = this.grid.scroller.getScrollLeft();
     this.boxstyle.left = (colOffsetLeft + leftStyleWidth - scrollLeft) + "px";
   }
   else
   {
     // Make sure that it is offset to the same area as the column we're dragging
-	  this.boxstyle.left = colObject.getHeaderElement().offsetLeft + "px";
+	  this.boxstyle.left = (colObject.getHeaderElement().offsetLeft - scrollLeft) + "px";
   }
  	// Fit the line in the viewable area. 26 for the scrollbar
 	this.boxstyle.height = this.grid.Scroller.scrollSurface.offsetHeight + "px";
