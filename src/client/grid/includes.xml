@@ -118,8 +118,10 @@
 	<jsfile path="../toolkit/js/nitobi/toolbar/interactiveelement.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/button.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/binarystatebutton.js" />
+	<jsfile path="../toolkit/js/nitobi/toolbar/inputtext.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/toolbar.js" />
-
+	
+	
 	<cssfile path="css/nitobi.reset.css"></cssfile>
 
 	<cssfile path="css/tiny/nitobi.grid.css"></cssfile>
