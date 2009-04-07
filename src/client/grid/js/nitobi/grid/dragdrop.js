@@ -55,7 +55,14 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
   
   var colObject = grid.getColumnObject(column);
   var colHdr = colObject.getHeaderElement();
-	var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.grid.uid);
+  if (nitobi.browser.IE)
+  {
+    var leftStyleWidth = this.grid.scroller.view.topleft.element.clientWidth;
+  }
+  else
+  {
+	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
+  }
 
   var x = nitobi.html.getEventCoords(evt).x;
 
@@ -80,7 +87,9 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 	  var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
     //var colLeft = nitobi.html.getBoundingClientRect(colHdr).left;
     // Note: This is not a perfect solution, but it's good enough for look and feel
-    this.boxstyle.left = (colObject.getHeaderElement().offsetLeft + parseInt(leftStyle.width) - this.grid.scroller.getScrollLeft()) + "px";
+    var colOffsetLeft = colHdr.offsetLeft;
+    var scrollLeft = this.grid.scroller.getScrollLeft();
+    this.boxstyle.left = (colOffsetLeft + leftStyleWidth - scrollLeft) + "px";
   }
   else
   {

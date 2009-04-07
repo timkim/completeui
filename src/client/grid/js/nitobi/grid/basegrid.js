@@ -1028,7 +1028,7 @@ nitobi.grid.Grid.prototype.handleHeaderMouseUp = function(evt)
 		return;
 	}
 	var columnNumber = parseInt(domMouseUpCell.getAttribute("col"));
-  var hover = this.headerResizeHover(evt,cell);
+  var hover = this.headerResizeHover(evt,domMouseUpCell);
  	this.fire("HeaderUp",columnNumber);
 }
 
@@ -2115,17 +2115,23 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
 
 nitobi.grid.Grid.prototype.findColumnWithX = function(x)
 {
-  var C = nitobi.html.Css;
-  var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+  var C = nitobi.html.Css;  if (nitobi.browser.IE)
+  {
+    var leftStyleWidth = this.scroller.view.topleft.element.clientWidth;
+  }
+  else
+  {
+	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
+  }
   var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
   // The header width will be the same as the grid width
   var viewport = this.scroller.view.topcenter;
   var frznCount = this.getFrozenLeftColumnCount();
 
   // We're trying to figure out the state of the grid on the DOM now
-  if(frznCount > 0 && parseInt(leftStyle.width) < x)
+  if(frznCount > 0 && leftStyleWidth < x)
   {
-     var new_range = x - parseInt(leftStyle.width) + this.scroller.getScrollLeft();
+     var new_range = (x - leftStyleWidth) + this.scroller.getScrollLeft();
      for(var i = frznCount; i < this.getColumnCount(); ++i)
      {
          if( this.getColumnObject(i).inRange(new_range) )
