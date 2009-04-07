@@ -56,8 +56,11 @@ nitobi.grid.GridStandard.prototype.createChildren=function() {
 	nitobi.grid.GridStandard.base.createToolbars.call(this, nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
 
 	// Attach events
+	this.toolbars.subscribe("FirstPage",nitobi.lang.close(this,this.pageFirst));
+	this.toolbars.subscribe("LastPage",nitobi.lang.close(this,this.pageLast));
 	this.toolbars.subscribe("NextPage",nitobi.lang.close(this,this.pageNext));
 	this.toolbars.subscribe("PreviousPage",nitobi.lang.close(this,this.pagePrevious));
+	this.toolbars.subscribe("InputTextPage",nitobi.lang.close(this,this.pageTextInput));
 	this.subscribe("EndOfData",this.disableNextPage); 
 	this.subscribe("TopOfData",this.disablePreviousPage);
 	this.subscribe("NotTopOfData",this.enablePreviousPage); 
@@ -161,6 +164,15 @@ nitobi.grid.GridStandard.prototype.enableButton = function(button)
 }
 
 /**
+ * Go to the first page
+ */
+nitobi.grid.GridStandard.prototype.pageFirst=function() {
+	this.fire("BeforeLoadPreviousPage");
+	this.loadDataPage(0);
+	this.fire("AfterLoadPreviousPage");
+}
+
+/**
  * Load the previous page of data.
  */
 nitobi.grid.GridStandard.prototype.pagePrevious=function() {
@@ -178,6 +190,29 @@ nitobi.grid.GridStandard.prototype.pageNext=function() {
 	this.fire("AfterLoadNextPage");
 }
 
+/**
+ * Go to the last page
+ */
+nitobi.grid.GridStandard.prototype.pageLast=function() {
+	this.fire("BeforeLoadNextPage");
+	var totalPages = Math.ceil(this.datatable.totalRowCount/this.getRowsPerPage());
+	this.loadDataPage(totalPages-1);
+	this.fire("AfterLoadNextPage");
+}
+
+/**
+ * Jump to the page based on the input text
+ */
+nitobi.grid.GridStandard.prototype.pageTextInput=function() {
+	this.fire("BeforeLoadNextPage");
+	var input = $ntb('startPage' + this.toolbars.uid);
+	if(input)
+	{
+		var val = parseInt(input.value);
+		this.loadDataPage(val-1);
+	}
+	this.fire("AfterLoadNextPage");
+}
 /**
  * Load a specific page of data.
  * @param {Number} newPageNumber The page to load.

@@ -66,14 +66,11 @@ nitobi.grid.GridLocalPage.prototype.createChildren=function() {
 	// This should be done only if there is a toolbar
 	nitobi.grid.GridLiveScrolling.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
 	// Attach events
-	this.toolbars.subscribe("NextPage",nitobi.lang.close(this,this.pageNext));
-	this.toolbars.subscribe("PreviousPage",nitobi.lang.close(this,this.pagePrevious));
 	this.subscribe("EndOfData",function(pct){this.toolbars.pagingToolbar.getUiElements()["nextPage"+this.toolbars.uid].disable();}); 
 	this.subscribe("TopOfData",function(pct){this.toolbars.pagingToolbar.getUiElements()["previousPage"+this.toolbars.uid].disable();}); 
 	this.subscribe("NotTopOfData",function(pct){this.toolbars.pagingToolbar.getUiElements()["previousPage"+this.toolbars.uid].enable();}); 
 	this.subscribe("NotEndOfData",function(pct){this.toolbars.pagingToolbar.getUiElements()["nextPage"+this.toolbars.uid].enable();}); 
 }
-
 /**
  * Go to the previous page
  */

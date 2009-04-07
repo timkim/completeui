@@ -32,20 +32,6 @@ nitobi.ui.RowCountXsl =
 	"</div>" +
    "</xsl:template>";
 
-nitobi.ui.InputXsl = 
-
-   "<xsl:template match=\"//inputtext\">"+
-	 "<input=\"text\" class=\"ntb-toolbar-input-text\" gridInput=\"true\" VALUE=\"\">"+
-	 "<xsl:attribute name=\"id\" >"+
-            "<xsl:value-of select=\"@id\" />"+
-         "</xsl:attribute>"+
-		 "<xsl:attribute name=\"style\">"+
-			"<xsl:value-of select=\"concat('margin-top:3','px; margin-bottom:0','px')\" />"+
-	 "</xsl:attribute>"+
-	"</input>"+
-   "</xsl:template>";
-
-
 nitobi.ui.ToolbarXsl = 
 
    "<xsl:template match=\"//toolbar\">"+
@@ -63,7 +49,8 @@ nitobi.ui.ToolbarXsl =
    nitobi.ui.ToolbarDivItemXsl +
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
-   
+   nitobi.ui.InputXsl +
+
       "<xsl:template match=\"separator\">"+
          "<div align='center'>"+
 	         "<xsl:attribute name=\"style\">"+
@@ -101,6 +88,7 @@ nitobi.ui.pagingToolbarXsl =
    nitobi.ui.ToolbarDivItemXsl +
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
+   nitobi.ui.InputXsl +
    
       "<xsl:template match=\"separator\">"+
          "<div align='center'>"+
@@ -189,6 +177,11 @@ nitobi.ui.Toolbar.prototype.attachButtonObjects = function ()
 					case("ntb-binarybutton"):
 					{
 						newElement = new nitobi.ui.BinaryStateButton(null,child.id);	
+						break;
+					}
+					case("ntb-inputtext"):
+					{
+						newElement = new nitobi.ui.InputText(null,child.id);
 						break;
 					}
 					default:
