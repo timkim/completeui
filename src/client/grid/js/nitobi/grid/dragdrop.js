@@ -13,7 +13,9 @@ nitobi.grid.DragDropColumn = function(grid)
   this.grid_id = this.grid.UiContainer.parentid;
 
   this.column;
-  
+ 
+  this.targetCol;
+
   this.onAfterDragDrop = new nitobi.base.Event();
 
   this.dragbox = $ntb('ntb-column-dragbox' + this.grid.uid);
@@ -45,13 +47,19 @@ nitobi.grid.DragDropColumn = function(grid)
 
 nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeaderElement, evt)
 {
+ 	var C = nitobi.html.Css;
+
+ 
   this.grid = grid;
   this.column = column;
   
   var colObject = grid.getColumnObject(column);
+  var colHdr = colObject.getHeaderElement();
+	var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.grid.uid);
 
   var x = nitobi.html.getEventCoords(evt).x;
- 	//	TODO: encapsulate this sort of mouse position calculation stuff in a cross browser lib
+
+  //	TODO: encapsulate this sort of mouse position calculation stuff in a cross browser lib
 	// Calculate the current mouse position.
 	if (nitobi.browser.IE) 
 	{
@@ -64,9 +72,21 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 // First make the resize line visible
 	this.boxstyle.display = "block";
 
-  // Make sure that it is offset to the same area as the column we're dragging
-	this.boxstyle.left = colObject.getHeaderElement().offsetLeft + "px";
-
+  var frozenCount = this.grid.getFrozenLeftColumnCount();
+  if(frozenCount > 0 && column >= frozenCount)
+  { 
+	  // The div containing the resize line is a child of the grid's html, not the body
+	  // so we need to offset the position of the resize line by the Grid's x coord.
+	  var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
+    //var colLeft = nitobi.html.getBoundingClientRect(colHdr).left;
+    // Note: This is not a perfect solution, but it's good enough for look and feel
+    this.boxstyle.left = (colObject.getHeaderElement().offsetLeft + parseInt(leftStyle.width) - this.grid.scroller.getScrollLeft()) + "px";
+  }
+  else
+  {
+    // Make sure that it is offset to the same area as the column we're dragging
+	  this.boxstyle.left = colObject.getHeaderElement().offsetLeft + "px";
+  }
  	// Fit the line in the viewable area. 26 for the scrollbar
 	this.boxstyle.height = this.grid.Scroller.scrollSurface.offsetHeight + "px";
   this.boxstyle.width = colObject.getWidth() + "px";  
@@ -84,6 +104,14 @@ nitobi.grid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
 
   this.x = dragStopEventArgs.x;
   this.y = dragStopEventArgs.y;
+
+  // At least try to get the target column, before relying on guesswork
+  var target = nitobi.grid.Cell.getColumnNumber(dragStopEventArgs.event.srcElement.parentNode);
+
+  if (target != null)
+  {
+    targerCol = this.grid.getColumnObject(target);
+  }
 
   if (nitobi.browser.IE)
 	{

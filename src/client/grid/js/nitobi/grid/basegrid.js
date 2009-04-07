@@ -2020,7 +2020,11 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 nitobi.grid.Grid.prototype.afterDragDropColumn = function(dragbox)
 {
   var source = this.getColumnObject(dragbox.column);
-  var target = this.findColumnWithX(dragbox.x);
+  if (this.targetCol == null)
+    var target = this.findColumnWithX(dragbox.x);
+  else
+    var target = this.targetCol;
+
   if (source == target || target == null)
   {
     this.headerClicked(dragbox.column);
@@ -2092,12 +2096,9 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 
 nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
 {
-  var headerRow = source.getHeaderElement().parentNode;
-  var srcNode = source.getHeaderElement();
   var srcIndex = source.column;
-  var destNode = dest.getHeaderElement();
   var destIndex = dest.column;
-  headerRow.insertBefore(srcNode, destNode);
+  
   // This manipulates the Grid XML
   var columns = this.Declaration.columns.firstChild;
   var destCol = columns.childNodes[destIndex];
@@ -2105,17 +2106,41 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   var tmpNode = srcCol.cloneNode(true);
   columns.removeChild(srcCol);
   columns.insertBefore(tmpNode, destCol);
+
+  // Dump the old cached stuff out, redefine everything and bind it!
+  this.columns = [];
   this.defineColumns(columns);
   this.bind();
 }
 
 nitobi.grid.Grid.prototype.findColumnWithX = function(x)
 {
-  for (var i = 0; i < this.getColumnCount(); ++i)
+  var C = nitobi.html.Css;
+  var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+  var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+  // The header width will be the same as the grid width
+  var viewport = this.scroller.view.topcenter;
+  var frznCount = this.getFrozenLeftColumnCount();
+
+  // We're trying to figure out the state of the grid on the DOM now
+  if(frznCount > 0 && parseInt(leftStyle.width) < x)
   {
-    if( this.getColumnObject(i).inRange(x) )
-      return this.getColumnObject(i);
+     var new_range = x - parseInt(leftStyle.width) + this.scroller.getScrollLeft();
+     for(var i = frznCount; i < this.getColumnCount(); ++i)
+     {
+         if( this.getColumnObject(i).inRange(new_range) )
+           return this.getColumnObject(i);
+     } 
   }
+  else
+  {
+    for (var i = 0; i < this.getColumnCount(); ++i)
+    {
+      if( this.getColumnObject(i).inRange(x) )
+        return this.getColumnObject(i);
+    }
+  }
+
   return null;
 }
 
