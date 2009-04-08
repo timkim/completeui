@@ -2115,7 +2115,10 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
 
 nitobi.grid.Grid.prototype.findColumnWithX = function(x)
 {
-  var C = nitobi.html.Css;  if (nitobi.browser.IE)
+  var C = nitobi.html.Css;
+  var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+ 
+  if (nitobi.browser.IE)
   {
     var leftStyleWidth = this.scroller.view.topleft.element.clientWidth;
   }
@@ -2131,7 +2134,7 @@ nitobi.grid.Grid.prototype.findColumnWithX = function(x)
   // We're trying to figure out the state of the grid on the DOM now
   if(frznCount > 0 && leftStyleWidth < x)
   {
-     var new_range = (x - leftStyleWidth) + this.scroller.getScrollLeft();
+     var new_range = ((x - gridLeft) - leftStyleWidth) + this.scroller.getScrollLeft();
      for(var i = frznCount; i < this.getColumnCount(); ++i)
      {
          if( this.getColumnObject(i).inRange(new_range) )
@@ -2142,7 +2145,7 @@ nitobi.grid.Grid.prototype.findColumnWithX = function(x)
   {
     for (var i = 0; i < this.getColumnCount(); ++i)
     {
-      if( this.getColumnObject(i).inRange(x) )
+      if( this.getColumnObject(i).inRange(x - gridLeft) )
         return this.getColumnObject(i);
     }
   }
