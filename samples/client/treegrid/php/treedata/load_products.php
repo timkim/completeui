@@ -59,7 +59,7 @@ require("../../../../server/php/base_gethandler.php");
 	//Set up the database connection and get the recordset
 
 	// Make a MySQL Connection
-	mysql_connect() or die(mysql_error());
+	mysql_connect('localhost', 'root', 'moocow') or die(mysql_error());
 	mysql_select_db("nitobi_testdb_v1") or die(mysql_error());
 
 	// Retrieve all the data from the "example" table

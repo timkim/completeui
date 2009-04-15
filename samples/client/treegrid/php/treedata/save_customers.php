@@ -16,7 +16,7 @@ $saveHandler = new EBASaveHandler();
 $saveHandler->ProcessRecords();
 
 // Make a MySQL Connection
-mysql_connect() or die(mysql_error());
+mysql_connect('localhost', 'root', 'moocow') or die(mysql_error());
 mysql_select_db("nitobi_testdb_v1") or die(mysql_error());
 
 // ********************************************************** '

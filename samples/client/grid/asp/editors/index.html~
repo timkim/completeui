@@ -23,7 +23,7 @@
 
 function init()
 {
-  	nitobi.grid.loadRowWrap();
+
 	var LSGrid1 = nitobi.loadComponent('EditorsGrid');
 }
 
@@ -69,7 +69,7 @@ function GetNewRecordID()
 		toolbarenabled="true"
 		theme="flex"
 		frozenleftcolumncount="3"
-		onhtmlreadyevent="calcVisibleRows(eventArgs)"
+		onhtmlreadyevent=""
 		>
 
 		<ntb:columns>
