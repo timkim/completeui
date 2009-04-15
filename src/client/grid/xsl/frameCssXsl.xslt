@@ -121,6 +121,7 @@
 
 	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
 	.ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
+	.ntb-column-indicator<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@HeaderHeight)-2" />px;}
 
 	<xsl:apply-templates select="state/nitobi.grid.Columns" />
 

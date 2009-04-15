@@ -291,6 +291,28 @@ nitobi.grid.Column.prototype.getEditor = function()
 }
 
 /**
+ * Hides the column
+ */ 
+nitobi.grid.Column.prototype.hide = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + this.column;
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "none";
+  this.grid.resizePanes(-width, this.column - 1 );
+  this.grid.adjustHorizontalScrollBars();
+ }
+
+nitobi.grid.Column.prototype.show = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + this.column;
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "";
+  this.grid.resizePanes(width, this.column + 1);
+}
+
+/**
  * @private
  */
 nitobi.grid.Column.prototype.xGET = function()
@@ -397,4 +419,11 @@ nitobi.grid.Column.prototype.unsubscribe = function(evt,func)
 nitobi.grid.Column.getColumnHeaderElement = function(grid, column)
 {
 	return $ntb('columnheader_'+column+'_'+grid.uid);
+}
+
+nitobi.grid.Column.prototype.inRange = function(x)
+{
+  var left = this.getHeaderElement().offsetLeft;
+  var right = left + this.getWidth();
+  return left < x && x < right;
 }

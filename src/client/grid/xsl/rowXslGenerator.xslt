@@ -55,7 +55,7 @@
 							&lt;/xsl:variable&gt;
 	
 							&lt;xsl:attribute name="class"&gt;ntb-column-indicator-border&lt;xsl:value-of select="$sortString<xsl:value-of select="position()-1"/>" /&gt;&lt;/xsl:attribute&gt;
-							&lt;div class="ntb-column-indicator"&gt;
+							&lt;div class="ntb-column-indicator ntb-column-indicator<xsl:value-of select="$uniqueId" />"&gt;
 								<xsl:choose>
 									<xsl:when test="@Label and not(@Label = '') and not(@Label = ' ')"><xsl:value-of select="@Label" /></xsl:when>
 									<xsl:when test="ntb:label and not(ntb:label = '') and not(ntb:label = ' ')"><xsl:value-of select="ntb:label" /></xsl:when>

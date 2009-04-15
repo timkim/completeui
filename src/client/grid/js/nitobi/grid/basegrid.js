@@ -956,8 +956,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseDown=function(evt)
 	}
 	else
 	{
-		this.headerClicked(colNumber);
-		this.fire("HeaderDown", colNumber);
+    // Do the cell move here
+	  this.dragDropColumn.pickUp(this, colNumber, cell, evt);
+    this.fire("HeaderDown", colNumber);
 	}
 }
 
@@ -1026,8 +1027,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseUp = function(evt)
 		this.focus();
 		return;
 	}
-	var columnNumber = parseInt(domMouseUpCell.getAttribute("xi"));
-	this.fire("HeaderUp",columnNumber);
+	var columnNumber = parseInt(domMouseUpCell.getAttribute("col"));
+  var hover = this.headerResizeHover(evt,domMouseUpCell);
+ 	this.fire("HeaderUp",columnNumber);
 }
 
 /**
@@ -1551,7 +1553,13 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	 */
 	var cr = new nitobi.grid.ColumnResizer(this);
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
-	this.columnResizer = cr;
+  this.columnResizer = cr;
+
+  // This is the drag/drop column, this is for resorting columns
+
+  var db = new nitobi.grid.DragDropColumn(this);
+  db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  this.dragDropColumn = db;
 
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
@@ -2004,6 +2012,29 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 	this.columnResize(col, prevWidth + resizer.dx);
 }
 
+/** 
+ * Executes after a user initiated column move event occurs
+ * @param {Object} 
+ * @private
+ */
+nitobi.grid.Grid.prototype.afterDragDropColumn = function(dragbox)
+{
+  var source = this.getColumnObject(dragbox.column);
+  if (this.targetCol == null)
+    var target = this.findColumnWithX(dragbox.x);
+  else
+    var target = this.targetCol;
+
+  if (source == target || target == null)
+  {
+    this.headerClicked(dragbox.column);
+  }
+  else
+  {
+    this.moveColumns(source, target);
+  }
+}
+
 /**
  * Resizes the grid column to the specified width. 
  * @param {Number} width The width (in pixels) of the column.
@@ -2024,16 +2055,12 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	this.updateCellRanges();
 
 	/*
-	 * This is absolutely stupid!  Not only does IE7 have issues with properly generating CSS, 
-	 * but Firefox can't find style descriptors for styles that have both an ID and a style!
-	 * 
-	 * TODO: File a bug in Bugzilla and remove this check when 3.1 comes out?
-	 * 
-	 * Gecko FAIL!
-	 */
-	if (nitobi.browser.IE7 || nitobi.browser.FF3)
+	 * Found the stupidity in the CSS class that should fix this.  This code
+   * depends on nitobi.html.Css.getRule.
+   */
+	if (nitobi.browser.IE7)
 	{
-		this.generateCss();
+      this.generateCss();
 	}
 	else
 	{
@@ -2067,7 +2094,82 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
+nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
+{
+  var srcIndex = source.column;
+  var destIndex = dest.column;
+  
+  // This manipulates the Grid XML
+  var columns = this.Declaration.columns.firstChild;
+  var destCol = columns.childNodes[destIndex];
+  var srcCol = columns.childNodes[srcIndex];
+  var tmpNode = srcCol.cloneNode(true);
+  columns.removeChild(srcCol);
+  columns.insertBefore(tmpNode, destCol);
 
+  // Dump the old cached stuff out, redefine everything and bind it!
+  this.columns = [];
+  this.defineColumns(columns);
+  this.bind();
+}
+
+nitobi.grid.Grid.prototype.findColumnWithX = function(x)
+{
+  var C = nitobi.html.Css;
+  var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+ 
+  if (nitobi.browser.IE)
+  {
+    var leftStyleWidth = this.scroller.view.topleft.element.clientWidth;
+  }
+  else
+  {
+	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.uid).width);
+  }
+  var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+  // The header width will be the same as the grid width
+  var viewport = this.scroller.view.topcenter;
+  var frznCount = this.getFrozenLeftColumnCount();
+
+  // We're trying to figure out the state of the grid on the DOM now
+  if(frznCount > 0 && leftStyleWidth < x)
+  {
+     var new_range = ((x - gridLeft) - leftStyleWidth) + this.scroller.getScrollLeft();
+     for(var i = frznCount; i < this.getColumnCount(); ++i)
+     {
+         if( this.getColumnObject(i).inRange(new_range) )
+           return this.getColumnObject(i);
+     } 
+  }
+  else
+  {
+    for (var i = 0; i < this.getColumnCount(); ++i)
+    {
+      if( this.getColumnObject(i).inRange(x - gridLeft) )
+        return this.getColumnObject(i);
+    }
+  }
+
+  return null;
+}
+
+nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
+{
+  	var C = nitobi.html.Css;
+		// Things are different if we are resizing a frozen or unfrozen column
+		if (columnIndex < this.getFrozenLeftColumnCount())
+		{
+			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
+			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
+		}
+		else
+		{
+			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
+		}
+}
 /**
  * Loads the Grid Model from XML. The Model is essentially a serialization of the Grid state which contains all the property values and 
  * child object information.
@@ -2278,6 +2380,10 @@ nitobi.grid.Grid.prototype.bindComplete=function()
 	// TODO: this setRowCount should not be here ...
 	// TODO: But this is in conflict with grouping grid / block rendering mechanism so I am leaving it.  
 	this.setRowCount(this.datatable.getRemoteRowCount());
+	
+	// TODO: This toolbar calc should not be here either
+	this.toolbars.calculateRange();
+	
 	// The bound property indicates that events from the datasource to which
 	// we are bound will now be able to cause re-renders of our interface
 	this.setBound(true);
@@ -5516,6 +5622,7 @@ nitobi.grid.Grid.prototype.setDisplayedRowCount= function(newVal)
 		this.Scroller.view.midcenter.rows = newVal;
 		this.Scroller.view.midleft.rows	= newVal;
 	}
+	
 	this.displayedRowCount = newVal;
 }
 

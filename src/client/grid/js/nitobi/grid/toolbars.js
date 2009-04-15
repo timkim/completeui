@@ -284,11 +284,20 @@ nitobi.ui.Toolbars.prototype.render= function()
 		}
 
 		switch (eachPbutton) {
+			case "firstPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("FirstPage");		
+						_this.resetCounter();
+					};
+			break;
 			case "previousPage"+this.uid:
 				buttonsPaging[eachPbutton].onClick = 
 					function()
 					{
-						_this.fire("PreviousPage");			
+						_this.fire("PreviousPage");
+						_this.decrementCounter();
 					};
 				buttonsPaging[eachPbutton].disable();
 			break;
@@ -297,8 +306,24 @@ nitobi.ui.Toolbars.prototype.render= function()
 					function()
 					{
 						_this.fire("NextPage");
+						_this.incrementCounter();
 					};
 			break;
+			case "lastPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("LastPage");	
+						_this.maxCounter();		
+					};
+			break;
+			case "startPage"+this.uid:
+				buttonsPaging[eachPbutton].onBlur = 
+					function()
+					{	
+						_this.inputCounter();		
+					};
+			break;			
 			default:
 		}
 	}
@@ -321,6 +346,74 @@ nitobi.ui.Toolbars.prototype.render= function()
 	}
 	toolbarDiv.style.visibility="visible";		
 }
+
+nitobi.ui.Toolbars.prototype.resetCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		start_page.value = String(1);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.maxCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
+	if (start_page)
+	{		
+		start_page.value = String(Math.ceil(pages));	
+	}	
+}
+nitobi.ui.Toolbars.prototype.incrementCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var val = parseInt(start_page.value);
+		start_page.value = String(++val);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.decrementCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var val = parseInt(start_page.value);
+		start_page.value = String(--val);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.inputCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var maxPage = Math.ceil(this.grid.datatable.totalRowCount/this.grid.getRowsPerPage());
+		var val = parseInt(start_page.value);
+		var isNotNumber = isNaN(start_page.value);
+		if(val < 0 || val > maxPage || isNotNumber)
+		{
+			alert('Please enter a value within the ranges of 1 and ' + maxPage);
+		}
+		else
+		{
+			this.fire("InputTextPage");
+		}
+	}	
+}
+nitobi.ui.Toolbars.prototype.calculateRange = function()
+{
+	var startPage = 1;
+	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
+	var last_page =  $ntb('endPage' + this.uid);
+	if(last_page)
+	{
+		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
+	}
+}
+
 
 nitobi.ui.Toolbars.prototype.resize = function()
 {
@@ -361,3 +454,4 @@ nitobi.ui.Toolbars.prototype.dispose= function()
 		this.toolbarPaging = null;
 	}
 }  
+
