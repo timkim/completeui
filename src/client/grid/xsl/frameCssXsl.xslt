@@ -55,7 +55,6 @@
 
 	.<xsl:value-of select="$t"/> .ntb-cell {overflow:hidden;white-space:nowrap;}
 	.<xsl:value-of select="$t"/> .ntb-cell, x:-moz-any-link, x:default {display: -moz-box;}
-	.<xsl:value-of select="$t"/> .ntb-column-indicator, x:-moz-any-link, x:default {display: -moz-box;}
 	.<xsl:value-of select="$t"/> .ntb-cell-border {overflow:hidden;white-space:nowrap;<xsl:if test="$IE='true'">height:auto;</xsl:if>}
 
 	.ntb-grid-headershow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@ColumnIndicatorsEnabled=1)">display:none;</xsl:if>}
@@ -112,11 +111,6 @@
 		width:100px;
 		height:100px;
 		z-index:800;
-	}
-
-	.<xsl:value-of select="$t"/> .ntb-column-indicator {
-		overflow:hidden;
-		white-space: nowrap;    
 	}
 
 	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
