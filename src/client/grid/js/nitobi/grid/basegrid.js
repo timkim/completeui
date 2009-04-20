@@ -1553,13 +1553,13 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	 */
 	var cr = new nitobi.grid.ColumnResizer(this);
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
-  this.columnResizer = cr;
+  	this.columnResizer = cr;
 
-  // This is the drag/drop column, this is for resorting columns
+  	// This is the drag/drop column, this is for resorting columns
 
-  var db = new nitobi.grid.DragDropColumn(this);
-  db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
-  this.dragDropColumn = db;
+  	var db = new nitobi.grid.DragDropColumn(this);
+  	db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  	this.dragDropColumn = db;
 
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
