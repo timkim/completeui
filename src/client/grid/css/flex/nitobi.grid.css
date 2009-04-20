@@ -60,7 +60,6 @@
 .flex .ntb-grid-header {
 	background: url(assets/header.png) left top repeat-x;
 	border-bottom: #b7babc 1px solid;
-	height: 21px;
 }
 
 .flex .ntb-column-descending { 
@@ -75,8 +74,12 @@
 	border-bottom: #ebeff2 1px solid;
 }
 
+/* this determines the behaviour of the top row */
 .flex .ntb-column-indicator { 
 	padding: 0px 5px;
+	display: -moz-box;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .flex .ntb-column-indicator-border,
