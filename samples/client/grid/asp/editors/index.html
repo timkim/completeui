@@ -21,8 +21,22 @@
 
 <script>
 
+var getPagingToolBar = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'toolbar.xml';
+  xhr.async = false;
+  xhr.get();
+
+  return xhr.httpObj.respons
+}
+
 function init()
 {
+
+  	nitobi.grid.pagingToolbarDoc = nitobi.xml.createXmlDoc(getPagingToolBar());
+
   	nitobi.grid.loadRowWrap();
 	var LSGrid1 = nitobi.loadComponent('EditorsGrid');
 }
@@ -60,6 +74,7 @@ function GetNewRecordID()
 		width="630"
 		height="407"
 		mode="standard"
+		headerheight="40"
 		rowsperpage="10"
 		keygenerator="GetNewRecordID()"
 		gethandler="load_data.asp"
