@@ -146,7 +146,5 @@
 	EBAGetHandler_SetTotalRowCount totalRowCount
 	EBAGetHandler_CompleteGet
 
-	
-
 %>
 
