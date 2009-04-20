@@ -80,6 +80,8 @@
 
 	countRecordSet = objConn.execute("SELECT COUNT(*) FROM " & MyTableName)
 	dim MaxRecords
+	dim totalRowCount
+	totalRowCount = countRecordSet(0)
 	MaxRecords = countRecordSet(0)
 	if  (MaxRecords > PageSize+StartRecordIndex) then 
 		MaxRecords = PageSize+StartRecordIndex
@@ -140,8 +142,11 @@
 		RecordSet.close
 	end if
 	objconn.close
+
+	EBAGetHandler_SetTotalRowCount totalRowCount
 	EBAGetHandler_CompleteGet
 
+	
 
 %>
 

@@ -134,3 +134,32 @@ nitobi.grid.LoadingScreen.prototype.hide = function()
 	  this.loadingScreen.style.display="none";
   }
 }
+
+nitobi.ui.Toolbars.prototype.setStartRow = function(value)
+{
+	var start_page = $ntb('startRow' + this.uid);
+	if (start_page)
+	{		
+		start_page.value = value;	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.setNumRows = function(value)
+{
+	var start_page = $ntb('numRows' + this.uid);
+	
+	if (start_page)
+	{		
+		start_page.value = value; 	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.calculateRange = function()
+{
+	var last_row = $ntb('endRow' + this.uid)
+	if(last_row)
+	{
+		last_page.innerHTML = "&nbsp;" + this.grid.remoteRowCount();
+	}
+}
+
