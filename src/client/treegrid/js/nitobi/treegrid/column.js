@@ -328,3 +328,10 @@ nitobi.grid.Column.getColumnHeaderElement = function(gridId, column, surface)
 {
 	return $ntb('columnheader_'+column+'_'+gridId + "_" + surface);
 }
+
+nitobi.grid.Column.prototype.inRange = function(x)
+{
+  var left = this.getHeaderElement().offsetLeft;
+  var right = left + this.getWidth();
+  return left < x && x < right;
+}

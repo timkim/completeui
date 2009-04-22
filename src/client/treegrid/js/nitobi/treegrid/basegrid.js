@@ -990,9 +990,10 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 
 	var colNumber = nitobi.grid.Cell.getColumnNumber(cell);
 	var surfacePath = nitobi.grid.Cell.getSurfacePath(cell);
+	var columnObj = this.getColumnObject(colNumber, surfacePath);
+
 	if (this.headerResizeHover(evt, cell))
 	{
-		var columnObj = this.getColumnObject(colNumber, nitobi.grid.Cell.getSurfacePath(cell));
 		var beforeColumnResizeEventArgs = new nitobi.grid.OnBeforeColumnResizeEventArgs(this, columnObj);
 		if (!nitobi.event.evaluate(columnObj.getOnBeforeResizeEvent(), beforeColumnResizeEventArgs)) return;
 
@@ -1002,7 +1003,8 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 	}
 	else
 	{
-		this.headerClicked(colNumber, surfacePath);
+		// Do the cell move here
+		this.dragDropColumn.pickUp(this, columnObj, cell, evt);
 		this.fire("HeaderDown", colNumber);
 	}
 }
@@ -1602,6 +1604,12 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
 	this.columnResizer = cr;
 
+	// This is the drag/drop column, this is for resorting columns
+
+  	var db = new nitobi.grid.DragDropColumn(this);
+  	db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  	this.dragDropColumn = db;
+
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
 	 * @type nitobi.grid.GridResizer
@@ -1613,6 +1621,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	gr.minHeight = Math.max(this.getMinHeight(), (this.getHeaderHeight()+this.getscrollbarHeight()));
 	gr.onAfterResize.subscribe(L.close(this, this.afterResize));
 	this.gridResizer = gr;
+
 
 	// TODO: Scroller is deprecated
 	var sc = this.Scroller = this.scroller = new nitobi.grid.Scroller3x3(this, this.getHeight(), this.getDisplayedRowCount(), this.getColumnCount(), this.getfreezetop(), this.getFrozenLeftColumnCount());
@@ -2060,6 +2069,30 @@ nitobi.grid.TreeGrid.prototype.afterColumnResize = function(resizer)
 	this.columnResize(col, prevWidth + resizer.dx);
 }
 
+
+nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
+{
+	var source = dragbox.column;
+	if (this.targetCol == null)
+	{
+		var target = this.findColumnWithCoords(dragbox.surface, dragbox.x, dragbox.y);
+	}
+	else
+	{
+		var target = this.targetCol;
+	}
+
+	if (source == target || target == null)
+	{
+		debugger;
+		this.headerClicked(dragbox.column);
+	}
+	else
+	{
+		this.moveColumns(source, target);
+	}
+}
+
 /**
  * Resizes the grid column to the specified width. 
  * @param {Number} width The width (in pixels) of the column.
@@ -2140,6 +2173,37 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 	this.adjustHorizontalScrollBars()
 	var afterColumnResizeEventArgs = new nitobi.grid.OnAfterColumnResizeEventArgs(this, column);
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
+}
+
+nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
+{
+	var srcIndex = source.column;
+	var destIndex = dest.column;
+
+	// This manipulates the Grid XML
+
+ 	// Dump the old cached stuff out, redefine everything and bind it!
+  	this.columns = [];
+  	this.defineColumns(columns);
+  	this.bind();
+}
+
+nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
+{
+	var C = nitobi.html.Css;
+	var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+
+	if (surface.key == "0")
+		var colContainer = this;
+	else
+	   	var colContainer = surface; 
+ 	for (var i = 0; i < colContainer.getColumnCount(); ++i)
+    	{
+      		if( this.getColumnObject(i, surface.key).inRange(x - gridLeft) )
+        		return this.getColumnObject(i, surface.key);
+    	}
+
+	return null;
 }
 
 nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()

@@ -1389,6 +1389,11 @@ nitobi.grid.Surface.prototype.isCellInSurface = function(cell)
 	return nitobi.grid.Cell.getSurfacePath(cell).indexOf(this.key) == 0;
 }
 
+nitobi.grid.Surface.prototype.getColumnCount = function()
+{
+	return this.columnsNode.childNodes.length;
+}
+
 /**
  * @private
  */

@@ -55,6 +55,7 @@
 	        &lt;div style="position:relative;"&gt;
 	            &lt;div id="ntb-column-resizeline<xsl:value-of select="$u" />" class="ntb-column-resizeline"&gt;&lt;/div&gt;
 	            &lt;div id="ntb-grid-resizebox<xsl:value-of select="$u" />" class="ntb-grid-resizebox"&gt;&lt;/div&gt;
+		    &lt;div id="ntb-column-dragbox<xsl:value-of select="$u" />" class="ntb-column-dragbox"&gt;&lt;/div&gt;
 			&lt;/div&gt;
         &lt;/div&gt;
 

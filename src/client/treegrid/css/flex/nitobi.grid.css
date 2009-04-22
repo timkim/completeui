@@ -122,6 +122,20 @@
     z-index: 900;
 }
 
+.flex .ntb-column-dragbox {
+    filter:alpha(opacity=50);
+    -moz-opacity: .50;
+    opacity: .50;
+    background-color: #736F6E;	/* gray */
+    width: 3px;
+    position:absolute;
+    display:none;
+    top:-5000px;
+    left:-5000px;
+    cursor: w-resize;
+    z-index: 900;
+}
+
 .flex .ntb-grid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
@@ -362,9 +376,9 @@
 	background-color: #7fceff !important;
 }
 
+/* Removed left because we may not want an offset in a subgrid. */
 .flex .ntb-grid-subgroup {
 	position:relative;
-	left:10px;
 	border: 1px solid #b7babc; 
 	margin-bottom: 1px;
 }
