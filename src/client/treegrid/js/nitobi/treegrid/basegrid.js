@@ -2073,6 +2073,7 @@ nitobi.grid.TreeGrid.prototype.afterColumnResize = function(resizer)
 nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 {
 	var source = dragbox.column;
+	var surface = dragbox.surface;
 	if (this.targetCol == null)
 	{
 		var target = this.findColumnWithCoords(dragbox.surface, dragbox.x, dragbox.y);
@@ -2084,8 +2085,7 @@ nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 
 	if (source == target || target == null)
 	{
-		debugger;
-		this.headerClicked(dragbox.column);
+		this.headerClicked(source.column, surface.key);
 	}
 	else
 	{
@@ -2179,13 +2179,22 @@ nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
 {
 	var srcIndex = source.column;
 	var destIndex = dest.column;
+	var surfacePath = source.surface.key;
+ 	var parentNode = source.surface.columnsNode;		
 
-	// This manipulates the Grid XML
-
- 	// Dump the old cached stuff out, redefine everything and bind it!
-  	this.columns = [];
-  	this.defineColumns(columns);
-  	this.bind();
+	var srcNode = parentNode.childNodes[srcIndex];
+	var destNode = parentNode.childNodes[destIndex];
+	var tmpNode = srcNode.cloneNode(true);
+	parentNode.removeChild(srcNode);
+	parentNode.insertBefore(tmpNode, destNode); 
+	
+	this.Selection.clear();
+	this.Scroller.clearSurface(null, null, null, null, surfacePath);
+	var surface = this.Scroller.getSurface(surfacePath);
+	surface.cachedColumns=[];
+	surface.clearHeader();
+	surface.syncWithData();
+	surface.renderHeader();
 }
 
 nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
@@ -2196,8 +2205,10 @@ nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
 	if (surface.key == "0")
 		var colContainer = this;
 	else
-	   	var colContainer = surface; 
- 	for (var i = 0; i < colContainer.getColumnCount(); ++i)
+	   	var colContainer = surface;
+	var colCount = colContainer.getColumnCount();
+ 	
+	for (var i = 0; i < colCount; ++i)
     	{
       		if( this.getColumnObject(i, surface.key).inRange(x - gridLeft) )
         		return this.getColumnObject(i, surface.key);
@@ -3274,7 +3285,7 @@ nitobi.grid.TreeGrid.prototype.resetColumns=function()
 	this.fire("BeforeClearColumns");
 	this.inferredColumns=true;
 	this.columnsDefined=false;
-	var Existing = this.model.selectSingleNode("//ntb:columns");
+	var Existing = this.model.selectSingleNode("/state/Defaults/nitobi.grid.Column");
 
 	//Create columns based upon #of columns
 	var xDec = nitobi.xml.createElement(this.model, "columns");
@@ -3594,128 +3605,6 @@ nitobi.grid.TreeGrid.prototype.editorDataReady= function(column)
 	column.setAttribute("DisplayFields", displayFieldsString);
 	column.setAttribute("ValueField", valueField);
 }
-/*
-nitobi.grid.TreeGrid.prototype.calcForumlas = function(cell)
-{
-	//	Now we need to re-calculate all the formulas for this row ...
-	var cols = this.columns;
-	var len = cols.length;
-
-	//	Loop through each column and see if it is of type formula ... if so we need to re-calc it
-	for (var i=0; i<len; i++)
-	{
-		if (cols[i].type == "FORMULA")
-		{
-			//	re-calculate the formula ...
-			var f = cols[i].xdatafld;
-			var re = /$\{(.*?)\}/gi;
-			var reBG = f.match(re);
-			if (reBG != null)
-			{
-				var BGL = reBG.length;
-				for (var j=0; j<BGL; j++)
-				{
-					var curfld = reBG[j].replace(re,"$1");
-					var stp = 'this.GetXMLDataField("'+curfld+'", '+curRow+')';
-					f = f.replace(reBG[j],stp);
-				}
-
-				var newValue = eval(f)*1;
-				var val=0;
-
-				if (_getBoolean(cols[i].showSummary))
-				{
-					var msk = cols[i].mask || '###,##0.00';
-					var sumCell = document.getElementById(i + '_Column_Sum' + this.element.uniqueID);
-
-					//	Get the old cell value
-					var cellPrevValue = this.getCellValue(curRow, i);
-					//	Get the old summary value
-					var colPrevSummary = maskedToNumber(sumCell.innerText, this.decimalSeparator);
-
-					val = formatNumber(colPrevSummary - cellPrevValue + newValue, msk, this.decimalSeparator, this.groupingSeparator);
-					if (val=="false") continue;
-					//	Set the new summary value
-					sumCell.innerHTML = val;
-				}
-
-				val = formatNumber(newValue, msk, this.decimalSeparator, this.groupingSeparator);
-
-				//	Set this flag so that setCell will not attempt to call calcFormulas again and create a loop ...
-				cell.calculate = false;
-				cell.setValue(val);
-				cell.calculate = false;
-			}
-		}
-	}
-}
-
-
-/// <function name="calcSummary" access="private">
-/// <summary>Calculates the summary values for any FORMULA and NUMBER columns.</summary>
-/// </function>
-function _gridlist.prototype.calcSummary()
-{
-	var uniqueID = this.element.uniqueID;
-	var cols = this.columns;
-	var clen = cols.length;
-
-	var iRows = this.rowCount();
-
-	var oRows = document.getElementById("rows"+uniqueID);
-	var oFreezeRows = document.getElementById("freezerows"+uniqueID);
-
-	//	This is for summary rows on formula columns that cannot be calculated in the xsl
-	for (var m=0; m<clen; m++)
-	{
-		if (cols[m].type == "FORMULA" || cols[m].type == "NUMBER")
-		{
-			//	bSummary tells if we are showing the summary for THIS column or not
-			var bSummary = _getBoolean(cols[m].showSummary);
-			var curfld = cols[m].xdatafld;
-			var sum = 0;
-			var oCell = null;
-
-			for (var i=0; i<iRows; i++)
-			{
-				var xVal = this.getCellValue(i,m);
-
-				//	First we need to do a data update for the formula columns so that the values will be in the xml
-				if (cols[m].type == "FORMULA")
-				{
-					var xslfld = this.fieldmap[curfld]+"";
-					if (xVal != null && !gEsc) 
-					{
-						var xk = this.getKey(i);
-						xNode = this.oXML.documentElement.selectSingleNode("*[@xk = '"+xk+"']");
-						if (xNode != null) {
-							xVal = maskedToNumber(xVal, this.decimalSeparator)+"";
-							xNode.setAttribute(xslfld.substr(1),xVal);
-						}
-					}
-				}
-
-				//	Then we sum the values if we are in a summary column
-				if (bSummary)
-					sum += xVal*1;
-			}
-
-			//	Also need to set the summary cell for this column as the sum value ...
-			if (bSummary)
-			{
-				var msk = cols[m].mask || '###,##0.00';
-				var val = formatNumber(sum, msk, this.decimalSeparator, this.groupingSeparator);
-
-				if (val=="false") return;
-
-				//	Get a handle to the summary cell for the current column
-				var sumCell = document.getElementById(m + '_Column_Sum' + uniqueID);
-				sumCell.innerHTML = val;
-			}
-		}
-	}
-}
-*/
 
 /**
  * Handles clicks on the header by the user.
