@@ -244,7 +244,8 @@ var resizeCellsToFit = function(column, width)
 	var col = column.column;
 	var hdr = column.getHeaderElement();
 	var rowCount = grid.getRowCount();
-	
+	var viewport = grid.scroller.view.midcenter;
+
 	if(nitobi.browser.IE)
 	{
 		for (var i = 0; i < rowCount; ++i)
@@ -270,4 +271,11 @@ var resizeCellsToFit = function(column, width)
 	}
 
 	equalHeight(grid);
+ 	if (viewport.element.clientHeight < viewport.surface.clientHeight)
+  	{
+		var pct = viewport.element.clientHeight / viewport.surface.clientHeight;
+		grid.vScrollbar.setRange(pct);	
+  	}
+
 }
+
