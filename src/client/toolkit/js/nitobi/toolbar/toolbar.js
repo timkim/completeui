@@ -156,7 +156,7 @@ nitobi.ui.Toolbar.prototype.attachButtonObjects = function ()
 	if (!this.m_UiElements)
 	{
 		this.m_UiElements = new Array();
-    var tag = this.getHtmlElementHandle();
+    		var tag = this.getHtmlElementHandle();
 		var children = tag.childNodes;
 
 		for (var i = 0; i < children.length; i++)

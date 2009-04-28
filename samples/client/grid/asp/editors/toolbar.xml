@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <toolbar id="toolbarthis.uid" title="Grid" height="23" width="140" image_directory="imagedir">
    <items>
-      <button id="firstPage" onclick_event="this.onClick();" height="11" width="100" image="left.gif" image_disabled="left_disabled.gif" tooltip_text="First Page" />
       <button id="previousPage" onclick_event="this.onClick();" height="11" width="10" image="left.gif" image_disabled="left_disabled.gif" tooltip_text="Previous Page" />
-      <text id="page" value="Page "/>
-	  <inputtext id="startPage" value="1" onblur_event="this.onBlur();" float="left" width="25"/>
-      <!--<text id="startPage" value="1"/>-->
+      <text id="Row" value="Rows "/>
+      <text id="startRow" value="1"/>
+      <text id="to" value="to" />
+      <text id="numRows" value="10" />
       <text id="of" value="of"/>
-      <text id="endPage" value="0" />  
+      <text id="endRow" value="0" />  
       <button id="nextPage" onclick_event="this.onClick();" height="11" width="10" image="right.gif" image_disabled="right_disabled.gif" tooltip_text="Next Page" />
-	  <button id="lastPage" onclick_event="this.onClick();" height="11" width="10" image="right.gif" image_disabled="right_disabled.gif" tooltip_text="Last Page" />
    </items>
 </toolbar>
 

@@ -2180,7 +2180,8 @@ nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
 	var srcIndex = source.column;
 	var destIndex = dest.column;
 	var surfacePath = source.surface.key;
- 	var parentNode = source.surface.columnsNode;		
+ 	var parentNode = source.surface.columnsNode;
+	var surface = source.surface;		
 
 	var srcNode = parentNode.childNodes[srcIndex];
 	var destNode = parentNode.childNodes[destIndex];
@@ -2190,11 +2191,12 @@ nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
 	
 	this.Selection.clear();
 	this.Scroller.clearSurface(null, null, null, null, surfacePath);
-	var surface = this.Scroller.getSurface(surfacePath);
 	surface.cachedColumns=[];
 	surface.clearHeader();
 	surface.syncWithData();
 	surface.renderHeader();
+	// We need to generate the CSS here so the columns have the proper width 
+	this.generateCss();
 }
 
 nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)

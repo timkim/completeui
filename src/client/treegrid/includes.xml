@@ -48,6 +48,7 @@
 	<jsfile path="js/nitobi/treegrid/dataformatconverter.js" />
 	<jsfile path="js/nitobi/treegrid/datecolumn.js" />
 	<jsfile path="js/nitobi/treegrid/declaration.js" />
+	<jsfile path="js/nitobi/treegrid/dragdrop.js" />
 	<jsfile path="../grid/js/nitobi/grid/editcompleteeventargs.js" />
 	<jsfile path="../grid/js/nitobi/grid/getcompleteeventargs.js" />
 	<jsfile path="js/nitobi/treegrid/grid.js" />

@@ -167,3 +167,107 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 	}
 }
 
+// Custom column resize to deal with the column width issues, and allignment in FF3 and Safari
+
+/**
+ * Resizes the grid column to the specified width. 
+ * @param {Number} width The width (in pixels) of the column.
+ * @param {Number|nitobi.grid.Column} column The index of the column to resize or the Column object.
+ */
+nitobi.grid.Grid.prototype.columnResize= function(column, width) 
+{
+	if (isNaN(width)) return;
+
+	// Yank this out to avoid recursion
+	this.colResize(column, width);
+	
+	resizeCellsToFit(column, width);
+
+	var afterColumnResizeEventArgs = new nitobi.grid.OnAfterColumnResizeEventArgs(this, column);
+	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
+}
+
+nitobi.grid.Grid.prototype.colResize = function(column, width)
+{
+	column = (typeof column == "object"?column:this.getColumnObject(column));
+	var prevWidth = column.getWidth();
+	column.setWidth(width);
+
+	//	TODO: this is a hack to fix a problem with the fixed column header not resizing.
+	// This was causing some hacky code to be added in EBASelection.collapse 
+	// see the following - tix for details.
+	// http://portal:8090/cgi-bin/trac.cgi/ticket/522
+	this.updateCellRanges();
+
+	/*
+	 * Found the stupidity in the CSS class that should fix this.  This code
+   * depends on nitobi.html.Css.getRule.
+   */
+	if (nitobi.browser.IE7)
+	{
+      		this.generateCss();
+	}
+	else
+	{
+		var columnIndex = column.column;
+		var dx = width - prevWidth;
+		var C = nitobi.html.Css;
+		// Things are different if we are resizing a frozen or unfrozen column
+		if (columnIndex < this.getFrozenLeftColumnCount())
+		{
+			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
+			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
+		}
+		else
+		{
+			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
+		}
+	
+		// No matter what do the column class itself
+		var columnStyle = C.getClass(".ntb-column"+this.uid+"_"+(columnIndex+1));
+		columnStyle.width = (parseInt(columnStyle.width) + dx) + "px";
+	
+		this.adjustHorizontalScrollBars();
+	}
+
+	this.Selection.collapse(this.activeCell);
+
+}
+
+/* This little hack makes it so you can't resize smaller than the largest word. */
+var resizeCellsToFit = function(column, width)
+{
+	var grid = column.grid;
+	var col = column.column;
+	var hdr = column.getHeaderElement();
+	var rowCount = grid.getRowCount();
+	
+	if(nitobi.browser.IE)
+	{
+		for (var i = 0; i < rowCount; ++i)
+		{
+			var cell = $ntb('cell_' + i + '_' + col + "_" + grid.uid);
+			if (cell.firstChild.offsetHeight > cell.offsetHeight)
+			{	
+				cell.parentNode.style.height = cell.firstChild.offsetHeight + "px";
+			}	
+		}
+	}
+
+	// Do the snap back
+	var cell = $ntb('cell_0_' + col + "_" + grid.uid);
+	if(cell.offsetWidth > hdr.offsetWidth)  
+	{
+
+		grid.colResize(column, cell.offsetWidth);
+	}
+	else if(cell.offsetWidth < cell.firstChild.offsetWidth)
+	{
+		grid.colResize(column, cell.firstChild.offsetWidth);
+	}
+
+	equalHeight(grid);
+}

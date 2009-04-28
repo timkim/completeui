@@ -50,6 +50,7 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
   var C = nitobi.html.Css;
 
   this.grid = grid;
+  
   this.column = column;
  
   this.x = nitobi.html.getEventCoords(evt).x;
