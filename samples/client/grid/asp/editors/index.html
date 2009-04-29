@@ -16,28 +16,23 @@
 <!-- Now we include the component JavaScript -->
 <script language="javascript" src="$SCRIPT$/nitobi.grid.js"></script>
 <!-- End of Demo-related Includes -->
-
-<script language="javascript" src="row_wrap_module/rowwrap.js"></script>
-
 <script>
 
-var getPagingToolBar = function()
+var getShowHideToolBar = function()
 {
   var xhr = new nitobi.ajax.HttpRequest();
 
-  xhr.handler = 'toolbar.xml';
+  xhr.handler = 'showhide.xml';
   xhr.async = false;
   xhr.get();
-
-  return xhr.httpObj.respons
+ 
+  return xhr.httpObj.responseText;
 }
 
 function init()
 {
+  	nitobi.grid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
 
-  	//nitobi.grid.pagingToolbarDoc = nitobi.xml.createXmlDoc(getPagingToolBar());
-
-  	nitobi.grid.loadRowWrap();
 	var LSGrid1 = nitobi.loadComponent('EditorsGrid');
 }
 
@@ -84,7 +79,6 @@ function GetNewRecordID()
 		toolbarenabled="true"
 		theme="flex"
 		frozenleftcolumncount="3"
-		onhtmlreadyevent="calcVisibleRows(eventArgs)"
 		>
 
 		<ntb:columns>
