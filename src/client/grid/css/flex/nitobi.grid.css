@@ -394,3 +394,14 @@
 .flex .ntb-button-down {
 	background-color: #7fceff !important;
 }
+
+.flex .ntb-showhide
+{
+	background-color: #efefef;
+	border: 1px solid #000000;
+}
+
+.flex .ntb-showhide li input
+{
+	width: 20px;
+}

@@ -1579,6 +1579,8 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	sc.setRowHeight(this.getRowHeight());
 	sc.setHeaderHeight(this.getHeaderHeight());
 
+	this.populateColumnList();
+
 	// Set up default key handlers - eventually move these out into editor factory
 //	var kh = function(k) {if ((k > 64 && k < 91) || (k > 47 && k < 58) || (k > 95 && k < 111) || (k > 188 && k < 191) || (k == 113) ) {_this.edit();}};
 //	var gh = function(k) {if (k==32) {var group =  _this.activeCell.getAttribute("xig");_this.toggleGroup(group);}}; 
@@ -1660,6 +1662,26 @@ nitobi.grid.Grid.prototype.createToolbars = function(visibleToolbars)
 	tb.subscribe("Refresh",L.close(this,this.refresh));
 
 	this.subscribe("AfterGridResize", L.close(this,this.resizeToolbars));
+}
+
+
+nitobi.grid.Grid.prototype.populateColumnList = function()
+{
+  var uid = this.uid;
+  var listDiv = $ntb('ntb-grid-showhide' + uid);
+  var list = $ntb('ntb-grid-colcheck' + uid);
+  var count = this.getColumnCount();
+  for (var i = 0; i < count; ++i)
+  {
+      var hdr = this.getColumnObject(i);
+      var hdrTitle = hdr.getLabel();
+      var list_item = document.createElement("li");
+      var id = "ntb-hidecol_" + i + "_" + uid;
+      list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+      list.appendChild(list_item);
+      //Attach event here
+      nitobi.html.attachEvent($ntb("ntb-hidecol_"+ i + "_" + this.uid), "mouseup", hdr.toggleVis, hdr); 
+  } 
 }
 
 /**

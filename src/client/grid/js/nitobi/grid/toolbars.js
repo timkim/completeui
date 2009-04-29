@@ -252,6 +252,34 @@ nitobi.ui.Toolbars.prototype.render= function()
 						}
 					};
 			break;
+			case "showhide"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  var menu = $ntb('ntb-grid-showhide' + grid.uid);
+  						  if(menu.style.display == "none")
+  						  {
+    							menu.style.position = "absolute";
+							// Figure out the height fast!
+							menu.style.left = "-5000"
+							menu.style.display = "";
+							var m_height = menu.clientHeight;
+							// Pull it back and put it in the right spot
+							menu.style.display = "none";
+    							menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
+    							menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
+    							menu.style.display = "";
+  						  }
+  						  else
+  						  {
+    							menu.style.position="relative";
+    							menu.style.display = "none";
+  						  }
+					};
+			break;
 			default:
 		}
 	}
