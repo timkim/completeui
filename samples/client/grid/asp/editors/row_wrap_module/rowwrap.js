@@ -100,7 +100,7 @@ var calcVisibleRows = function(evt)
     grid.datatable.flush();
     entry.numRows--;
     grid.setRowsPerPage(entry.numRows);
-		grid.datatable.get(entry.startRow, entry.numRows, grid, grid.afterLoadDataPage);
+	grid.datatable.get(entry.startRow, entry.numRows, grid, grid.afterLoadDataPage);
   }
   else
   {
@@ -108,6 +108,8 @@ var calcVisibleRows = function(evt)
       equalHeight(grid);
       grid.fitted = true;
       grid.loadingScreen.hide();
+      grid.toolbars.setStartRow(entry.startRow + 1);
+      grid.toolbars.setNumRows(entry.startRow + entry.numRows);
   }
 }
 
@@ -144,7 +146,7 @@ nitobi.ui.Toolbars.prototype.setStartRow = function(value)
 	var start_page = $ntb('startRow' + this.uid);
 	if (start_page)
 	{		
-		start_page.value = value;	
+		start_page.innerHTML = "&nbsp;" + value;	
 	}	
 }
 
@@ -154,7 +156,7 @@ nitobi.ui.Toolbars.prototype.setNumRows = function(value)
 	
 	if (start_page)
 	{		
-		start_page.value = value; 	
+		start_page.innerHTML  = "&nbsp;" + value; 	
 	}	
 }
 
@@ -163,7 +165,7 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 	var last_row = $ntb('endRow' + this.uid)
 	if(last_row)
 	{
-		last_page.innerHTML = "&nbsp;" + this.grid.remoteRowCount();
+		last_row.innerHTML = "&nbsp;" + this.grid.datatable.getTotalRowCount();
 	}
 }
 
