@@ -65,27 +65,17 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
   	var groupOffset = 0;
   else
   	var groupOffset = this.grid.getGroupOffset();
-
-  
+	  
   if (nitobi.browser.IE)
   {
-    var leftStyleWidth = this.grid.scroller.view.topleft.element.clientWidth;
+    var leftStyleWidth = this.grid.scroller.surface.view.topcenter.element.clientWidth;
   }
   else
   {
-	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
-  }
+    var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
+  } 
 
   var x = nitobi.html.getEventCoords(evt).x;
-
-  // TODO: encapsulate this sort of mouse position calculation stuff in a cross browser lib
-  // Calculate the current mouse position.
-  if (nitobi.browser.IE) 
-	{
-		this.surface.style.display="block";
-		nitobi.drawing.align(this.surface,this.grid.element,nitobi.drawing.align.SAMEHEIGHT | nitobi.drawing.align.SAMEWIDTH | nitobi.drawing.align.ALIGNTOP | nitobi.drawing.align.ALIGNLEFT);
-
- 	} 
 
   this.x = x;
   // First make the resize line visible
@@ -118,11 +108,7 @@ nitobi.grid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
   {
     targerCol = this.grid.getColumnObject(target);
   }
-
-  if (nitobi.browser.IE)
-	{
-		this.surface.style.display="none";
-	}
+  
 
   var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
 
