@@ -1679,6 +1679,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.subscribe("PercentWidthChanged",L.close(hs, hs.setRange)); // I had to do it this way ... context wasn't being passed properly
 	this.subscribe("ScrollHorizontal",L.close(hs, hs.setScrollPercent));
 	this.setscrollbarHeight(hs.getHeight());
+
 }
 
 /**
@@ -2190,6 +2191,10 @@ nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
 	parentNode.insertBefore(tmpNode, destNode); 
 	
 	this.Selection.clear();
+	// If we move a column on the first surface, purge all the surfaces
+	if(surface.key == "0")
+		this.scroller.purgeSurfaces();
+
 	this.Scroller.clearSurface(null, null, null, null, surfacePath);
 	surface.cachedColumns=[];
 	surface.clearHeader();
