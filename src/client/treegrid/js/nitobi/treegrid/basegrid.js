@@ -183,6 +183,12 @@ nitobi.grid.TreeGrid = function(uid) {
 	 * @type Array
 	 */
 	this.keyEvents = [];
+
+	/**
+	 * This is how many childHeaders are visible on the treegrid;
+	 */
+
+	this.childHeaders = 0;
 }
 
 nitobi.lang.implement(nitobi.grid.TreeGrid, nitobi.Object);
@@ -1942,7 +1948,8 @@ nitobi.grid.TreeGrid.prototype.updateCellRanges= function()
 		this.measure();
 		this.resizeScroller();
 
-		this.fire("PercentHeightChanged",this.getHeight()/this.calculateHeight());
+		// This is required because we need to get the height of the headers in the child grids
+		this.fire("PercentHeightChanged",this.getHeight()/(this.calculateHeight() + this.calculateHdrHeight()));
 		this.fire("PercentWidthChanged",this.getWidth()/this.calculateWidth());
 	}
 }
@@ -3481,6 +3488,7 @@ nitobi.grid.TreeGrid.prototype.afterExpandSelection = function(evt)
 /**
  * Calculates the height of the rows in the Grid. If the start and end 
  * arguments are defined then it will calculate the height of those rows only.
+ *
  * @param {Number} start The zero based start row index.
  * @param {Number} end The end row index.
  * @type Number
@@ -3492,6 +3500,11 @@ nitobi.grid.TreeGrid.prototype.calculateHeight = function(start, end)
 	var numRows = this.getDisplayedRowCount();
 	end = (end != null)?end:numRows - 1;
 	return (end - start + 1) * this.getRowHeight();
+}
+
+nitobi.grid.TreeGrid.prototype.calculateHdrHeight = function()
+{
+	return this.childHeaders * this.getHeaderHeight();	
 }
 
 /**
@@ -6117,13 +6130,22 @@ nitobi.grid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 	if (eventArgs.visible)
 	{
 		this.setRowCount(this.rowCount + rows);
+		this.childHeaders++;
 		surface.parent.onAfterExpand.notify();
 	}
 	else
 	{
 		this.setRowCount(this.rowCount - rows);
+		if(this.childHeaders > 0)
+			this.childHeaders--;
 		surface.parent.onAfterCollapse.notify();
 	}
+	// Do the calculation here for toggling the row height
+	// TODO: Clean this up and maybe put it somewhere else
+	var outer_height = this.scroller.surface.view.midcenter.container.clientHeight; 
+	var inner_height = this.scroller.surface.view.midcenter.element.clientHeight;
+	var ratio = inner_height/outer_height;
+	this.vScrollbar.setRange(ratio);
 }
 
 nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
