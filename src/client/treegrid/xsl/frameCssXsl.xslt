@@ -30,7 +30,7 @@
 	
 	.vScrollbarRange<xsl:value-of select="$u" /> {}
 
-	.ntb-grid-datablock, .ntb-grid-headerblock {
+	.ntb-treegrid-datablock, .ntb-treegrid-headerblock {
 		table-layout:fixed;
 	<xsl:if test="$IE='true'">
 		width:0px;
@@ -42,16 +42,16 @@
 	.<xsl:value-of select="$t"/> .ntb-column-indicator, x:-moz-any-link, x:default {display: -moz-box;}
 	.<xsl:value-of select="$t"/> .ntb-cell-border {overflow:hidden;white-space:nowrap;<xsl:if test="$IE='true'">height:auto;</xsl:if>}
 
-	.ntb-grid-headershow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@ColumnIndicatorsEnabled=1)">display:none;</xsl:if>}
-	.ntb-grid-vscrollshow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@VScrollbarEnabled=1)">display:none;</xsl:if>}
-	#ntb-grid-hscrollshow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@HScrollbarEnabled=1)">display:none;</xsl:if>}
-	.ntb-grid-toolbarshow<xsl:value-of select="$u" /> {<xsl:if test="not($g/@ToolbarEnabled=1) and not($g/@ToolbarEnabled='true')">display:none;</xsl:if>}
+	.ntb-treegrid-headershow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@ColumnIndicatorsEnabled=1)">display:none;</xsl:if>}
+	.ntb-treegrid-vscrollshow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@VScrollbarEnabled=1)">display:none;</xsl:if>}
+	#ntb-treegrid-hscrollshow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@HScrollbarEnabled=1)">display:none;</xsl:if>}
+	.ntb-treegrid-toolbarshow<xsl:value-of select="$u" /> {<xsl:if test="not($g/@ToolbarEnabled=1) and not($g/@ToolbarEnabled='true')">display:none;</xsl:if>}
 
-	.ntb-grid-height<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@Height" />px;overflow:hidden;}
-	.ntb-grid-width<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@Width" />px;overflow:hidden;}
-	.ntb-grid-overlay<xsl:value-of select="$u" /> {position:relative;z-index:1000;top:0px;left:0px;}
+	.ntb-treegrid-height<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@Height" />px;overflow:hidden;}
+	.ntb-treegrid-width<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@Width" />px;overflow:hidden;}
+	.ntb-treegrid-overlay<xsl:value-of select="$u" /> {position:relative;z-index:1000;top:0px;left:0px;}
 
-	.ntb-grid-scroller<xsl:value-of select="$u" /> {
+	.ntb-treegrid-scroller<xsl:value-of select="$u" /> {
 		overflow:hidden;
 		text-align:left;
 		-moz-user-select: none;
@@ -59,17 +59,17 @@
 		-khtml-user-select: none;
 		user-select: none;
 	}
-	.ntb-grid-scrollerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$scrollerWidth"/>px;}
-	.ntb-grid-topheight<xsl:value-of select="$u" /> {overflow:hidden;<xsl:if test="$g/@top=0">display:none;</xsl:if>}
-	.ntb-grid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@left" />px;overflow:hidden;text-align:left;}
-	.ntb-grid-centerwidth<xsl:value-of select="$u" />-0 {width:<xsl:value-of select="number($g/@Width)-number($g/@left)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
-	.ntb-grid-scrollbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@scrollbarHeight" />px;}
-	.ntb-grid-scrollbarwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@scrollbarWidth" />px;}
-	.ntb-grid-toolbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@ToolbarHeight" />px;}
+	.ntb-treegrid-scrollerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$scrollerWidth"/>px;}
+	.ntb-treegrid-topheight<xsl:value-of select="$u" /> {overflow:hidden;<xsl:if test="$g/@top=0">display:none;</xsl:if>}
+	.ntb-treegrid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@left" />px;overflow:hidden;text-align:left;}
+	.ntb-treegrid-centerwidth<xsl:value-of select="$u" />-0 {width:<xsl:value-of select="number($g/@Width)-number($g/@left)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
+	.ntb-treegrid-scrollbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@scrollbarHeight" />px;}
+	.ntb-treegrid-scrollbarwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@scrollbarWidth" />px;}
+	.ntb-treegrid-toolbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@ToolbarHeight" />px;}
 	
-	.ntb-grid-surfaceheight<xsl:value-of select="$u" /> {height:100px;}
+	.ntb-treegrid-surfaceheight<xsl:value-of select="$u" /> {height:100px;}
 
-	.ntb-grid {padding:0px;margin:0px;border:1px solid #cccccc}
+	.ntb-treegrid {padding:0px;margin:0px;border:1px solid #cccccc}
 	.ntb-scroller {padding:0px;}
 	.ntb-scrollcorner {padding:0px;}
 
@@ -184,9 +184,9 @@
 	</xsl:variable>
 	<xsl:variable name="id"><xsl:value-of select="@id"/></xsl:variable>
 	
-	.ntb-grid-midheight<xsl:value-of select="$u" />-0 {overflow:hidden;height:<xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$midHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($midHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
+	.ntb-treegrid-midheight<xsl:value-of select="$u" />-0 {overflow:hidden;height:<xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$midHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($midHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
 	<xsl:if test="$id = $g/@RootColumns">
-		.ntb-grid-scrollerheight<xsl:value-of select="$u" /> {height: <xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$scrollerHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($scrollerHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
+		.ntb-treegrid-scrollerheight<xsl:value-of select="$u" /> {height: <xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$scrollerHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($scrollerHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
 	</xsl:if>
 	.hScrollbarRange<xsl:value-of select="$u" /> {
 		width:<xsl:value-of select="$total-columns-width"/>px;
@@ -194,10 +194,10 @@
 
 	<xsl:choose>
 		<xsl:when test="$id = $g/@RootColumns">
-			.ntb-grid-surfacewidth<xsl:value-of select="$u" />-<xsl:value-of select="@id"/> {width:<xsl:value-of select="number($g/@ViewableWidth)"/>px;}
+			.ntb-treegrid-surfacewidth<xsl:value-of select="$u" />-<xsl:value-of select="@id"/> {width:<xsl:value-of select="number($g/@ViewableWidth)"/>px;}
 		</xsl:when>
 		<xsl:otherwise>
-			.ntb-grid-surfacewidth<xsl:value-of select="$u" />-<xsl:value-of select="@id"/> {width:<xsl:value-of select="number($g/@ViewableWidth)-(number($depth) * number($g/@GroupOffset)) - (number($depth) + 1)"/>px;}
+			.ntb-treegrid-surfacewidth<xsl:value-of select="$u" />-<xsl:value-of select="@id"/> {width:<xsl:value-of select="number($g/@ViewableWidth)-(number($depth) * number($g/@GroupOffset)) - (number($depth) + 1)"/>px;}
 		</xsl:otherwise>
 	</xsl:choose>
 	<xsl:for-each select="*">

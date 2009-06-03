@@ -48,7 +48,7 @@
 	<div>
 	<xsl:choose>
 	<xsl:when test="$showHeaders = 1">
-		<table cellpadding="0" cellspacing="0" border="0" class="ntb-grid-headerblock">
+		<table cellpadding="0" cellspacing="0" border="0" class="ntb-treegrid-headerblock">
 			<tr>
 				<xsl:attribute name="class">ntb-header-row<xsl:value-of select="$uniqueId" /></xsl:attribute>
 
@@ -78,7 +78,7 @@
 		</table>
 	</xsl:when>
 	<xsl:otherwise>
-	<table cellpadding="0" cellspacing="0" border="0" class="ntb-grid-datablock">
+	<table cellpadding="0" cellspacing="0" border="0" class="ntb-treegrid-datablock">
 		<xsl:apply-templates select="key('data-source', $dataTableId)/ntb:data/ntb:e[@xi &gt;= $start and @xi &lt; $end]" >
 			<xsl:sort select="@xi" data-type="number" />
 		</xsl:apply-templates>
