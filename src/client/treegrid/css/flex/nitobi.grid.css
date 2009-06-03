@@ -54,13 +54,12 @@
 
 /* Lists */
 
-.flex .ntb-grid { 
+.flex .ntb-treegrid { 
 }
 
-.flex .ntb-grid-header {
+.flex .ntb-treegrid-header {
 	background: url(assets/header.png) left top repeat-x;
 	border-bottom: #b7babc 1px solid;
-	height: 21px;
 }
 
 .flex .ntb-column-descending { 
@@ -73,10 +72,6 @@
 	background-color:#7fceff; 
 	border-right: #b7babc 1px solid;
 	border-bottom: #ebeff2 1px solid;
-}
-
-.flex .ntb-column-indicator { 
-	padding: 0px 5px;
 }
 
 .flex .ntb-column-indicator-border,
@@ -136,7 +131,7 @@
     z-index: 900;
 }
 
-.flex .ntb-grid-resizebox {
+.flex .ntb-treegrid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -184,7 +179,7 @@
 	background-color: #44b7fe; 
 }
 
-.flex .ntb-grid-selection-background {
+.flex .ntb-treegrid-selection-background {
     background-color: #7fceff;
     filter:alpha(opacity=25);
     -moz-opacity:.25;
@@ -282,7 +277,7 @@
 	overflow:hidden;
 }
 
-.flex .ntb-grid-selection {
+.flex .ntb-treegrid-selection {
     background-color:transparent;
     display:block;
     height:10px;
@@ -292,7 +287,7 @@
     top:-2000px;
 }
 
-.flex .ntb-grid-selection-grabby {
+.flex .ntb-treegrid-selection-grabby {
 	/* Note: Always define a generic cursor 
 	at the end of the list in case none of 
 	the url-defined cursors can be used */
@@ -309,11 +304,11 @@
     z-index:20;
 }
 
-.flex .ntb-grid-selection-border {
+.flex .ntb-treegrid-selection-border {
     border: 1px solid #000000;
 }
 
-.flex .ntb-grid-selection-border-active {
+.flex .ntb-treegrid-selection-border-active {
     border:1px dashed #000000;
 }
 
@@ -377,7 +372,7 @@
 }
 
 /* Removed left because we may not want an offset in a subgrid. */
-.flex .ntb-grid-subgroup {
+.flex .ntb-treegrid-subgroup {
 	position:relative;
 	border: 1px solid #b7babc; 
 	margin-bottom: 1px;
