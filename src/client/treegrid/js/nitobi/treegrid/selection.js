@@ -124,7 +124,7 @@ nitobi.grid.Selection.prototype.createBoxes = function ()
 		var H = nitobi.html;
 
 		// The expander grabby is the small handle in the bottom right of the selection used to drag fill
-		var boxexpanderGrabby = H.createElement("div", {"class":"ntb-grid-selection-grabby"})
+		var boxexpanderGrabby = H.createElement("div", {"class":"ntb-treegrid-selection-grabby"})
 		this.expanderGrabbyEvents = [
 			{type:'mousedown', handler:this.handleGrabbyMouseDown},
 			{type:'mouseup', handler:this.handleGrabbyMouseUp},
@@ -170,9 +170,9 @@ nitobi.grid.Selection.prototype.createBox = function (id)
 		boxBorder = nitobi.html.createTable({"cellpadding":0,"cellspacing":0,"border":0}, {"backgroundColor":"transparent"});
 		cell = boxBorder.rows[0].cells[0];
 	}
-	boxBorder.className = "ntb-grid-selection ntb-grid-selection-border";
-	boxBorder.setAttribute("id", "ntb-grid-selection-"+id);
-	var boxBackground = nitobi.html.createElement("div", {"id":id, "class":"ntb-grid-selection-background"});
+	boxBorder.className = "ntb-treegrid-selection ntb-treegrid-selection-border";
+	boxBorder.setAttribute("id", "ntb-treegrid-selection-"+id);
+	var boxBackground = nitobi.html.createElement("div", {"id":id, "class":"ntb-treegrid-selection-background"});
 	cell.appendChild(boxBackground);
 	return boxBorder;
 }
@@ -345,7 +345,7 @@ nitobi.grid.Selection.prototype.shrink = function(evt)
 {
 	// This is for Firefox where the selection expand border is a bit bigger than the selection so it can cause 
 	// shrink to be called instead of expand because the expand border is 1px over the next cell where expand should be fired
-	if (nitobi.html.Css.hasClass(evt.srcElement, "ntb-grid-selection-border") || nitobi.html.Css.hasClass(evt.srcElement, "ntb-grid-selection-grabby")) return;
+	if (nitobi.html.Css.hasClass(evt.srcElement, "ntb-treegrid-selection-border") || nitobi.html.Css.hasClass(evt.srcElement, "ntb-treegrid-selection-grabby")) return;
 
 	//	First make sure that the start and end cell are not the same - ie we have a selection
 	//	Also check that we are in "selecting" mode
@@ -904,7 +904,7 @@ nitobi.grid.Selection.prototype.setExpanding = function(val, dir)
 	this.expandingVertical = (dir == "horiz"?false:true);
 
 	var C = nitobi.html.Css;
-	var regular = "ntb-grid-selection-border";
+	var regular = "ntb-treegrid-selection-border";
 	var active = regular + "-active";
 	if (val) {
 		C.swapClass(this.box, regular, active);

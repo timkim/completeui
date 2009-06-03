@@ -521,11 +521,11 @@ nitobi.grid.TreeGrid.prototype.initializeFromCss = function()
 	if (rowHeight != null && rowHeight != "")
 		this.setRowHeight(parseInt(rowHeight));
 
-	var headerHeight = this.getThemedStyle("ntb-grid-header", "height");
+	var headerHeight = this.getThemedStyle("ntb-treegrid-header", "height");
 	if (headerHeight != null && headerHeight != "")
 		this.setHeaderHeight(parseInt(headerHeight));
 	
-	var ntbSubgroup = this.getThemedClass("ntb-grid-subgroup");
+	var ntbSubgroup = this.getThemedClass("ntb-treegrid-subgroup");
 	if (ntbSubgroup != null && ntbSubgroup.left != null && ntbSubgroup.left != "" && this.getGroupOffset() == 0)
 		this.setGroupOffset(parseInt(ntbSubgroup.left));
 	
@@ -834,7 +834,7 @@ nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
 	if (nitobi.browser.IE)
 		this.keyNav = this.getScrollerContainer();
 	else
-		this.keyNav = $ntb("ntb-grid-keynav"+this.uid);
+		this.keyNav = $ntb("ntb-treegrid-keynav"+this.uid);
 
 	this.keyEvents = [
 		{type:'keydown', handler:this.handleKey},
@@ -844,8 +844,8 @@ nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
 	nitobi.html.attachEvents(this.keyNav, this.keyEvents, this);
 
 	// Attach the DOM events for grid resizing
-	var rightGrabby = $ntb("ntb-grid-resizeright" + this.uid);
-	var btmGrabby = $ntb("ntb-grid-resizebottom" + this.uid);
+	var rightGrabby = $ntb("ntb-treegrid-resizeright" + this.uid);
+	var btmGrabby = $ntb("ntb-treegrid-resizebottom" + this.uid);
 	if (rightGrabby != null)
 	{
 		nitobi.html.attachEvent(rightGrabby, "mousedown", this.beforeResize, this);
@@ -1537,7 +1537,7 @@ nitobi.grid.TreeGrid.prototype.getToolbars = function()
 nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
 {
 	var viewableWidth = this.getViewableWidth();
-	var hScrollbarContainer = $ntb("ntb-grid-hscrollshow" + this.uid);
+	var hScrollbarContainer = $ntb("ntb-treegrid-hscrollshow" + this.uid);
 	if ((viewableWidth <= parseInt(this.getWidth())))
 	{
 		hScrollbarContainer.style.display = "none";
@@ -1549,7 +1549,7 @@ nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
 		var pctW = this.getWidth()/this.getViewableWidth();
 		this.hScrollbar.setRange(pctW);
 	}
-	var scrollStyle = nitobi.html.Css.getClass(".ntb-grid-scrollerheight" + this.uid, true);
+	var scrollStyle = nitobi.html.Css.getClass(".ntb-treegrid-scrollerheight" + this.uid, true);
 	if (viewableWidth > this.getWidth())
 	{
 		scrollStyle.height = this.getHeight() - this.getscrollbarHeight() - (this.isToolbarEnabled()?this.getToolbarHeight():0) + "px";
@@ -1596,7 +1596,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.subscribe("HtmlReady", L.close(ls,ls.hide));
 	this.subscribe("AfterGridResize", L.close(ls,ls.resize));
 	ls.initialize();
-	ls.attachToElement($ntb("ntb-grid-overlay"+this.uid));
+	ls.attachToElement($ntb("ntb-treegrid-overlay"+this.uid));
 	ls.show();
 
 //	nitobi.html.setBgImage($ntb("ntb-frozenshadow"+this.uid));
@@ -2149,14 +2149,14 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 		// Things are different if we are resizing a frozen or unfrozen column
 		if (columnIndex < this.getFrozenLeftColumnCount())
 		{
-			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			var leftStyle = C.getClass(".ntb-treegrid-leftwidth"+this.uid);
 			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
-			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			var centerStyle = C.getClass(".ntb-treegrid-centerwidth"+this.uid);
 			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
 		}
 		else
 		{
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth"+this.uid);
 			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
 		}
 		*/
@@ -2167,7 +2167,7 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 		do
 		{
 			var id = columns.getAttribute("id");
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth" + this.uid + "-" + id);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth" + this.uid + "-" + id);
 			var width = (id == rootId?maxWidth:maxWidth - (depth * parseInt(groupOffset)) - (depth + 1));
 			surfaceStyle.width = width + "px";
 			var childId = this.findChildColumnSet(id);
@@ -2256,7 +2256,7 @@ nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()
 		{
 			var columnsNode = surface.columnsNode;
 			var id = columnsNode.getAttribute("id");
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth" + this.uid + "-" + id, true);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth" + this.uid + "-" + id, true);
 			var width = (id == rootId?maxWidth:maxWidth - (depth * parseInt(groupOffset)) - (depth + 1));
 			surfaceStyle.width = width + "px";
 			depth++;
@@ -3936,19 +3936,19 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 	var midHeight = scrollerHeight-this.gettop();
 
 	var addRule = nitobi.html.Css.addRule;
-	var p = "ntb-grid-";
+	var p = "ntb-treegrid-";
 
 	if (this.rules == null)
 	{
 		this.rules = {};
 
 		// Static private styles - only set them once and no need to store them for later.
-		this.rules[".ntb-grid-datablock"] = addRule(ss, ".ntb-grid-datablock", "table-layout:fixed;width:100%;");
-		this.rules[".ntb-grid-headerblock"] = addRule(ss, ".ntb-grid-headerblock", "table-layout:fixed;width:100%;");
+		this.rules[".ntb-treegrid-datablock"] = addRule(ss, ".ntb-treegrid-datablock", "table-layout:fixed;width:100%;");
+		this.rules[".ntb-treegrid-headerblock"] = addRule(ss, ".ntb-treegrid-headerblock", "table-layout:fixed;width:100%;");
 		addRule(ss, ".ntbcellborder"+u, "overflow:hidden;text-decoration:none;margin:0px;border-right:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;white-space:nowrap;");
 		addRule(ss, "."+p+"overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
 		addRule(ss, "."+p+"scroller"+u, "overflow:hidden;text-align:left;");
-		addRule(ss, ".ntb-grid", "padding:0px;margin:0px;border:1px solid #cccccc;");
+		addRule(ss, ".ntb-treegrid", "padding:0px;margin:0px;border:1px solid #cccccc;");
 		addRule(ss, ".ntb-scroller", "padding:0px;spacing:0px;");
 		addRule(ss, ".ntb-scrollcorner", "padding:0px;spacing:0px;");
 		addRule(ss, ".ntb-input-border", "table-layout:fixed;overflow:hidden;position:absolute;z-index:2000;top:-2000px;left:-2000px;;");
@@ -3962,26 +3962,26 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 	addRule(ss, ".vScrollbarRange"+u, "");
 	addRule(ss, "."+t+" .ntb-cell", "overflow:hidden;white-space:nowrap;");
 	addRule(ss, "."+t+" .ntb-cell-border", "overflow:hidden;white-space:nowrap;"+(nitobi.browser.IE?"height:auto;":"")+";");
-	addRule(ss, ".ntb-grid-headershow"+u, "padding:0px;spacing:0px;"+(this.isColumnIndicatorsEnabled()?"display:none;":"")+"");
-	addRule(ss, ".ntb-grid-vscrollshow"+u, "padding:0px;spacing:0px;"+(showvscroll?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-hscrollshow"+u, "padding:0px;spacing:0px;"+(showhscroll?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-toolbarshow"+u, ""+(showtoolbar?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-height"+u, "height:"+height+"px;overflow:hidden;");
-	addRule(ss, ".ntb-grid-width"+u, "width:"+width+"px;overflow:hidden;");
-	addRule(ss, ".ntb-grid-overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
-	addRule(ss, ".ntb-grid-scroller"+u, "overflow:hidden;text-align:left;");
-	//addRule(ss, ".ntb-grid-scrollerheight"+u, "height:"+(totalColumnsWidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight())+"px;");
-	addRule(ss, ".ntb-grid-scrollerwidth"+u, "width:"+scrollerWidth+"px;");
-	addRule(ss, ".ntb-grid-topheight"+u, "height:"+this.gettop()+"px;overflow:hidden;"+(this.gettop()==0?"display:none;":"")+"");
-	//addRule(ss, ".ntb-grid-midheight"+u, "overflow:hidden;height:"+(totalColumnsWidth > width?midHeight:midHeight+this.getscrollbarHeight())+"px;");
-	addRule(ss, ".ntb-grid-leftwidth"+u, "width:"+this.getleft()+"px;overflow:hidden;text-align:left;");
+	addRule(ss, ".ntb-treegrid-headershow"+u, "padding:0px;spacing:0px;"+(this.isColumnIndicatorsEnabled()?"display:none;":"")+"");
+	addRule(ss, ".ntb-treegrid-vscrollshow"+u, "padding:0px;spacing:0px;"+(showvscroll?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-hscrollshow"+u, "padding:0px;spacing:0px;"+(showhscroll?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-toolbarshow"+u, ""+(showtoolbar?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-height"+u, "height:"+height+"px;overflow:hidden;");
+	addRule(ss, ".ntb-treegrid-width"+u, "width:"+width+"px;overflow:hidden;");
+	addRule(ss, ".ntb-treegrid-overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
+	addRule(ss, ".ntb-treegrid-scroller"+u, "overflow:hidden;text-align:left;");
+	//addRule(ss, ".ntb-treegrid-scrollerheight"+u, "height:"+(totalColumnsWidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight())+"px;");
+	addRule(ss, ".ntb-treegrid-scrollerwidth"+u, "width:"+scrollerWidth+"px;");
+	addRule(ss, ".ntb-treegrid-topheight"+u, "height:"+this.gettop()+"px;overflow:hidden;"+(this.gettop()==0?"display:none;":"")+"");
+	//addRule(ss, ".ntb-treegrid-midheight"+u, "overflow:hidden;height:"+(totalColumnsWidth > width?midHeight:midHeight+this.getscrollbarHeight())+"px;");
+	addRule(ss, ".ntb-treegrid-leftwidth"+u, "width:"+this.getleft()+"px;overflow:hidden;text-align:left;");
 	// TODO: centerwidth should target the root surface
-	addRule(ss, ".ntb-grid-centerwidth"+u, "width:"+(width-this.getleft()-this.getscrollbarWidth()*showvscroll)+"px;");
-	addRule(ss, ".ntb-grid-scrollbarheight"+u, "height:"+this.getscrollbarHeight()+"px;");
-	addRule(ss, ".ntb-grid-scrollbarwidth"+u, "width:"+this.getscrollbarWidth()+"px;");
-	addRule(ss, ".ntb-grid-toolbarheight"+u, "height:"+this.getToolbarHeight()+"px;");
-	//addRule(ss, ".ntb-grid-surfacewidth"+u, "width:"+unfrozenColumnsWidth+"px;");
-	addRule(ss, ".ntb-grid-surfaceheight"+u, "height:100px;");
+	addRule(ss, ".ntb-treegrid-centerwidth"+u, "width:"+(width-this.getleft()-this.getscrollbarWidth()*showvscroll)+"px;");
+	addRule(ss, ".ntb-treegrid-scrollbarheight"+u, "height:"+this.getscrollbarHeight()+"px;");
+	addRule(ss, ".ntb-treegrid-scrollbarwidth"+u, "width:"+this.getscrollbarWidth()+"px;");
+	addRule(ss, ".ntb-treegrid-toolbarheight"+u, "height:"+this.getToolbarHeight()+"px;");
+	//addRule(ss, ".ntb-treegrid-surfacewidth"+u, "width:"+unfrozenColumnsWidth+"px;");
+	addRule(ss, ".ntb-treegrid-surfaceheight"+u, "height:100px;");
 	//addRule(ss, ".ntb-hscrollbar", (totalColumnsWidth > width?"display:block;":"display:none;"));
 	addRule(ss, ".ntb-row"+u, "height:"+this.getRowHeight()+"px;margin:0px;line-height:"+this.getRowHeight()+"px;");
 	addRule(ss, ".ntb-header-row"+u, "height:"+this.getHeaderHeight()+"px;");
@@ -4010,18 +4010,18 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 		var depth = this.calculateColumnDepth(colset, 0);
 		
 		addRule(ss, ".ntb-hscrollbar", (colwidth > width?"display:block":"display:none"));
-		addRule(ss, ".ntb-grid-midheight"+u+"-0", "overflow:hidden;height:" + (colwidth > width?midHeight:midHeight + this.getscrollbarHeight()) + "px;");
+		addRule(ss, ".ntb-treegrid-midheight"+u+"-0", "overflow:hidden;height:" + (colwidth > width?midHeight:midHeight + this.getscrollbarHeight()) + "px;");
 		if (id == this.getRootColumns())
-			addRule(ss, ".ntb-grid-scrollerheight"+u, "height:" + (colwidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight()) + "px;");
+			addRule(ss, ".ntb-treegrid-scrollerheight"+u, "height:" + (colwidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight()) + "px;");
 		addRule(ss, ".hScrollbarRange"+u, "width:" + colwidth + "px;");
 	
 		if (id == this.getRootColumns())
 		{
-			var rule = addRule(ss, ".ntb-grid-surfacewidth"+u+"-"+id, "width:" + this.getViewableWidth() + "px;");
+			var rule = addRule(ss, ".ntb-treegrid-surfacewidth"+u+"-"+id, "width:" + this.getViewableWidth() + "px;");
 		}
 		else
 		{
-			addRule(ss, ".ntb-grid-surfacewidth"+u+"-"+id, "width:" + (this.getViewableWidth() - (depth * this.getGroupOffset()) - 1) + "px;");
+			addRule(ss, ".ntb-treegrid-surfacewidth"+u+"-"+id, "width:" + (this.getViewableWidth() - (depth * this.getGroupOffset()) - 1) + "px;");
 		}
 	}
 }
@@ -4095,8 +4095,8 @@ nitobi.grid.TreeGrid.prototype.renderSurface = function()
 		throw "Can't render the surface without a Scroller";
 	}
 	var surfaceHtml = this.Scroller.surface.renderContainer(this.uid);
-	// The ntb-grid-surface-container element is defined and created by frameXslProc
-	$ntb("ntb-grid-surface-container-" + this.uid).innerHTML = surfaceHtml;
+	// The ntb-treegrid-surface-container element is defined and created by frameXslProc
+	$ntb("ntb-treegrid-surface-container-" + this.uid).innerHTML = surfaceHtml;
 }
 
 /**
@@ -5786,28 +5786,28 @@ nitobi.grid.TreeGrid.prototype.getDisplayedRowCount = function()
 
 nitobi.grid.TreeGrid.prototype.getToolsContainer = function() 
 {
-	this.toolsContainer = this.toolsContainer || document.getElementById("ntb-grid-toolscontainer"+this.uid);
+	this.toolsContainer = this.toolsContainer || document.getElementById("ntb-treegrid-toolscontainer"+this.uid);
 	return this.toolsContainer;
 }
 
 nitobi.grid.TreeGrid.prototype.getHeaderContainer = function()
 {
-	return document.getElementById("ntb-grid-header"+this.uid+"_" + this.scroller.surface.key);
+	return document.getElementById("ntb-treegrid-header"+this.uid+"_" + this.scroller.surface.key);
 }
 
 nitobi.grid.TreeGrid.prototype.getSubHeaderContainer = function()
 {
-	return document.getElementById("ntb-grid-subheader-container" + this.uid);
+	return document.getElementById("ntb-treegrid-subheader-container" + this.uid);
 }
 
 nitobi.grid.TreeGrid.prototype.getDataContainer = function()
 {
-	return document.getElementById("ntb-grid-data"+this.uid);
+	return document.getElementById("ntb-treegrid-data"+this.uid);
 }
 
 nitobi.grid.TreeGrid.prototype.getScrollerContainer = function()
 {
-	return document.getElementById("ntb-grid-scroller"+this.uid)
+	return document.getElementById("ntb-treegrid-scroller"+this.uid)
 }
 
 nitobi.grid.TreeGrid.prototype.getGridContainer = function()
@@ -5973,7 +5973,7 @@ nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
 	if (!editable)
 	{
 		// TODO: what is the approach to these sorts of alerts???
-		// TODO: put a default class on read only columns ntb-grid-columnreadonly
+		// TODO: put a default class on read only columns ntb-treegrid-columnreadonly
 		this.fire("PasteFailed", new nitobi.base.EventArgs(this));
 		this.handleAfterPaste();
 		return;
@@ -6190,7 +6190,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	he.push({type:'mousedown', handler:this.handleHeaderMouseDown});
 	he.push({type:'mouseup', handler:this.handleHeaderMouseUp});
 	he.push({type:'mousemove', handler:this.handleHeaderMouseMove});
-	nitobi.html.attachEvents($ntb("ntb-grid-header" + this.uid + "_" + subSurface.key), he, this);
+	nitobi.html.attachEvents($ntb("ntb-treegrid-header" + this.uid + "_" + subSurface.key), he, this);
 	
 	var columnsElement = subSurface.columnsNode;
 	var getHandler = columnsElement.getAttribute("gethandler");

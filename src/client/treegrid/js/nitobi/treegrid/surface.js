@@ -242,7 +242,7 @@ nitobi.grid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMo
 	}
 	
 	var surfaceTop = this.calculateOffsetTop();
-	var subSurfaceNode = nitobi.html.getChildNodeByAttribute(b0, "className", "ntb-grid-subgroup");
+	var subSurfaceNode = nitobi.html.getChildNodeByAttribute(b0, "className", "ntb-treegrid-subgroup");
 	// We'll figure out the unrendered rows by pretending there are no subgroups rendered so we'll
 	// subtract the height of any subgroups in this block when calculating the firstVisibleRow
 	var buffer = 0;
@@ -1296,8 +1296,8 @@ nitobi.grid.Surface.prototype.attachTopHeader = function()
 	sbStyle.left = ((this.getDepth()-1) * this.grid.getGroupOffset()) + 1 + "px";
 	sbStyle.position = "relative";
 	sbStyle.overflow = "visible";
-	Css.removeClass(subHeader, "ntb-grid-header");
-	Css.addClass(nitobi.html.getFirstChild(subHeader), "ntb-grid-header");
+	Css.removeClass(subHeader, "ntb-treegrid-header");
+	Css.addClass(nitobi.html.getFirstChild(subHeader), "ntb-treegrid-header");
 	var gridSubHeader = this.grid.getSubHeaderContainer();
 	gridSubHeader.appendChild(subHeader);
 	for (var i = 0; i < this.columnsNode.childNodes.length; i++)

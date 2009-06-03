@@ -72,7 +72,7 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
   }
   else
   {
-    var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
+    var leftStyleWidth = parseInt(C.getClass(".ntb-treegrid-leftwidth"+this.grid.uid).width);
   } 
 
   var x = nitobi.html.getEventCoords(evt).x;
