@@ -1672,7 +1672,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	var vs = this.vScrollbar = new nitobi.ui.VerticalScrollbar();
 	vs.attachToParent(this.element, $ntb("vscroll"+this.uid));
 	vs.subscribe("ScrollByUser",L.close(this,this.scrollVertical));
-	this.subscribe("PercentHeightChanged",L.close(vs, vs.setRange)); // I had to do it this way ... context wasn't being passed properly
+	this.subscribe("PercentHeightChanged", L.close(vs, vs.setRange)); // I had to do it this way ... context wasn't being passed properly
 	this.subscribe("ScrollVertical",L.close(vs, vs.setScrollPercent)); 
 	this.setscrollbarWidth(vs.getWidth());
 
@@ -1948,8 +1948,12 @@ nitobi.grid.TreeGrid.prototype.updateCellRanges= function()
 		this.measure();
 		this.resizeScroller();
 
+		var surfaceHeight = this.scroller.scrollSurface.clientHeight;
+		
+		var ratio = surfaceHeight/(this.calculateHeight() + this.calculateHdrHeight());
+		
 		// This is required because we need to get the height of the headers in the child grids
-		this.fire("PercentHeightChanged",this.getHeight()/(this.calculateHeight() + this.calculateHdrHeight()));
+		this.fire("PercentHeightChanged", ratio);
 		this.fire("PercentWidthChanged",this.getWidth()/this.calculateWidth());
 	}
 }
