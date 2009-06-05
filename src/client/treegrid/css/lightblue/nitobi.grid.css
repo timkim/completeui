@@ -56,11 +56,11 @@
 
 /* Lists */
 
-.lightblue .ntb-grid { 
+.lightblue .ntb-treetreetreegrid { 
 	border:#CCCCCC 1px solid; 
 }
 
-.lightblue .ntb-grid-header { 
+.lightblue .ntb-treetreetreegrid-header { 
 	background-image:url('column_deadspace.gif'); 
 }
 
@@ -118,7 +118,7 @@
     z-index: 900;
 }
 
-.lightblue .ntb-grid-resizebox {
+.lightblue .ntb-treetreetreegrid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -159,7 +159,7 @@
 	background-color:#FCD661; 
 }
 
-.lightblue .ntb-grid-selection-background {
+.lightblue .ntb-treetreetreegrid-selection-background {
     background-color:#F0B604;
     filter:alpha(opacity=25);
     -moz-opacity:.25;
@@ -260,7 +260,7 @@
 	cursor: nw-resize;
 }
 
-.lightblue .ntb-grid-selection {
+.lightblue .ntb-treetreetreegrid-selection {
     background-color:transparent;
     display:block;
     height:10px;
@@ -270,7 +270,7 @@
     top:-2000px;
 }
 
-.lightblue .ntb-grid-selection-expander-grabby {
+.lightblue .ntb-treetreetreegrid-selection-expander-grabby {
 	/* Note: Always define a generic cursor 
 	at the end of the list in case none of 
 	the url-defined cursors can be used */
@@ -287,11 +287,11 @@
     z-index:20;
 }
 
-.lightblue .ntb-grid-selection-border {
+.lightblue .ntb-treetreetreegrid-selection-border {
     border: 1px solid #000000;
 }
 
-.lightblue .ntb-grid-selection-border-active {
+.lightblue .ntb-treetreetreegrid-selection-border-active {
     border:1px dashed #000000;
 }
 

@@ -54,13 +54,13 @@
 
 /* Lists */
 
-.xp.ntb-grid {
+.xp.ntb-treetreegrid {
 	border: 1px solid #7f9db9 !important;
 }
 
 /*********** Column headers ******************/
 
-.xp .ntb-grid-header {
+.xp .ntb-treetreegrid-header {
 	background: url(assets/header.png) repeat-x left top;
 	height: 21px;
 }
@@ -115,7 +115,7 @@
     z-index: 900;
 }
 
-.nitobi .ntb-grid-resizebox {
+.nitobi .ntb-treetreegrid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -157,7 +157,7 @@
 	background-color: #c3c3c3;
 }
 
-.xp .ntb-grid-selection {
+.xp .ntb-treetreegrid-selection {
     background-color:transparent;
     display:block;
     height:10px;
@@ -167,7 +167,7 @@
     top:-2000px;
 }
 
-.xp .ntb-grid-selection-grabby {
+.xp .ntb-treetreegrid-selection-grabby {
 	/* Note: Always define a generic cursor 
 	at the end of the list in case none of 
 	the url-defined cursors can be used */
@@ -184,15 +184,15 @@
     z-index:20;
 }
 
-.xp .ntb-grid-selection-border {
+.xp .ntb-treetreegrid-selection-border {
     border: 1px solid #000000;
 }
 
-.xp .ntb-grid-selection-border-active {
+.xp .ntb-treetreegrid-selection-border-active {
     border:1px dashed #000000;
 }
 
-.xp .ntb-grid-selection-background {
+.xp .ntb-treetreegrid-selection-background {
     background-color: #ffc73c;
     filter:alpha(opacity=25);
     -moz-opacity:.25;
@@ -347,7 +347,7 @@
 	background: url(assets/toolbar_hover.png) left top no-repeat !important;
 }
 
-.xp .ntb-grid-subgroup {
+.xp .ntb-treetreegrid-subgroup {
 	position:relative;
 	left:10px;
 	border: 1px solid #d5d5d5; 

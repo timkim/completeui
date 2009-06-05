@@ -54,13 +54,13 @@
 
 /* Lists */
 
-.tiny .ntb-grid { 
+.tiny .ntb-treetreetreegrid { 
 	border:#CCCCCC 1px solid; 
 }
 
 /*********** Column headers ******************/
 
-.tiny .ntb-grid-header { 
+.tiny .ntb-treetreetreegrid-header { 
 	background-image:url('column_deadspace.gif');
 	height:18px;
 }
@@ -116,7 +116,7 @@
     z-index: 900;
 }
 
-.tiny .ntb-grid-resizebox {
+.tiny .ntb-treetreetreegrid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -161,7 +161,7 @@
 	background-color:#FCD661; 
 }
 
-.tiny .ntb-grid-selection {
+.tiny .ntb-treetreetreegrid-selection {
     background-color:transparent;
     display:block;
     height:10px;
@@ -171,7 +171,7 @@
     top:-2000px;
 }
 
-.tiny .ntb-grid-selection-grabby {
+.tiny .ntb-treetreetreegrid-selection-grabby {
 	/* Note: Always define a generic cursor 
 	at the end of the list in case none of 
 	the url-defined cursors can be used */
@@ -188,16 +188,16 @@
     z-index:20;
 }
 
-.tiny .ntb-grid-selection-border {
+.tiny .ntb-treetreetreegrid-selection-border {
 	border: 1px solid transparent;
 
 }
 
-.tiny .ntb-grid-selection-border-active {
+.tiny .ntb-treetreetreegrid-selection-border-active {
     border:1px dashed #000000;
 }
 
-.tiny .ntb-grid-selection-background {
+.tiny .ntb-treetreetreegrid-selection-background {
     background-color:#F0B604;
     filter:alpha(opacity=25);
     -moz-opacity:.25;
@@ -340,7 +340,7 @@
     z-index:-1;
 }
 
-.tiny .ntb-grid-subgroup {
+.tiny .ntb-treetreetreegrid-subgroup {
 	position:relative;
 	left:10px;
 	border: 1px solid #CCCCCC; 

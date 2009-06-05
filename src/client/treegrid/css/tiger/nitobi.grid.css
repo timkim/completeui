@@ -55,13 +55,13 @@
 
 /* Lists */
 
-.tiger.ntb-grid {
+.tiger.ntb-treetreetreegrid {
 	border: 1px solid #898989 !important;
 }
 
 /*********** Column headers ******************/
 
-.tiger .ntb-grid-header {
+.tiger .ntb-treetreetreegrid-header {
 	background: url(assets/header.png) repeat-x right top;
 	height: 21px;
 }
@@ -120,7 +120,7 @@
     z-index: 900;
 }
 
-.tiger .ntb-grid-resizebox {
+.tiger .ntb-treetreetreegrid-resizebox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -163,7 +163,7 @@
 	background-color: #d0d0d0;
 }
 
-.tiger .ntb-grid-selection-background {
+.tiger .ntb-treetreetreegrid-selection-background {
     background-color: #3875d7;
     filter:alpha(opacity=25);
     -moz-opacity:.25;
@@ -265,7 +265,7 @@
 	cursor: nw-resize;
 }
 
-.tiger .ntb-grid-selection {
+.tiger .ntb-treetreetreegrid-selection {
     background-color:transparent;
     display:block;
     height:10px;
@@ -275,7 +275,7 @@
     top:-2000px;
 }
 
-.tiger .ntb-grid-selection-grabby {
+.tiger .ntb-treetreetreegrid-selection-grabby {
 	/* Note: Always define a generic cursor 
 	at the end of the list in case none of 
 	the url-defined cursors can be used */
@@ -292,11 +292,11 @@
     z-index:20;
 }
 
-.tiger .ntb-grid-selection-border {
+.tiger .ntb-treetreetreegrid-selection-border {
     border: 1px solid #000000;
 }
 
-.tiger .ntb-grid-selection-border-active {
+.tiger .ntb-treetreetreegrid-selection-border-active {
     border:1px dashed #000000;
 }
 
@@ -358,7 +358,7 @@
 	background: url(assets/toolbar_hover.png) left top no-repeat !important;
 }
 
-.tiger .ntb-grid-subgroup {
+.tiger .ntb-treetreetreegrid-subgroup {
 	position:relative;
 	left:10px;
 	border: 1px solid #d5d5d5; 
