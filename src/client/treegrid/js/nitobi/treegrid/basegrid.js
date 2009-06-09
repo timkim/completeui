@@ -1596,7 +1596,17 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.subscribe("HtmlReady", L.close(ls,ls.hide));
 	this.subscribe("AfterGridResize", L.close(ls,ls.resize));
 	ls.initialize();
-	ls.attachToElement($ntb("ntb-treegrid-overlay"+this.uid));
+
+	// This is for the IE7 z-index bug!
+        if(nitobi.browser.IE7 && nitobi.lang.isStandards())
+        {
+                ls.attachToElement($ntb("grid" + this.uid));
+        }
+        else
+        {
+                ls.attachToElement($ntb("ntb-treegrid-overlay" + this.uid));
+        }
+
 	ls.show();
 
 //	nitobi.html.setBgImage($ntb("ntb-frozenshadow"+this.uid));
