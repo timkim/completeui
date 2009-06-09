@@ -352,18 +352,13 @@ nitobi.grid.Viewport.prototype.renderInsideEmptyBlock=function(top, bottom, Empt
 /**
  *
  */
-nitobi.grid.Viewport.prototype.renderEmptyBlock = function(top, bottom, nextSibling) 
+nitobi.grid.Viewport.prototype.renderEmptyBlock = function(mtop, bottom, nextSibling) 
 {
-	var o = this.renderBlock(top,bottom,nextSibling);
-
-	o.setAttribute('id','eba_grid_emptyblock_'+this.region+'_'+top+'_'+bottom+'_'+this.uid);
-	// Why are we making this check?
-	/*if(top == 0 && bottom == 99) 
-	{
-		crash
-	}*/
+	var o = this.renderBlock(mtop,bottom,nextSibling);
+	o.setAttribute('id','eba_grid_emptyblock_'+this.region+'_'+mtop+'_'+bottom+'_'+this.uid);
 	o.setAttribute('rendered','false');
-	o.style.height = ((bottom - top + 1) * this.rowHeight)  + "px";
+	var style_val = (bottom - mtop + 1) * this.rowHeight;
+	o.style.height =  style_val + "px";
 	return o;
 }
 
