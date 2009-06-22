@@ -1,5 +1,8 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <!-- It's important to use the ntb namespace in the HTML tag or the grid will not render -->
-<html xmlns:ntb>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ntb="http://www.nitobi.com">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
 <title>Nitobi Grid Demos - Editors</title>
@@ -50,6 +53,15 @@ function GetNewRecordID()
 		return myAjaxRequest.httpObj.responseText;
 }
 
+function empty()
+{
+	var grid = nitobi.getComponent('EditorsGrid');
+	if(grid.datatable.getTotalRowCount() == 0)
+		{
+			$ntb('ntb-loading-cellEditorsGrid').innerHTML = "Grid is empty";
+		}
+}
+
 </script>
 </head>
 <body onload="init();">
@@ -79,6 +91,7 @@ function GetNewRecordID()
 		toolbarenabled="true"
 		theme="flex"
 		frozenleftcolumncount="3"
+		ondatareadyevent="empty()"
 		>
 
 		<ntb:columns>

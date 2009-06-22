@@ -5,21 +5,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
 <title>Nitobi Tree Grid</title>
 
-<!-- EBA_REMOVE_START -->
-<link type="text/css" rel="stylesheet" href="../../../../samples/css/samples.css"></link>
-<link type="text/css" rel="stylesheet" href="../../../../samples/css/sh.css"></link>
-<script src="../../../../samples/js/sh.js"></script>
-<script language="javascript" src="../../../../../test/client/treegrid/base.js"></script><script language="javascript"> initTest(); </script><!-- EBA_REMOVE_END -->
-<link type="text/css" rel="stylesheet" href="$STYLE$/samples.css"></link>
-
 <!-- Now we include the CSS for the component -->
-<link type="text/css" rel="stylesheet" href="$STYLE$/nitobi.treegrid.css"></link>
+<link type="text/css" rel="stylesheet" href="style/nitobi.treegrid.css"></link>
 
 <!-- First we include the Toolkit JavaScript -->
-<script language="javascript" src="$SCRIPT$/nitobi.toolkit.js"></script>
+<script language="javascript" src="nitobi.toolkit.js"></script>
 
 <!-- Now we include the component JavaScript -->
-<script language="javascript" src="$SCRIPT$/nitobi.treegrid.js"></script>
+<script language="javascript" src="nitobi.treegrid.js"></script>
 <!-- End of Demo-related Includes -->
 
 <script>
@@ -28,12 +21,10 @@ function init()
 {
 	nitobi.loadComponent('TreeGrid');
 }
-
 function click()
 {
-console.log("click");
-}
 
+}
 function switchStyles(evt)
 {
 	var grid = nitobi.getComponent('TreeGrid');
@@ -43,6 +34,20 @@ function switchStyles(evt)
 	newStyle = source.options[source.selectedIndex].value;
 	grid.setTheme(newStyle);
 	nitobi.html.Css.swapClass(container, oldStyle, newStyle);
+}
+
+function GetNewRecordID()
+{
+		// Use the native cross-browser nitobi Ajax object
+		var myAjaxRequest = new nitobi.ajax.HttpRequest();
+
+		// Define the url for your generatekey script
+		myAjaxRequest.handler = 'allocaterecord.asp?rnd=' + Math.random();
+		myAjaxRequest.async = false;
+		myAjaxRequest.get();
+
+		// return the result to the grid
+		return myAjaxRequest.httpObj.responseText;
 }
 </script>
 </head>
@@ -84,10 +89,11 @@ function switchStyles(evt)
 				  >
 		  <ntb:columns id="customers">
 			<ntb:expandcolumn childcolumnset="orders" width="50"></ntb:expandcolumn>
-			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130"></ntb:textcolumn>
+			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130" align="right"></ntb:textcolumn>
 	   		<ntb:textcolumn label="Contact Name" xdatafld="ContactName" width="130"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Email" xdatafld="ContactEmail" width="150"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Phone Number" xdatafld="PhoneNumber" width="100"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Email" xdatafld="ContactEmail" width="150" align="right"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Phone Number" xdatafld="PhoneNumber" width="100" align="right"></ntb:textcolumn>
+			<ntb:textcolumn label="Address" xdatafld="Address" width="100" align="right"></ntb:textcolumn>
 		  </ntb:columns>
 		  
 		   <ntb:columns id="orders" gethandler="load_orders.asp" savehandler="save_orders.asp" headerenabled="true">
@@ -95,11 +101,15 @@ function switchStyles(evt)
 		  	<ntb:numbercolumn label="Order ID" editable="false" xdatafld="OrderID" width="100"></ntb:numbercolumn>
 		  	<ntb:textcolumn label="Order Date" xdatafld="OrderDate" width="140"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Shipped Date" xdatafld="ShippedDate" width="140"></ntb:textcolumn>
+			<ntb:textcolumn label="Product Name" xdatafld="ProductName" width="150"></ntb:textcolumn>
 		  </ntb:columns>
 		  
 		  <ntb:columns id="products" gethandler="load_products.asp">
 		  	<ntb:textcolumn label="Product Name" xdatafld="ProductName" width="150"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Price" xdatafld="ProductPrice"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Product Name" xdatafld="ProductSku" width="150"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Price" xdatafld="ProductQuantityPerUnit"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Product Name" xdatafld="ProductCategoryName" width="150"></ntb:textcolumn>
 		  </ntb:columns>
 	</ntb:treegrid>
 </body>

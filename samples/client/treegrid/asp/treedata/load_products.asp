@@ -1,5 +1,5 @@
 <%@ Language=VBScript%>
-<!--#include file="../../../../server/asp/base_gethandler.inc"-->
+<!--#include file="nitobi.xml.inc"-->
 
 <%
 
@@ -34,7 +34,7 @@
 	DefaultOrderByColumn = "ProductID"
 	
 	dim FileandFolder
-	FileandFolder = "..\..\..\..\..\server\common\datasources\en\NorthWindUltra.mdb"	
+	FileandFolder = "\nitobitestdb.mdb"		
 	
 	' *******************************************************************
 	' Now we get all the parameters we'll need to construct the query
@@ -67,8 +67,8 @@
 		ReverseDirection = "ASC"	
 	end if
 	
-	dim ProductID
-	ProductID = cstr(request("ProductID"))
+	dim ProductName
+	ProductName = cstr(request("ProductName"))
 
 
 
@@ -82,7 +82,7 @@
 	' we need to know how many records are in the table
 	' *******************************************************************'	
 
-	countRecordSet = objConn.execute("SELECT COUNT(*) FROM " & MyTableName & " WHERE ProductID = " & ProductID)
+	countRecordSet = objConn.execute("SELECT COUNT(*) FROM " & MyTableName & " WHERE ProductName = '" & ProductName & "'")
 	dim MaxRecords
 	dim totalRowCount
 	totalRowCount = countRecordSet(0)
@@ -95,8 +95,9 @@
 
 	if MaxRecords > StartRecordIndex then
 		' Access doesn't support paging so we must execute a triple-nested query where the top n records are flipped and clipped
-		dim RecordSet
-		Set RecordSet = objConn.execute("SELECT * FROM (SELECT TOP " & PageSize & " * FROM (SELECT TOP " & MaxRecords &  "  * FROM " & MyTableName & " WHERE ProductID = " & ProductID & " ORDER BY " & SortColumn & " " & SortDirection & ") ORDER BY " & SortColumn & " " & ReverseDirection & ") ORDER BY " & SortColumn & " " & SortDirection)
+		'dim RecordSet
+		'Break("SELECT * FROM (SELECT TOP " & PageSize & " * FROM (SELECT TOP " & MaxRecords &  "  * FROM " & MyTableName & " WHERE ProductName = '" & ProductName & "' ORDER BY " & SortColumn & " " & SortDirection & ") ORDER BY " & SortColumn & " " & ReverseDirection & ") ORDER BY " & SortColumn & " " & SortDirection)
+		Set RecordSet = objConn.execute("SELECT * FROM (SELECT TOP " & PageSize & " * FROM (SELECT TOP " & MaxRecords &  "  * FROM " & MyTableName & " WHERE ProductName = '" & ProductName & "' ORDER BY " & SortColumn & " " & SortDirection & ") ORDER BY " & SortColumn & " " & ReverseDirection & ") ORDER BY " & SortColumn & " " & SortDirection)
 	end if
 	
 	' *******************************************************************
@@ -111,17 +112,22 @@
 	EBAGetHandler_DefineField("ProductID")
 	EBAGetHandler_DefineField("ProductName") 'column index 1
 	EBAGetHandler_DefineField("ProductPrice") 'column index 2
-
+	EBAGetHandler_DefineField("ProductSku") 'column index 3
+	EBAGetHandler_DefineField("ProductQuantityPerUnit") 'column index 4
+	EBAGetHandler_DefineField("ProductCategoryName") 'column index 5
 	' *******************************************************************
 	' Lets loop through our data and send it to the grid
 	' *******************************************************************
 	if MaxRecords > StartRecordIndex then
 		do while not RecordSet.eof
 	
-			EBAGetHandler_CreateNewRecord(RecordSet("ProductID"))
+			EBAGetHandler_CreateNewRecord(RecordSet("ProductName"))
 				EBAGetHandler_DefineRecordFieldValue "ProductID", RecordSet("ProductID")
 				EBAGetHandler_DefineRecordFieldValue "ProductName", RecordSet("ProductName")
 				EBAGetHandler_DefineRecordFieldValue "ProductPrice", RecordSet("ProductPrice")
+				EBAGetHandler_DefineRecordFieldValue "ProductSku", RecordSet("ProductSku")
+				EBAGetHandler_DefineRecordFieldValue "ProductQuantityPerUnit", RecordSet("ProductQuantityPerUnit")
+				EBAGetHandler_DefineRecordFieldValue "ProductCategoryName", RecordSet("ProductCategoryName")
 			EBAGetHandler_SaveRecord
 	
 			RecordSet.MoveNext
@@ -132,7 +138,5 @@
 	objConn.close
 	EBAGetHandler_SetTotalRowCount(totalRowCount)
 	EBAGetHandler_CompleteGet
-
-
 %>
 

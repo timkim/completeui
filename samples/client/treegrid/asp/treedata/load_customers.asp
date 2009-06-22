@@ -1,5 +1,5 @@
 <%@ Language=VBScript%>
-<!--#include file="../../../../server/asp/base_gethandler.inc"-->
+<!--#include file="nitobi.xml.inc"-->
 
 <%
 
@@ -28,13 +28,13 @@
 	' *******************************************************************
 	
 	dim MyTableName
-	MyTableName = "tblCustomers"
+	MyTableName = "tblMDCustomers"
 	
 	dim DefaultOrderByColumn
 	DefaultOrderByColumn = "CustomerID"
 	
 	dim FileandFolder
-	FileandFolder = "..\..\..\..\..\server\common\datasources\en\NorthWindUltra.mdb"	
+	FileandFolder = "\nitobitestdb.mdb"	
 	
 	' *******************************************************************
 	' Now we get all the parameters we'll need to construct the query

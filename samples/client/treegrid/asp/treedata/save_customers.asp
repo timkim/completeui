@@ -1,5 +1,5 @@
 <%@ Language=VBScript%>
-<!--#include file="../../../../server/asp/base_gethandler.inc"-->
+<!--#include file="nitobi.xml.inc"-->
 
 <%
 dim objConn
@@ -7,7 +7,7 @@ dim accessdb
 
 dim strconn
 
-accessdb=server.mappath(".") & "..\..\..\..\..\server\common\datasources\en\NorthWindUltra.mdb"
+accessdb=server.mappath(".") & "\nitobitestdb.mdb"	
 strconn="PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=" & accessDB & ";USER ID=;PASSWORD=;"
 Set objConn = Server.CreateObject("ADODB.Connection")
 objConn.open strconn
@@ -28,12 +28,13 @@ if EBASaveHandler_ReturnInsertCount > 0 then
 
 	for CurrentRecord = 0 to EBASaveHandler_ReturnInsertCount-1
 
-		MyQuery = "INSERT INTO tblCustomers (CustomerName, ContactName, ContactEmail, PhoneNumber) VALUES ("
+		MyQuery = "INSERT INTO tblMDCustomers (CustomerName, ContactName, ContactEmail, ContactTitle, PhoneNumber, Address) VALUES ("
 		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"CustomerName") & "',"
 		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"ContactName") & "',"
 		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"ContactEmail") & "',"
-		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"PhoneNumber") & "'"
-		
+		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"ContactTitle") & "',"
+		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"PhoneNumber") & "',"
+		MyQuery = MyQuery & "'" & EBASaveHandler_ReturnInsertField(CurrentRecord,"Address") & "'"
 		MyQuery = MyQuery & ");"
 
 		' Now we execute this query
@@ -52,13 +53,15 @@ if EBASaveHandler_ReturnUpdateCount > 0 then
 
 	for CurrentRecord = 0 to EBASaveHandler_ReturnUpdateCount-1
 
-		MyQuery = "UPDATE tblCustomers SET "
+		MyQuery = "UPDATE tblMDCustomers SET "
 		MyQuery = MyQuery & "CustomerName = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"CustomerName") & "', "
-		MyQuery = MyQuery & "CustomerName = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"ContactName") & "', "
+		MyQuery = MyQuery & "ContactName = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"ContactName") & "', "
 		MyQuery = MyQuery & "ContactEmail = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"ContactEmail") & "', "
+		MyQuery = MyQuery & "ContactTitle = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"ContactTitle") & "', "
 		MyQuery = MyQuery & "PhoneNumber = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"PhoneNumber") & "',"
+		MyQuery = MyQuery & "Address = '" & EBASaveHandler_ReturnUpdateField(CurrentRecord,"Address") & "'"
 		
-		MyQuery = MyQuery & " WHERE ContactID = " & EBASaveHandler_ReturnUpdateField(CurrentRecord,"PK") & ";"
+		MyQuery = MyQuery & " WHERE CustomerID = " & EBASaveHandler_ReturnUpdateField(CurrentRecord,"PK") & ";"
 		' PK is always our Primary Key for the row
 
 		' Now we execute this query
@@ -79,7 +82,7 @@ if EBASaveHandler_ReturnDeleteCount > 0 then
 
 	for CurrentRecord = 0 to EBASaveHandler_ReturnDeleteCount-1
 
-		MyQuery = "DELETE FROM tblCustomers WHERE ContactID = " & EBASaveHandler_ReturnDeleteField(CurrentRecord)
+		MyQuery = "DELETE FROM tblMDCustomers WHERE CustomerID = " & EBASaveHandler_ReturnDeleteField(CurrentRecord)
 
 		' Now we execute this query
 		objConn.execute(MyQuery)
@@ -88,5 +91,4 @@ if EBASaveHandler_ReturnDeleteCount > 0 then
 end if
 
 EBASaveHandler_CompleteSave
-
 %>
