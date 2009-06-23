@@ -53,8 +53,7 @@
 	</xsl:if>
 	}
 
-	.<xsl:value-of select="$t"/> .ntb-cell {overflow:hidden;white-space:nowrap;}
-	.<xsl:value-of select="$t"/> .ntb-cell, x:-moz-any-link, x:default {display: -moz-box;}
+	.<xsl:value-of select="$t"/> x:-moz-any-link, x:default {display: -moz-box;}
 	.<xsl:value-of select="$t"/> .ntb-cell-border {overflow:hidden;white-space:nowrap;<xsl:if test="$IE='true'">height:auto;</xsl:if>}
 
 	.ntb-grid-headershow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@ColumnIndicatorsEnabled=1)">display:none;</xsl:if>}
@@ -113,7 +112,7 @@
 		z-index:800;
 	}
 
-	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
+	.ntb-row<xsl:value-of select="$u" /> {min-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
 	.ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
 	.ntb-column-indicator<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@HeaderHeight)-2" />px;}
 
@@ -144,10 +143,24 @@
 	<xsl:for-each select="*">
 		<xsl:variable name="p"><xsl:value-of select="position()"/></xsl:variable>
 		<xsl:variable name="w"><xsl:value-of select="@Width"/></xsl:variable>
+		<xsl:variable name="wrap"><xsl:value-of select="@Wrap" /></xsl:variable>
 		<xsl:variable name="colw"><xsl:value-of select="number($w)-number($g/@CellBorder)"/></xsl:variable>
 		<xsl:variable name="coldataw"><xsl:value-of select="number($w)-number($g/@InnerCellBorder)"/></xsl:variable>
 		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$colw" />px;}
 		#grid<xsl:value-of select="$u" /> .ntb-column-data<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$coldataw" />px;text-align:<xsl:value-of select="@Align"/>;}
+		#grid<xsl:value-of select="$u" /> .ntb-cell-col_<xsl:value-of select="$p" /> 
+		{
+			<xsl:choose>
+				<xsl:when test="$wrap=1 and $g/@PagingMode='standard'">
+					white-space: normal;
+				</xsl:when>	
+				<xsl:otherwise>
+					overflow: hidden;
+					white-space: nowrap;
+					display: -moz-box; 
+				</xsl:otherwise>
+			</xsl:choose>
+		}
 	</xsl:for-each>
 </xsl:template>
 

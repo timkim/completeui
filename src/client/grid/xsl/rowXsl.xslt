@@ -138,8 +138,8 @@
             <!-- note the use of the ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /> class ... that is for a safari bug -->
             <xsl:attribute name="class">ntb-cell-border<xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-column-<xsl:choose><xsl:when test="$sortColumn=$pos and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=$pos and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column-<xsl:value-of select="@DataType"/><xsl:text> </xsl:text><xsl:call-template name="ClassName"><xsl:with-param name="row" select="$row"/></xsl:call-template><xsl:text> </xsl:text><xsl:if test="@type = 'NUMBER' and $value &lt; 0">ntb-cell-negativenumber</xsl:if><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
 
-            <div style="overflow:hidden;white-space:nowrap;">
-            	<xsl:attribute name="class">ntb-row<xsl:value-of select="$uniqueId"/><xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-cell</xsl:attribute>
+            <div>
+            	<xsl:attribute name="class">ntb-row<xsl:value-of select="$uniqueId"/><xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-cell-col_<xsl:value-of select="position()" /></xsl:attribute>
 	            <xsl:if test="$toolTipsEnabled='1'"> 
 		            	<xsl:attribute name="title"> 
 	            		<xsl:value-of select="$value" />
