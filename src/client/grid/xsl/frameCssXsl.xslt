@@ -10,7 +10,7 @@
 	<xsl:variable name="t" select="$g/@Theme"></xsl:variable>
 	<xsl:variable name="showvscroll"><xsl:choose><xsl:when test="($g/@VScrollbarEnabled='true' or $g/@VScrollbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
 	<xsl:variable name="showhscroll"><xsl:choose><xsl:when test="($g/@HScrollbarEnabled='true' or $g/@HScrollbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
-	<xsl:variable name="showtoolbar"><xsl:choose><xsl:when test="($g/@ToolbarEnabled='true' or $g/@ToolbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>		
+	<xsl:variable name="showtoolbar"><xsl:choose><xsl:when test="($g/@ToolbarEnabled='true' or $g/@ToolbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
 	<xsl:variable name="frozen-columns-width">
 		<xsl:call-template name="get-pane-width">
 				<xsl:with-param name="start-column" select="number(1)"/>
@@ -77,8 +77,18 @@
 	.ntb-grid-scrollerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$scrollerWidth"/>px;}
 	.ntb-grid-topheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@top" />px;overflow:hidden;<xsl:if test="$g/@top=0">display:none;</xsl:if>}
 	.ntb-grid-midheight<xsl:value-of select="$u" /> {overflow:hidden;height:<xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$midHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($midHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
-	.ntb-grid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@left" />px;overflow:hidden;text-align:left;}
-	.ntb-grid-centerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="number($g/@Width)-number($g/@left)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
+	<xsl:variable name="leftwidth">
+	<xsl:choose>
+	<xsl:when test="$IE='true'">
+	<xsl:value-of select="number($g/@left+3)" />
+	</xsl:when>
+	<xsl:otherwise>
+	<xsl:value-of select="$g/@left+3" />
+	</xsl:otherwise>
+	</xsl:choose>
+	</xsl:variable>
+	.ntb-grid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$leftwidth" />px;overflow:hidden;text-align:left;}
+	.ntb-grid-centerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="number($g/@Width)-number($leftwidth)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
 	.ntb-grid-scrollbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@scrollbarHeight" />px;}
 	.ntb-grid-scrollbarwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@scrollbarWidth" />px;}
 	.ntb-grid-toolbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@ToolbarHeight" />px;}
