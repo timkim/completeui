@@ -145,7 +145,7 @@ nitobi.grid.Grid = function(uid) {
 	// We need to check if the horizontal scroll bar needs to be drawn after it's
 	// rendered and everytime the grid is resized.
 	this.subscribeOnce("HtmlReady", this.adjustHorizontalScrollBars);
-	this.subscribe("AfterGridResize", this.adjustHorizontalScrollBars)
+	this.subscribe("AfterGridResize", this.adjustHorizontalScrollBars);
 
 	/**
 	 * Various events that are attached to the root of the Grid HTML.
@@ -2033,6 +2033,7 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 	var col = this.getColumnObject(resizer.column);
 	var prevWidth = col.getWidth();
 	this.columnResize(col, prevWidth + resizer.dx);
+	this.syncViewports();
 }
 
 /** 
@@ -4736,7 +4737,7 @@ nitobi.grid.Grid.prototype.getRendererForColumn= function(col) {
 	var columnCount = this.getColumnCount();
 	if (col >= columnCount)
 		col = columnCount - 1;
-	var frozeneft = this.getFrozenLeftColumnCount();
+	var frozenLeft = this.getFrozenLeftColumnCount();
 	if (col < frozenLeft)
 		return this.MidLeftRenderer;
 	else
@@ -5686,6 +5687,49 @@ nitobi.grid.Grid.prototype.getGridContainer = function()
 }
 
 /**
+ * Sync the frozen left column and the right column
+ *
+ */
+
+nitobi.grid.Grid.prototype.syncViewports = function()
+{
+	if (this.getPagingMode() != nitobi.grid.PAGINGMODE_STANDARD) 
+		return;
+	var frozenLeft = this.getFrozenLeftColumnCount();
+	if (frozenLeft == 0)
+		return;
+	var count = this.getColumnCount();
+	var wrap_column = false;
+	var i = 0;
+	while (wrap_column == false && i < count)
+	{
+		var col = this.getColumnObject(i);
+		if(col.getWrap() > 0)
+			wrap_column = true;
+		++i;	
+	}
+	if (wrap_column)
+	{
+		var left_viewport = this.scroller.view.midleft;
+		var right_viewport = this.scroller.view.midcenter;
+  		var rowCount = this.getRowsPerPage();
+  		for(i = 0; i < rowCount; ++i)
+  		{
+    			left_row = $ntb('row_'+ i + 'left_' + this.uid);
+    			right_row = $ntb('row_'+ i+ '_' + this.uid);
+    			if (left_row.clientHeight > right_row.clientHeight)
+    			{
+      				right_row.style.height = left_row.clientHeight + "px";
+    			}
+    			else
+    			{
+      				left_row.style.height = right_row.clientHeight + "px";
+    			}
+  		}
+	}
+}
+
+/**
  * Copies the currently selected block of cells in the Grid. Copied data will be located in the native operating system clipboard and
  * formatted as an HTML table. This data can be pasted into many common desktop applications such as Microsoft Excel or into other Grid components.
  * OnBeforeCopyEvent and OnAfterCopyEvent are fired.
@@ -5868,7 +5912,6 @@ nitobi.grid.Grid.prototype.pasteComplete = function(preMergedEbaXml,startRow,end
 {
 	// Call Viewport.render() (or notify with event)
 	this.Scroller.reRender(startRow, endRow);
-
 	this.subscribeOnce("HtmlReady", this.handleAfterPaste, this, [pasteEventArgs]);
 }
 
@@ -5913,6 +5956,8 @@ nitobi.grid.Grid.prototype.getSelection = function()
  */
 nitobi.grid.Grid.prototype.handleHtmlReady = function(evtArgs)
 {
+ 	// Clean up the rows, then fire this up
+	this.syncViewports();	
 	this.fire("HtmlReady", new nitobi.base.EventArgs(this));
 }
 

@@ -52,6 +52,11 @@ nitobi.grid.Column.prototype = {
 	 */
 	getAlign:function(){return this.xGET("Align",arguments);},
 	/**
+   	 * Returns the wrapping of the column
+	 * @type String
+	 */
+	getWrap:function(){return parseInt(this.xGET("Wrap",arguments));},
+	/**
 	 * Sets the css class to apply to the column.
 	 * @param {String} css The classname to apply.
 	 */
