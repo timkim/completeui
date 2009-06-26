@@ -19,6 +19,8 @@
 <!-- Now we include the component JavaScript -->
 <script language="javascript" src="$SCRIPT$/nitobi.grid.js"></script>
 <!-- End of Demo-related Includes -->
+
+<script language="javascript" src="post_datatable/datatable.js"></script>
 <script>
 
 var getShowHideToolBar = function()
@@ -36,6 +38,7 @@ function init()
 {
   	nitobi.grid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
 
+	//nitobi.grid.loadRowWrap();
 	var LSGrid1 = nitobi.loadComponent('EditorsGrid');
 }
 
@@ -91,7 +94,6 @@ function empty()
 		toolbarenabled="true"
 		theme="flex"
 		frozenleftcolumncount="3"
-		ondatareadyevent="empty()"
 		>
 
 		<ntb:columns>
@@ -101,8 +103,8 @@ function empty()
 			<ntb:textcolumn		label="Checkbox"	xdatafld="BulkAction"	sortenabled="false"	width="75">
 				<ntb:checkboxeditor datasource="[{value:'yes',display:'Yes!'},{value:'no',display:'No'}]" checkedvalue="yes" uncheckedvalue="no" displayfields="display" valuefield="value"></ntb:checkboxeditor>
 			</ntb:textcolumn>
-			<ntb:textcolumn		label="Text"		xdatafld="ProductName"	width="200"></ntb:textcolumn>
-			<ntb:textcolumn		label="Lookup"		xdatafld="ProductCategoryName" width="150">
+			<ntb:textcolumn		label="Text"		xdatafld="ProductName"	width="200" Wrap="0"></ntb:textcolumn>
+			<ntb:textcolumn		label="Lookup"		xdatafld="ProductCategoryName" width="150" align="right">
 				<ntb:lookupeditor  delay="1000" gethandler="lookuphandler.asp" displayfields="ProductCategoryName" valuefield="ProductCategoryName" ></ntb:lookupeditor>
 			</ntb:textcolumn>
 			<ntb:numbercolumn 	label="Number (with mask)"	xdatafld="ProductSKU" mask="#,##0"	negativemask="-#,##0" width="150"></ntb:numbercolumn>
