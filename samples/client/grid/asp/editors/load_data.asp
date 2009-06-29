@@ -40,21 +40,21 @@
 	' *******************************************************************	
 
 	dim PageSize ' Tells us how many records to return '
-	PageSize = cdbl(request.querystring("PageSize"))
+	PageSize = cdbl(request.Form("PageSize"))
 
 	dim StartRecordIndex ' tells us where in the table to start returning records from'
-	StartRecordIndex = cdbl(request.querystring("StartRecordIndex"))
+	StartRecordIndex = cdbl(request.Form("StartRecordIndex"))
 
 	dim SortColumn ' tells us which column to sort by'
 	SortColumn = DefaultOrderByColumn	
-	if len(request("SortColumn")) > 0 then
-		SortColumn = cstr(request("SortColumn")) & " "
+	if len(request.form("SortColumn")) > 0 then
+		SortColumn = cstr(request.form("SortColumn")) & " "
 	end if
 	
 	dim SortDirection ' tells us which direction to sort by'
 
-	if len(request("SortDirection")) > 0 then
-		SortDirection = ucase(cstr(request("SortDirection")))
+	if len(request.form("SortDirection")) > 0 then
+		SortDirection = ucase(cstr(request.form("SortDirection")))
 	end if	
 	
 	if SortDirection = empty then

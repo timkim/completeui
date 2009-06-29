@@ -40,7 +40,7 @@
 	' *******************************************************************	
 
 	dim SearchString ' The string we are using to narrow the results from the handler '
-	SearchString = cstr(request.querystring("SearchString"))
+	SearchString = cstr(request.form("SearchString"))
 
 	' Simple SQL injection prevention '
 	SearchString = replace(SearchString, ";", "")

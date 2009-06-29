@@ -1319,15 +1319,16 @@ nitobi.data.DataTable.prototype.getTable = function(context, callback, errorCall
 {
 	this.errorCallback = errorCallback;
 
-	console.log('this is empty data');
 	var ajaxCallback = this.ajaxCallbackPool.reserve();
 
 	ntbAssert(Boolean(ajaxCallback),"The datasource is serving too many connections. Please try again later. # current connections: " + this.ajaxCallbackPool.inUse.length );
 
 	// This is an editor's gethandler
-	var getHandler = this.getGetHandler();
+	var getHandler = this.getGetHandler().split('?')[0];
+	var data = this.getGetHandler().split('?')[1];
 	ajaxCallback.handler = getHandler;
-	ajaxCallback.responseType = "xml";
+	// This is a hack
+	ajaxCallback.responseType = "";
 	ajaxCallback.context = this;
 	ajaxCallback.completeCallback = nitobi.lang.close(this,this.getComplete);
 //	ajaxCallback.onGetComplete.subscribeOnce(this.getComplete, this);
@@ -1339,11 +1340,11 @@ nitobi.data.DataTable.prototype.getTable = function(context, callback, errorCall
 	if (typeof(callback) != 'function' || this.async == false)
 	{
 		ajaxCallback.async = false;
-		return this.getComplete({"response":ajaxCallback.get(), "params":ajaxCallback.params});
+		return this.getComplete({"response":ajaxCallback.post(), "params":ajaxCallback.params});
 	}
 	else
 	{
-		ajaxCallback.get();
+		ajaxCallback.post(data);
 	}
 }
 
@@ -1999,17 +2000,18 @@ nitobi.data.DataTable.prototype.getFromServer = function(firstRow, lastRow, low,
 	
 	ntbAssert(Boolean(ajaxCallback),"The datasource is serving too many connections. Please try again later. # current connections: " + this.ajaxCallbackPool.inUse.length );
 	ajaxCallback.handler = getHandler;
-	ajaxCallback.responseType = "xml";
+	// This is a hack!
+	ajaxCallback.responseType = "www-form-urlencoded";
 	ajaxCallback.context = this;
 	ajaxCallback.completeCallback = nitobi.lang.close(this,this.getComplete);
 	//ajaxCallback.onGetComplete.subscribeOnce(this.getComplete, this);
 	ajaxCallback.async = this.async;
 	ajaxCallback.params = new nitobi.data.GetCompleteEventArgs(firstRow, lastRow, low, pageSize, ajaxCallback, this, context, callback);
 
-	debugger;	
 	return ajaxCallback.post(postParams);
 }
 
+/*
 nitobi.data.DataTable.prototype.buildParams = function(low, pageSize, sortColumn, sortDirection)
 {
 	var getHandlerStr = this.getGetHandler().split('?');
@@ -2027,6 +2029,20 @@ nitobi.data.DataTable.prototype.buildParams = function(low, pageSize, sortColumn
 	params += "<StartRecordIndex>" + low + "</StartRecordIndex>";
 	params += "<start>" + low + "</start>";
 	params += "</params>";
+	return params;
+}
+
+*/
+nitobi.data.DataTable.prototype.buildParams = function(low, pageSize, sortColumn, sortDirection)
+{
+	var getHandlerStr = this.getGetHandler().split('?');
+	var getHandler = getHandlerStr[0];
+	var params = getHandlerStr[1];
+	params += "&PageSize=" + pageSize + "&";
+	params += "SortColumn=" + sortColumn + "&";
+	params += "SortDirection=" + sortDirection + "&";
+	params += "StartRecordIndex=" + low + "&";
+	params += "start=" + low; 
 	return params;
 }
 
