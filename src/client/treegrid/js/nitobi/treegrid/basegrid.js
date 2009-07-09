@@ -1959,12 +1959,21 @@ nitobi.grid.TreeGrid.prototype.updateCellRanges= function()
 		this.resizeScroller();
 
 		var surfaceHeight = this.scroller.scrollSurface.clientHeight;
-		
 		var ratio = surfaceHeight/(this.calculateHeight() + this.calculateHdrHeight());
+		var maxWidth = this.calculateWidth();
+
 		
+		for (surf in this.scroller.surfaceMap)
+		{
+			var surface = this.scroller.getSurface(surf);
+			var width = surface.calculateWidth();
+			if (width > maxWidth && surface.isVisible)
+				maxWidth = width;	
+		}
+
 		// This is required because we need to get the height of the headers in the child grids
 		this.fire("PercentHeightChanged", ratio);
-		this.fire("PercentWidthChanged",this.getWidth()/this.calculateWidth());
+		this.fire("PercentWidthChanged",this.getWidth()/maxWidth);
 	}
 }
 
