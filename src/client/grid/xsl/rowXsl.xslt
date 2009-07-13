@@ -89,7 +89,6 @@
 		<xsl:for-each select="$columns">
 			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 				<col>
-					<xsl:attribute name="class">ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text><xsl:if test="not(@Editable='1')">ntb-column-readonly</xsl:if></xsl:attribute>
 				</col>
 			</xsl:if>
 		</xsl:for-each>
