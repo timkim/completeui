@@ -156,7 +156,7 @@
 		<xsl:variable name="wrap"><xsl:value-of select="@Wrap" /></xsl:variable>
 		<xsl:variable name="colw"><xsl:value-of select="number($w)-number($g/@CellBorder)"/></xsl:variable>
 		<xsl:variable name="coldataw"><xsl:value-of select="number($w)-number($g/@InnerCellBorder)"/></xsl:variable>
-		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$colw" />px;text-align:<xsl:value-of select="@Align"/>;}}
+		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$colw" />px;text-align:<xsl:value-of select="@Align"/>;<xsl:if test="@Visible='0'">display:none;</xsl:if> }}
 		#grid<xsl:value-of select="$u" /> .ntb-column-data<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$coldataw" />px;text-align:<xsl:value-of select="@Align"/>;}
 		#grid<xsl:value-of select="$u" /> .ntb-cell-col_<xsl:value-of select="$p" /> 
 		{
