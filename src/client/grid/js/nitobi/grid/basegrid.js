@@ -2080,11 +2080,11 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 
 	/*
 	 * Found the stupidity in the CSS class that should fix this.  This code
-   * depends on nitobi.html.Css.getRule.
-   */
+   	 * depends on nitobi.html.Css.getRule.
+        */
 	if (nitobi.browser.IE7)
 	{
-      this.generateCss();
+      		this.generateCss();
 	}
 	else
 	{
@@ -2131,6 +2131,14 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   columns.removeChild(srcCol);
   columns.insertBefore(tmpNode, destCol);
 
+  // Dump the old cached stuff out, redefine everything and bind it!
+  this.columns = [];
+  this.defineColumns(columns);
+  this.bind();
+}
+
+nitobi.grid.Grid.prototype.reloadColumnDef = function()
+{
   // Dump the old cached stuff out, redefine everything and bind it!
   this.columns = [];
   this.defineColumns(columns);
@@ -3920,7 +3928,7 @@ nitobi.grid.Grid.prototype.generateFrameCss= function()
 
 	if (!nitobi.browser.SAFARI && !nitobi.browser.CHROME && this.stylesheet == null)
 		this.stylesheet = nitobi.html.Css.createStyleSheet();
-
+	
 	var ss = this.getScrollSurface(); // Viewport. (id= gridviewport*)
 	var scrollTop = 0;
 	var scrollLeft = 0;
