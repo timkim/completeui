@@ -77,9 +77,8 @@
 /* this determines the behaviour of the top row */
 .flex .ntb-column-indicator { 
 	padding: 0px 5px;
-	display: -moz-box;
 	overflow: hidden;
-	white-space: nowrap;
+	white-space: normal;
 }
 
 .flex .ntb-column-indicator-border,
