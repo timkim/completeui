@@ -1646,6 +1646,11 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.maxSurface = this.scroller.surface;
 	this.renderSurface();
 	this.attachDomEvents();
+
+
+	this.populateColumnLists();
+
+
 	// Set up default key handlers - eventually move these out into editor factory
 //	var kh = function(k) {if ((k > 64 && k < 91) || (k > 47 && k < 58) || (k > 95 && k < 111) || (k > 188 && k < 191) || (k == 113) ) {_this.edit();}};
 //	var gh = function(k) {if (k==32) {var group =  _this.activeCell.getAttribute("xig");_this.toggleGroup(group);}}; 
@@ -1732,6 +1737,59 @@ nitobi.grid.TreeGrid.prototype.resizeToolbars = function()
 {
 	this.toolbars.setWidth(this.getWidth());
 	this.toolbars.resize();
+}
+
+
+/**
+ * 
+ */
+
+nitobi.grid.TreeGrid.prototype.populateColumnLists = function()
+{
+	var sets = this.Declaration.columns;
+	for (var i = 0; i < sets.length; ++i)
+	{
+		this.populateColList(sets[i]);
+	}
+}
+
+nitobi.grid.TreeGrid.prototype.populateColList = function(colset)
+{
+	var uid = this.uid;
+	var setname = colset.firstChild.getAttribute('id');
+	var columns = colset.firstChild.childNodes;
+	var listDiv = $ntb('ntb-treegrid-showhide' + uid);
+	var menuDiv = document.createElement('div');
+	var list = document.createElement('ul');
+	menuDiv.setAttribute('id',  "ntb-treegrid-colmenu-" + setname);
+	menuDiv.setAttribute('style', 'display: none;');
+	menuDiv.setAttribute('class', 'ntb-showhide');
+	list.setAttribute('id', "ntb-treegrid-colcheck-" + setname);
+	menuDiv.appendChild(list);
+	listDiv.appendChild(menuDiv);
+	for (var i = 0; i < columns.length; ++i)
+	{
+		var hdrTitle = columns[i].getAttribute('label');
+		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
+		if (hdrTitle != null)
+		{
+			var list_item = document.createElement('li');
+			var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
+			list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+			list.appendChild(list_item);
+			nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
+		}
+	}	
+}
+
+nitobi.grid.TreeGrid.prototype.toggleVis = function(evt)
+{
+	var colAttr = evt.target.id.split('_');
+	var col = parseInt(colAttr[1]);
+	var colset = colAttr[2];
+	var surface = this.scroller.getSurfacesByColSet(colset)[0];
+	var column = surface.getColumnObject(col);
+	column.toggleVis();
 }
 
 /**

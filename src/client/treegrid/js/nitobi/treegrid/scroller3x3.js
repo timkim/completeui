@@ -337,6 +337,17 @@ nitobi.grid.Scroller3x3.prototype.purgeSurfaces = function()
 	this.surface.purgeSurfaces();
 }
 
+nitobi.grid.Scroller3x3.prototype.getSurfacesByColSet = function(colset)
+{
+	var result = [];
+	for(surf in this.surfaceMap)
+	{
+		if(this.surfaceMap[surf].columnSetId == colset)
+			result.push(this.surfaceMap[surf]);
+	}
+	return result;
+}
+
 nitobi.grid.Scroller3x3.prototype.resetHeaders = function()
 {
 	this.surface.checkHeaders();

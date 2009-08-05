@@ -220,6 +220,42 @@ nitobi.grid.Column.prototype.getEditor = function()
 	return nitobi.form.ControlFactory.instance.getEditor(this.grid, this);
 }
 
+
+/**
+ * Hides the column
+ */ 
+nitobi.grid.Column.prototype.hide = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId +"_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "none";
+  this.grid.resizePanes(-width, this.column );
+  this.grid.adjustHorizontalScrollBars();
+ }
+
+nitobi.grid.Column.prototype.show = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "";
+  this.grid.resizePanes(width, this.column);
+}
+
+nitobi.grid.Column.prototype.toggleVis = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className, true);
+  if (classDef.display == "none")
+  	this.show();
+  else 
+	this.hide();
+}
+
 /**
  * @private
  */

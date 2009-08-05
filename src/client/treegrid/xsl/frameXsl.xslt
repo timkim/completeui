@@ -59,6 +59,9 @@
 			&lt;/div&gt;
         &lt;/div&gt;
 
+      &lt;div id="ntb-treegrid-showhide<xsl:value-of select="$u" />"  &gt;
+      &lt;/div&gt;
+
 		<xsl:if test="$resizeEnabled = 1">
 	        &lt;div id="ntb-treegrid-resizecontainer<xsl:value-of select="$u"/>" style="height:0px;position:relative;"&gt;
 	        	&lt;div id="ntb-treegrid-resizeright<xsl:value-of select="$u" />" class="ntb-resize-indicator-right"&gt;&lt;/div&gt;

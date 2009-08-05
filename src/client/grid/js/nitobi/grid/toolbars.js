@@ -280,6 +280,76 @@ nitobi.ui.Toolbars.prototype.render= function()
   						  }
 					};
 			break;
+			case "showhide_master"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  // Try to find the master and the detail
+						  var colset = grid.scroller.surface.columnSetId;
+						  var menu = $ntb('ntb-treegrid-colmenu-' + colset );
+  						  if(menu.style.display == "none")
+  						  {
+    							menu.style.position = "absolute";
+							// Figure out the height fast!
+							menu.style.left = "-5000"
+							menu.style.display = "";
+							var m_height = menu.clientHeight;
+							// Pull it back and put it in the right spot
+							menu.style.display = "none";
+    							menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
+    							menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
+    							menu.style.display = "";
+  						  }
+  						  else
+  						  {
+    							menu.style.position="relative";
+    							menu.style.display = "none";
+  						  }
+					};
+			break;
+			case "showhide_detail"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  // Find the 2nd level
+						  var colset = null;
+						  for( surf in grid.Scroller.surfaceMap)
+						  {
+							if(surf.indexOf('0_') != -1 && surf.length == 3)
+							{
+								colset = grid.Scroller.surfaceMap[surf].columnSetId;			
+							}		
+						  }
+						  if(colset != null)
+						  {
+						  	var menu = $ntb('ntb-treegrid-colmenu-' + colset);
+  						  	if(menu.style.display == "none")
+  						  	{
+    								menu.style.position = "absolute";
+								// Figure out the height fast!
+								menu.style.left = "-5000";
+								menu.style.display = "";
+								var m_height = menu.clientHeight;
+								// Pull it back and put it in the right spot
+								menu.style.display = "none";
+    								menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
+    								menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
+    								menu.style.display = "";
+  						  	}
+  						  	else
+  						  	{
+    								menu.style.position="relative";
+    								menu.style.display = "none";
+  						  	}
+						}
+					};
+			break;
 			default:
 		}
 	}
