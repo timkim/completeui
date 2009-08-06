@@ -1778,13 +1778,17 @@ nitobi.grid.TreeGrid.prototype.populateColList = function(colset)
 			list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
 			list.appendChild(list_item);
 			nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
+			$ntb(id).style.width = "20px";
 		}
-	}	
+	}
+	// This is stupid, but is required for IE
+	rendered_menu = $ntb('ntb-treegrid-colmenu-' + setname);
+	rendered_menu.style.display = "none";
 }
 
 nitobi.grid.TreeGrid.prototype.toggleVis = function(evt)
 {
-	var colAttr = evt.target.id.split('_');
+	var colAttr = evt.srcElement.id.split('_');
 	var col = parseInt(colAttr[1]);
 	var colset = colAttr[2];
 	var surface = this.scroller.getSurfacesByColSet(colset)[0];

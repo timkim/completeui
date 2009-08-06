@@ -260,24 +260,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  grid = _this.grid;
 						  element = _this.show_hide_btn;
 						  var menu = $ntb('ntb-grid-showhide' + grid.uid);
-  						  if(menu.style.display == "none")
-  						  {
-    							menu.style.position = "absolute";
-							// Figure out the height fast!
-							menu.style.left = "-5000"
-							menu.style.display = "";
-							var m_height = menu.clientHeight;
-							// Pull it back and put it in the right spot
-							menu.style.display = "none";
-    							menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
-    							menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
-    							menu.style.display = "";
-  						  }
-  						  else
-  						  {
-    							menu.style.position="relative";
-    							menu.style.display = "none";
-  						  }
+  						  nitobi.ui.Toolbars.showMenu(menu, element);
 					};
 			break;
 			case "showhide_master"+this.uid:
@@ -290,24 +273,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  // Try to find the master and the detail
 						  var colset = grid.scroller.surface.columnSetId;
 						  var menu = $ntb('ntb-treegrid-colmenu-' + colset );
-  						  if(menu.style.display == "none")
-  						  {
-    							menu.style.position = "absolute";
-							// Figure out the height fast!
-							menu.style.left = "-5000"
-							menu.style.display = "";
-							var m_height = menu.clientHeight;
-							// Pull it back and put it in the right spot
-							menu.style.display = "none";
-    							menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
-    							menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
-    							menu.style.display = "";
-  						  }
-  						  else
-  						  {
-    							menu.style.position="relative";
-    							menu.style.display = "none";
-  						  }
+  						  nitobi.ui.Toolbars.showMenu(menu, element);
 					};
 			break;
 			case "showhide_detail"+this.uid:
@@ -329,25 +295,8 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  if(colset != null)
 						  {
 						  	var menu = $ntb('ntb-treegrid-colmenu-' + colset);
-  						  	if(menu.style.display == "none")
-  						  	{
-    								menu.style.position = "absolute";
-								// Figure out the height fast!
-								menu.style.left = "-5000";
-								menu.style.display = "";
-								var m_height = menu.clientHeight;
-								// Pull it back and put it in the right spot
-								menu.style.display = "none";
-    								menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
-    								menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
-    								menu.style.display = "";
-  						  	}
-  						  	else
-  						  	{
-    								menu.style.position="relative";
-    								menu.style.display = "none";
-  						  	}
-						}
+							nitobi.ui.Toolbars.showMenu(menu, element);
+						  }
 					};
 			break;
 			default:
@@ -443,6 +392,34 @@ nitobi.ui.Toolbars.prototype.render= function()
 		this.pagingToolbar.hide();
 	}
 	toolbarDiv.style.visibility="visible";		
+}
+
+nitobi.ui.Toolbars.showMenu = function(menu, element)
+{
+	if(nitobi.browser.IE)
+	{
+		// Style it with some default styling
+		menu.style.backgroundColor="#efefef";
+		menu.style.border="1px solid #000000";
+	}
+   	if(menu.style.display == "none")
+   	{
+ 		menu.style.position = "absolute";
+		// Figure out the height fast!
+		menu.style.left = "-5000";
+		menu.style.display = "";
+		var m_height = menu.clientHeight;
+		// Pull it back and put it in the right spot
+		menu.style.display = "none";
+    		menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
+    		menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
+    		menu.style.display = "";
+    	}
+    	else
+    	{
+  		menu.style.position="relative";
+    		menu.style.display = "none";
+    	}
 }
 
 nitobi.ui.Toolbars.prototype.resetCounter = function()
