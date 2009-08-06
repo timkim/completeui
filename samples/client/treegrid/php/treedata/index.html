@@ -10,8 +10,21 @@
 
 <script>
 
+
+var getShowHideToolBar = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'showhide.xml';
+  xhr.async = false;
+  xhr.get();
+ 
+  return xhr.httpObj.responseText;
+}
+
 function init()
 {
+  	nitobi.grid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
 	nitobi.loadComponent('TreeGrid');	
 }
 function switchStyles(evt)
