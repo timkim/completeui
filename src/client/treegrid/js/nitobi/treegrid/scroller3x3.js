@@ -348,6 +348,21 @@ nitobi.grid.Scroller3x3.prototype.getSurfacesByColSet = function(colset)
 	return result;
 }
 
+nitobi.grid.Scroller3x3.prototype.isColSetVisible = function(colset)
+{
+	var surfaces = this.getSurfacesByColSet(colset);
+	if (surfaces != null)
+	{
+		for (var i = 0; i < surfaces.length; ++i)
+		{
+			// If anything is true, jump out of this method
+			if (surfaces[i].isVisible)
+				return surfaces[i].isVisible;
+		}		
+	}
+	return false;
+}
+
 nitobi.grid.Scroller3x3.prototype.resetHeaders = function()
 {
 	this.surface.checkHeaders();

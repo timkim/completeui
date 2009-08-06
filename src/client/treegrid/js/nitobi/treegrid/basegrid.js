@@ -1726,6 +1726,14 @@ nitobi.grid.TreeGrid.prototype.createToolbars = function(visibleToolbars)
 	tb.subscribe("Save",L.close(this,this.save));
 	tb.subscribe("Refresh",L.close(this,this.refresh));
 
+	// If the show/hide is in fact enabled
+	var showhide_detail = tb.standardToolbar.getUiElements()["showhide_detail" + tb.uid];
+	if (showhide_detail)
+	{
+		showhide_detail.disable();
+	}
+
+
 	this.subscribe("AfterGridResize", L.close(this,this.resizeToolbars));
 }
 
@@ -6178,9 +6186,28 @@ nitobi.grid.TreeGrid.prototype.toggleSurface = function(cell)
 			this.selection.clear();
 			this.selectCellByCoords(targetRow, 1, C.getSurfacePath(this.activeCell));	
 		}
-		this.expand(targetRow, targetKey);
+		surface = this.expand(targetRow, targetKey);
 	}
+	this.toggleDetailButton(surface.columnSetId);
 	this.focus();
+}
+
+
+nitobi.grid.TreeGrid.prototype.toggleDetailButton = function(colset)
+{
+	// If the show/hide is in fact enabled
+	var showhide_detail = this.toolbars.standardToolbar.getUiElements()["showhide_detail" + this.toolbars.uid];
+	if (showhide_detail)
+	{
+		if (this.scroller.isColSetVisible(colset))
+		{
+			showhide_detail.enable();
+		}
+		else
+		{
+			showhide_detail.disable();
+		}
+	}
 }
 
 nitobi.grid.TreeGrid.prototype.toggleExpanderIcon = function(cell, expand)
@@ -6299,6 +6326,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 		dataTable.setGetHandlerParameter(fieldName, value);
 	}
 	dataTable.getPage(0, 21, this, this.getGroupComplete);
+	return surface;
 }
 
 nitobi.grid.TreeGrid.prototype.collapse = function(rowIndex, surfacePath)
