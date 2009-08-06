@@ -220,6 +220,40 @@ nitobi.grid.Column.prototype.getEditor = function()
 	return nitobi.form.ControlFactory.instance.getEditor(this.grid, this);
 }
 
+
+/**
+ * Hides the column
+ */ 
+nitobi.grid.Column.prototype.hide = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId +"_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "none";
+  this.grid.adjustHorizontalScrollBars();
+ }
+
+nitobi.grid.Column.prototype.show = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "";
+}
+
+nitobi.grid.Column.prototype.toggleVis = function()
+{
+  var colSetId = this.surface.columnSetId;
+  var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className, true);
+  if (classDef.display == "none")
+  	this.show();
+  else 
+	this.hide();
+}
+
 /**
  * @private
  */
@@ -327,4 +361,11 @@ nitobi.grid.Column.prototype.unsubscribe = function(evt,func)
 nitobi.grid.Column.getColumnHeaderElement = function(gridId, column, surface)
 {
 	return $ntb('columnheader_'+column+'_'+gridId + "_" + surface);
+}
+
+nitobi.grid.Column.prototype.inRange = function(x)
+{
+  var left = this.getHeaderElement().offsetLeft;
+  var right = left + this.getWidth();
+  return left < x && x < right;
 }

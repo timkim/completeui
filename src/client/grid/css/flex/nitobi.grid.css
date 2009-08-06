@@ -60,7 +60,6 @@
 .flex .ntb-grid-header {
 	background: url(assets/header.png) left top repeat-x;
 	border-bottom: #b7babc 1px solid;
-	height: 21px;
 }
 
 .flex .ntb-column-descending { 
@@ -75,8 +74,10 @@
 	border-bottom: #ebeff2 1px solid;
 }
 
+/* this determines the behaviour of the top row */
 .flex .ntb-column-indicator { 
 	padding: 0px 5px;
+	white-space: nowrap;
 }
 
 .flex .ntb-column-indicator-border,
@@ -122,7 +123,37 @@
     z-index: 900;
 }
 
+.flex .ntb-column-dragbox {
+    filter:alpha(opacity=50);
+    -moz-opacity: .50;
+    opacity: .50;
+    background-color: #736F6E;	/* gray */
+    width: 3px;
+    position:absolute;
+    display:none;
+    top:-5000px;
+    left:-5000px;
+    cursor: w-resize;
+    z-index: 900;
+}
+
+
 .flex .ntb-grid-resizebox {
+    filter:alpha(opacity=50);
+    -moz-opacity: .50;
+    opacity: .50;
+    background-color: #736F6E;	/* gray */
+    width: 3px;
+    position:absolute;
+    display:none;
+    top: -5000px;
+    left: -5000px;
+    cursor: w-resize;
+    z-index: 900;
+}
+
+
+.flex .ntb-column-dragbox {
     filter:alpha(opacity=50);
     -moz-opacity: .50;
     opacity: .50;
@@ -150,7 +181,7 @@
 }
 
 .flex .ntb-cell {
-    text-decoration:none;
+    	text-decoration:none;
 	padding:0px 2px 0px 4px;
 	white-space:nowrap;
 }
@@ -360,4 +391,15 @@
 }
 .flex .ntb-button-down {
 	background-color: #7fceff !important;
+}
+
+.flex .ntb-showhide
+{
+	background-color: #efefef;
+	border: 1px solid #000000;
+}
+
+.flex .ntb-showhide li input
+{
+	width: 20px;
 }

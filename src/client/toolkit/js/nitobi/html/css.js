@@ -363,11 +363,16 @@ nitobi.html.Css.findInSheet = function(cssClass, sheet, level)
 		return null;
 	level++;
 
+  /*
+  if (cssClass == ".ntb-columneditorsgrid_2")
+    debugger;
+    */
 	var rules = nitobi.html.Css.getRules(sheet);
 	for (var rule = 0; rule < rules.length; rule++) {
 		var ruleItem = rules[rule];
 		var ss = ruleItem.styleSheet
 		var selectorText = ruleItem.selectorText;
+    // We have to actually attempt
 		if (ss)
 		{
 			// Non-IE
@@ -375,21 +380,27 @@ nitobi.html.Css.findInSheet = function(cssClass, sheet, level)
 			if (inImport)
 				return inImport;
 		}
-		else if (selectorText != null && selectorText.toLowerCase()== cssClass) {
-			if (nitobi.browser.IE)
-			{
-				// We create a dummy rule object that includes the parentStyleSheet field.
-				// For whatever reason, IE doesn't support this property.
-				ruleItem = {
-					selectorText: selectorText,
-					style: ruleItem.style,
-					readOnly: ruleItem.readOnly,
-					parentStyleSheet: sheet
-				}
-			}
-			return ruleItem;
+		else if (selectorText != null) 
+      {
+      // Attempt at a hacky fix for when an ID preceeds a class
+      if (selectorText.toLowerCase() == cssClass || selectorText.toLowerCase().split(' ')[1] == cssClass)
+      {
+			  if (nitobi.browser.IE)
+			  {
+				  // We create a dummy rule object that includes the parentStyleSheet field.
+				  // For whatever reason, IE doesn't support this property.
+				  ruleItem = {
+					  selectorText: selectorText,
+					  style: ruleItem.style,
+					  readOnly: ruleItem.readOnly,
+					  parentStyleSheet: sheet
+				  }
+			  }
+			  return ruleItem;
+      }
 		}
 	}
+
 	// IE6 imports bug - its actually a problem with using imports on dynamic stylesheets
 	var imports = sheet.imports;
 	if (sheet.href != "" && imports)
@@ -413,7 +424,7 @@ nitobi.html.Css.findInSheet = function(cssClass, sheet, level)
  * @type Map
  */
 nitobi.html.Css.getClass = function(cssClass, ignoreCache){
-	// TODO: We need to cache this stuff here ... 
+	// TODO: We need to cache this stuff here ...
 	cssClass = cssClass.toLowerCase();
 	if (cssClass.indexOf(".") !== 0)
 	{

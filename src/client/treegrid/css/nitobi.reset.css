@@ -8,9 +8,9 @@
    
 -------------------------------------------------------------- */
 
-.ntb-grid-reset div, .ntb-grid-reset span, .ntb-grid-reset iframe, .ntb-grid-reset h1, .ntb-grid-reset h2, .ntb-grid-reset h3, .ntb-grid-reset h4, .ntb-grid-reset h5, .ntb-grid-reset h6, .ntb-grid-reset p, .ntb-grid-reset blockquote, .ntb-grid-reset pre,
-.ntb-grid-reset a, .ntb-grid-reset em, .ntb-grid-reset font, .ntb-grid-reset img, .ntb-grid-reset strong, .ntb-grid-reset ol, .ntb-grid-reset ul, .ntb-grid-reset li, .ntb-grid-reset fieldset, .ntb-grid-reset form, .ntb-grid-reset label, 
-.ntb-grid-reset table, .ntb-grid-reset caption, .ntb-grid-reset tbody, .ntb-grid-reset tfoot, .ntb-grid-reset thead, .ntb-grid-reset tr, .ntb-grid-reset th, .ntb-grid-reset td {
+.ntb-treegrid-reset div, .ntb-treegrid-reset span, .ntb-treegrid-reset iframe, .ntb-treegrid-reset h1, .ntb-treegrid-reset h2, .ntb-treegrid-reset h3, .ntb-treegrid-reset h4, .ntb-treegrid-reset h5, .ntb-treegrid-reset h6, .ntb-treegrid-reset p, .ntb-treegrid-reset blockquote, .ntb-treegrid-reset pre,
+.ntb-treegrid-reset a, .ntb-treegrid-reset em, .ntb-treegrid-reset font, .ntb-treegrid-reset img, .ntb-treegrid-reset strong, .ntb-treegrid-reset ol, .ntb-treegrid-reset ul, .ntb-treegrid-reset li, .ntb-treegrid-reset fieldset, .ntb-treegrid-reset form, .ntb-treegrid-reset label, 
+.ntb-treegrid-reset table, .ntb-treegrid-reset caption, .ntb-treegrid-reset tbody, .ntb-treegrid-reset tfoot, .ntb-treegrid-reset thead, .ntb-treegrid-reset tr, .ntb-treegrid-reset th, .ntb-treegrid-reset td {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -26,25 +26,25 @@
 	outline: 0;
 }
 
-.ntb-grid-reset ol,.ntb-grid-reset  ul {
+.ntb-treegrid-reset ol,.ntb-treegrid-reset  ul {
 	list-style: none;
 }
 
 /* tables still need 'cellspacing="0"' in the markup */
-.ntb-grid-reset table {
+.ntb-treegrid-reset table {
 	border-collapse: separate;
 	border-spacing: 0;
 }
 
-.ntb-grid-reset caption,.ntb-grid-reset th,.ntb-grid-reset td {
+.ntb-treegrid-reset caption,.ntb-treegrid-reset th,.ntb-treegrid-reset td {
 	text-align: left;
 	font-weight: normal;
 }
 
-.ntb-grid-reset blockquote:before, .ntb-grid-reset blockquote:after, .ntb-grid-reset q:before, q:after {
+.ntb-treegrid-reset blockquote:before, .ntb-treegrid-reset blockquote:after, .ntb-treegrid-reset q:before, q:after {
 	content: "";
 }
 
-.ntb-grid-reset blockquote, q {
+.ntb-treegrid-reset blockquote, q {
 	quotes: "" "";
 }

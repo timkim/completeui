@@ -42,19 +42,13 @@ nitobi.ui.VerticalScrollbar.prototype.getScrollPercent = function()
  */ 
 nitobi.ui.VerticalScrollbar.prototype.setRange = function(size)
 {
-	var st=this.element.scrollTop;
-	this.surface.style.height = Math.floor(this.element.offsetHeight / size) + "px";
-	this.element.scrollTop=st;
-	// This looks stupid but it is necessary to rejig the scroll position. (IE Only) (Of course)
-	this.element.scrollTop = this.element.scrollTop;
-
-	
-	
-/*
-	var origHeight = this.surface.clientHeight;
-	this.surface.style.height = Math.floor(this.element.clientHeight / size);
-	var pctChg = this.surface.clientHeight/origHeight;
-	alert(pctChg)
-	this.element.scrollTop=Math.floor(this.element.scrollTop/pctChg); // This keeps the absolute (not percentage) scroll position the same when the range changes
-*/
+	//We've had infinity passed in here for stupid reasons
+	if (size >= 0 && size <= 1)
+	{
+		var st=this.element.scrollTop;
+		this.surface.style.height = Math.floor(this.element.offsetHeight / size) + "px";
+		this.element.scrollTop=st;
+		// This looks stupid but it is necessary to rejig the scroll position. (IE Only) (Of course)
+		this.element.scrollTop = this.element.scrollTop;
+	}
 }

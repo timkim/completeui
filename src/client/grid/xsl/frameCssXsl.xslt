@@ -10,7 +10,7 @@
 	<xsl:variable name="t" select="$g/@Theme"></xsl:variable>
 	<xsl:variable name="showvscroll"><xsl:choose><xsl:when test="($g/@VScrollbarEnabled='true' or $g/@VScrollbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
 	<xsl:variable name="showhscroll"><xsl:choose><xsl:when test="($g/@HScrollbarEnabled='true' or $g/@HScrollbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
-	<xsl:variable name="showtoolbar"><xsl:choose><xsl:when test="($g/@ToolbarEnabled='true' or $g/@ToolbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>		
+	<xsl:variable name="showtoolbar"><xsl:choose><xsl:when test="($g/@ToolbarEnabled='true' or $g/@ToolbarEnabled=1)">1</xsl:when><xsl:otherwise>0</xsl:otherwise></xsl:choose></xsl:variable>
 	<xsl:variable name="frozen-columns-width">
 		<xsl:call-template name="get-pane-width">
 				<xsl:with-param name="start-column" select="number(1)"/>
@@ -53,9 +53,7 @@
 	</xsl:if>
 	}
 
-	.<xsl:value-of select="$t"/> .ntb-cell {overflow:hidden;white-space:nowrap;}
-	.<xsl:value-of select="$t"/> .ntb-cell, x:-moz-any-link, x:default {display: -moz-box;}
-	.<xsl:value-of select="$t"/> .ntb-column-indicator, x:-moz-any-link, x:default {display: -moz-box;}
+	.<xsl:value-of select="$t"/> x:-moz-any-link, x:default {display: -moz-box;}
 	.<xsl:value-of select="$t"/> .ntb-cell-border {overflow:hidden;white-space:nowrap;<xsl:if test="$IE='true'">height:auto;</xsl:if>}
 
 	.ntb-grid-headershow<xsl:value-of select="$u" /> {padding:0px;<xsl:if test="not($g/@ColumnIndicatorsEnabled=1)">display:none;</xsl:if>}
@@ -79,8 +77,18 @@
 	.ntb-grid-scrollerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$scrollerWidth"/>px;}
 	.ntb-grid-topheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@top" />px;overflow:hidden;<xsl:if test="$g/@top=0">display:none;</xsl:if>}
 	.ntb-grid-midheight<xsl:value-of select="$u" /> {overflow:hidden;height:<xsl:choose><xsl:when test="($total-columns-width &gt; $g/@Width)"><xsl:value-of select="$midHeight"/></xsl:when><xsl:otherwise><xsl:value-of select="number($midHeight) + number($g/@scrollbarHeight)"/></xsl:otherwise></xsl:choose>px;}
-	.ntb-grid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@left" />px;overflow:hidden;text-align:left;}
-	.ntb-grid-centerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="number($g/@Width)-number($g/@left)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
+	<xsl:variable name="leftwidth">
+	<xsl:choose>
+	<xsl:when test="$IE='true'">
+	<xsl:value-of select="number($g/@left+3)" />
+	</xsl:when>
+	<xsl:otherwise>
+	<xsl:value-of select="$g/@left+3" />
+	</xsl:otherwise>
+	</xsl:choose>
+	</xsl:variable>
+	.ntb-grid-leftwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$leftwidth" />px;overflow:hidden;text-align:left;}
+	.ntb-grid-centerwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="number($g/@Width)-number($leftwidth)-(number($g/@scrollbarWidth)*$showvscroll)" />px;}
 	.ntb-grid-scrollbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@scrollbarHeight" />px;}
 	.ntb-grid-scrollbarwidth<xsl:value-of select="$u" /> {width:<xsl:value-of select="$g/@scrollbarWidth" />px;}
 	.ntb-grid-toolbarheight<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@ToolbarHeight" />px;}
@@ -114,14 +122,11 @@
 		z-index:800;
 	}
 
-	.<xsl:value-of select="$t"/> .ntb-column-indicator {
-		overflow:hidden;
-		white-space: nowrap;    
-	}
+	.<xsl:value-of select="$t"/> .ntb-row<xsl:value-of select="$u" /> {min-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
+	.<xsl:value-of select="$t"/> .ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
+	.<xsl:value-of select="$t"/> .ntb-column-indicator<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@HeaderHeight)-2" />px;}
 
-	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
-	.ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
-
+	.<xsl:value-of select="$t"/> .ntb-column-header { overflow: hidden; white-space: nowrap;}
 	<xsl:apply-templates select="state/nitobi.grid.Columns" />
 
 </xsl:template>
@@ -149,10 +154,24 @@
 	<xsl:for-each select="*">
 		<xsl:variable name="p"><xsl:value-of select="position()"/></xsl:variable>
 		<xsl:variable name="w"><xsl:value-of select="@Width"/></xsl:variable>
+		<xsl:variable name="wrap"><xsl:value-of select="@Wrap" /></xsl:variable>
 		<xsl:variable name="colw"><xsl:value-of select="number($w)-number($g/@CellBorder)"/></xsl:variable>
 		<xsl:variable name="coldataw"><xsl:value-of select="number($w)-number($g/@InnerCellBorder)"/></xsl:variable>
-		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$colw" />px;}
+		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$colw" />px;text-align:<xsl:value-of select="@Align"/>;<xsl:if test="@Visible='0'">display:none;</xsl:if> }}
 		#grid<xsl:value-of select="$u" /> .ntb-column-data<xsl:value-of select="$u" />_<xsl:number value="$p" /> {width:<xsl:value-of select="$coldataw" />px;text-align:<xsl:value-of select="@Align"/>;}
+		#grid<xsl:value-of select="$u" /> .ntb-cell-col_<xsl:value-of select="$p" /> 
+		{
+			<xsl:choose>
+				<xsl:when test="$wrap=1 and $g/@PagingMode='standard'">
+					white-space: normal;
+				</xsl:when>	
+				<xsl:otherwise>
+					overflow: hidden;
+					white-space: nowrap;
+					display: -moz-box; 
+				</xsl:otherwise>
+			</xsl:choose>
+		}
 	</xsl:for-each>
 </xsl:template>
 

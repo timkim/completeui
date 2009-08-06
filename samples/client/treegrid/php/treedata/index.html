@@ -8,12 +8,23 @@
 <!-- EBA_REMOVE_START --><link type="text/css" rel="stylesheet" href="../../../../toolkit/samples-css/samples.css"></link><script language="javascript" src="../../../../../test/client/treegrid/base.js"></script><script language="javascript"> initTest(); </script><!-- EBA_REMOVE_END -->
 <link type="text/css" rel="stylesheet" href="$STYLE$/samples.css"></link>
 
-<!-- End of Demo-related Includes -->
-
 <script>
+
+
+var getShowHideToolBar = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'showhide.xml';
+  xhr.async = false;
+  xhr.get();
+ 
+  return xhr.httpObj.responseText;
+}
 
 function init()
 {
+  	nitobi.grid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
 	nitobi.loadComponent('TreeGrid');	
 }
 function switchStyles(evt)
@@ -51,19 +62,21 @@ function switchStyles(evt)
 	</div>
     <ntb:treegrid id="TreeGrid" 
 				  width="630"
-				  height="500"
+				  height="480"
 				  mode="standard"
-				  rowsperpage="20"  
+				  rowsperpage="20"
+				  headerheight="44"  
 				  gethandler="load_customers.php"
 				  savehandler="save_customers.php"
 				  toolbarenabled="true"
 				  rootcolumns="customers"
 				  theme="flex" 
 				  groupoffset="20"
-				  effectsenabled="true">
+				  effectsenabled="true"
+				>
 		  <ntb:columns id="customers">
 			<ntb:expandcolumn childcolumnset="orders" width="50"></ntb:expandcolumn>
-			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130"></ntb:textcolumn>
+			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130" align="right"></ntb:textcolumn>
 	   		<ntb:textcolumn label="Contact Name" xdatafld="ContactName" width="130"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Email" xdatafld="ContactEmail" width="150"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Phone Number" xdatafld="PhoneNumber"></ntb:textcolumn>

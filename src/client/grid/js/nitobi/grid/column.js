@@ -52,6 +52,11 @@ nitobi.grid.Column.prototype = {
 	 */
 	getAlign:function(){return this.xGET("Align",arguments);},
 	/**
+   	 * Returns the wrapping of the column
+	 * @type String
+	 */
+	getWrap:function(){return parseInt(this.xGET("Wrap",arguments));},
+	/**
 	 * Sets the css class to apply to the column.
 	 * @param {String} css The classname to apply.
 	 */
@@ -291,6 +296,38 @@ nitobi.grid.Column.prototype.getEditor = function()
 }
 
 /**
+ * Hides the column
+ */ 
+nitobi.grid.Column.prototype.hide = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "none";
+  this.grid.resizePanes(-width, this.column );
+  this.grid.adjustHorizontalScrollBars();
+ }
+
+nitobi.grid.Column.prototype.show = function()
+{
+  var width = this.getWidth();
+  var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className);
+  classDef.display = "";
+  this.grid.resizePanes(width, this.column);
+}
+
+nitobi.grid.Column.prototype.toggleVis = function()
+{
+  var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
+  var classDef = nitobi.html.getClass(className, true);
+  if (classDef.display == "none")
+  	this.show();
+  else 
+	this.hide();
+}
+
+/**
  * @private
  */
 nitobi.grid.Column.prototype.xGET = function()
@@ -397,4 +434,11 @@ nitobi.grid.Column.prototype.unsubscribe = function(evt,func)
 nitobi.grid.Column.getColumnHeaderElement = function(grid, column)
 {
 	return $ntb('columnheader_'+column+'_'+grid.uid);
+}
+
+nitobi.grid.Column.prototype.inRange = function(x)
+{
+  var left = this.getHeaderElement().offsetLeft;
+  var right = left + this.getWidth();
+  return left < x && x < right;
 }

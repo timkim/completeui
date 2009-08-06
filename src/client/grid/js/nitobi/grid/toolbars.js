@@ -252,6 +252,53 @@ nitobi.ui.Toolbars.prototype.render= function()
 						}
 					};
 			break;
+			case "showhide"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  var menu = $ntb('ntb-grid-showhide' + grid.uid);
+  						  nitobi.ui.Toolbars.showMenu(menu, element);
+					};
+			break;
+			case "showhide_master"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  // Try to find the master and the detail
+						  var colset = grid.scroller.surface.columnSetId;
+						  var menu = $ntb('ntb-treegrid-colmenu-' + colset );
+  						  nitobi.ui.Toolbars.showMenu(menu, element);
+					};
+			break;
+			case "showhide_detail"+this.uid:
+				this.show_hide_btn = buttons[eachbutton];
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						  grid = _this.grid;
+						  element = _this.show_hide_btn;
+						  // Find the 2nd level
+						  var colset = null;
+						  for( surf in grid.Scroller.surfaceMap)
+						  {
+							if(surf.indexOf('0_') != -1 && surf.length == 3)
+							{
+								colset = grid.Scroller.surfaceMap[surf].columnSetId;			
+							}		
+						  }
+						  if(colset != null)
+						  {
+						  	var menu = $ntb('ntb-treegrid-colmenu-' + colset);
+							nitobi.ui.Toolbars.showMenu(menu, element);
+						  }
+					};
+			break;
 			default:
 		}
 	}
@@ -284,11 +331,20 @@ nitobi.ui.Toolbars.prototype.render= function()
 		}
 
 		switch (eachPbutton) {
+			case "firstPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("FirstPage");		
+						_this.resetCounter();
+					};
+			break;
 			case "previousPage"+this.uid:
 				buttonsPaging[eachPbutton].onClick = 
 					function()
 					{
-						_this.fire("PreviousPage");			
+						_this.fire("PreviousPage");
+						_this.decrementCounter();
 					};
 				buttonsPaging[eachPbutton].disable();
 			break;
@@ -297,8 +353,24 @@ nitobi.ui.Toolbars.prototype.render= function()
 					function()
 					{
 						_this.fire("NextPage");
+						_this.incrementCounter();
 					};
 			break;
+			case "lastPage"+this.uid:
+				buttonsPaging[eachPbutton].onClick = 
+					function()
+					{
+						_this.fire("LastPage");	
+						_this.maxCounter();		
+					};
+			break;
+			case "startPage"+this.uid:
+				buttonsPaging[eachPbutton].onBlur = 
+					function()
+					{	
+						_this.inputCounter();		
+					};
+			break;			
 			default:
 		}
 	}
@@ -321,6 +393,102 @@ nitobi.ui.Toolbars.prototype.render= function()
 	}
 	toolbarDiv.style.visibility="visible";		
 }
+
+nitobi.ui.Toolbars.showMenu = function(menu, element)
+{
+	if(nitobi.browser.IE)
+	{
+		// Style it with some default styling
+		menu.style.backgroundColor="#efefef";
+		menu.style.border="1px solid #000000";
+	}
+   	if(menu.style.display == "none")
+   	{
+ 		menu.style.position = "absolute";
+		// Figure out the height fast!
+		menu.style.left = "-5000";
+		menu.style.display = "";
+		var m_height = menu.clientHeight;
+		// Pull it back and put it in the right spot
+		menu.style.display = "none";
+    		menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
+    		menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
+    		menu.style.display = "";
+    	}
+    	else
+    	{
+  		menu.style.position="relative";
+    		menu.style.display = "none";
+    	}
+}
+
+nitobi.ui.Toolbars.prototype.resetCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		start_page.value = String(1);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.maxCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
+	if (start_page)
+	{		
+		start_page.value = String(Math.ceil(pages));	
+	}	
+}
+nitobi.ui.Toolbars.prototype.incrementCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var val = parseInt(start_page.value);
+		start_page.value = String(++val);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.decrementCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var val = parseInt(start_page.value);
+		start_page.value = String(--val);	
+	}	
+}
+
+nitobi.ui.Toolbars.prototype.inputCounter = function()
+{
+	var start_page = $ntb('startPage' + this.uid);
+	if (start_page)
+	{		
+		var maxPage = Math.ceil(this.grid.datatable.totalRowCount/this.grid.getRowsPerPage());
+		var val = parseInt(start_page.value);
+		var isNotNumber = isNaN(start_page.value);
+		if(val < 0 || val > maxPage || isNotNumber)
+		{
+			alert('Please enter a value within the ranges of 1 and ' + maxPage);
+		}
+		else
+		{
+			this.fire("InputTextPage");
+		}
+	}	
+}
+nitobi.ui.Toolbars.prototype.calculateRange = function()
+{
+	var startPage = 1;
+	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
+	var last_page =  $ntb('endPage' + this.uid);
+	if(last_page)
+	{
+		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
+	}
+}
+
 
 nitobi.ui.Toolbars.prototype.resize = function()
 {
@@ -361,3 +529,4 @@ nitobi.ui.Toolbars.prototype.dispose= function()
 		this.toolbarPaging = null;
 	}
 }  
+

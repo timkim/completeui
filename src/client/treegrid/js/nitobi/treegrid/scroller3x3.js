@@ -112,7 +112,7 @@ nitobi.grid.Scroller3x3.prototype.setScrollLeftPercent=function(scrollPercent) {
 nitobi.grid.Scroller3x3.prototype.setScrollLeft=function(scrollLeft) {
 	this.surface.view.midcenter.element.scrollLeft = scrollLeft;
 	this.surface.view.topcenter.element.scrollLeft = scrollLeft;
-	$ntb("ntb-grid-subheader-container" + this.owner.uid).scrollLeft = scrollLeft;
+	$ntb("ntb-treegrid-subheader-container" + this.owner.uid).scrollLeft = scrollLeft;
 }
 nitobi.grid.Scroller3x3.prototype.getScrollLeft=function() {
 	return this.scrollSurface.scrollLeft;
@@ -168,7 +168,7 @@ nitobi.grid.Scroller3x3.prototype.mapToHtml=function(oNode)
 	var uid = this.owner.uid;
 	this.surface.mapToHtml(uid);
 	this.scrollSurface = $ntb("gridvp_3_" + uid + "_" + this.surface.key);
-	this.htmlNode = $ntb("ntb-grid-scroller");
+	this.htmlNode = $ntb("ntb-treegrid-scroller");
 	/*for (var i=0;i<4;i++) {
 		var node=$ntb("gridvp_"+i+"_"+uid);
 		this.view[EBAScroller_VIEWPANES[i]].mapToHtml(node,nitobi.html.getFirstChild(node),null);  
@@ -335,6 +335,17 @@ nitobi.grid.Scroller3x3.prototype.getSurface = function(path)
 nitobi.grid.Scroller3x3.prototype.purgeSurfaces = function()
 {
 	this.surface.purgeSurfaces();
+}
+
+nitobi.grid.Scroller3x3.prototype.getSurfacesByColSet = function(colset)
+{
+	var result = [];
+	for(surf in this.surfaceMap)
+	{
+		if(this.surfaceMap[surf].columnSetId == colset)
+			result.push(this.surfaceMap[surf]);
+	}
+	return result;
 }
 
 nitobi.grid.Scroller3x3.prototype.resetHeaders = function()

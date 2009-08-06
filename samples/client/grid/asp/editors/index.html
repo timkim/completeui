@@ -1,5 +1,8 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <!-- It's important to use the ntb namespace in the HTML tag or the grid will not render -->
-<html xmlns:ntb>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ntb="http://www.nitobi.com">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
 <title>Nitobi Grid Demos - Editors</title>
@@ -17,10 +20,25 @@
 <script language="javascript" src="$SCRIPT$/nitobi.grid.js"></script>
 <!-- End of Demo-related Includes -->
 
+<script language="javascript" src="post_datatable/datatable.js"></script>
 <script>
+
+var getShowHideToolBar = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'showhide.xml';
+  xhr.async = false;
+  xhr.get();
+ 
+  return xhr.httpObj.responseText;
+}
 
 function init()
 {
+  	nitobi.grid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
+
+	//nitobi.grid.loadRowWrap();
 	var LSGrid1 = nitobi.loadComponent('EditorsGrid');
 }
 
@@ -36,6 +54,15 @@ function GetNewRecordID()
 
 		// return the result to the grid
 		return myAjaxRequest.httpObj.responseText;
+}
+
+function empty()
+{
+	var grid = nitobi.getComponent('EditorsGrid');
+	if(grid.datatable.getTotalRowCount() == 0)
+		{
+			$ntb('ntb-loading-cellEditorsGrid').innerHTML = "Grid is empty";
+		}
 }
 
 </script>
@@ -56,7 +83,9 @@ function GetNewRecordID()
 	<ntb:grid id="EditorsGrid"
 		width="630"
 		height="407"
-		mode="livescrolling"
+		mode="standard"
+		headerheight="40"
+		rowsperpage="10"
 		keygenerator="GetNewRecordID()"
 		gethandler="load_data.asp"
 		savehandler="save_data.asp"
@@ -64,7 +93,8 @@ function GetNewRecordID()
 		autosaveenabled="true"
 		toolbarenabled="true"
 		theme="flex"
-		frozenleftcolumncount="3">
+		frozenleftcolumncount="3"
+		>
 
 		<ntb:columns>
 			<ntb:textcolumn		label="Image"		xdatafld="ProductIcon"	sortenabled="false"	width="75" initial="docicon.gif">
@@ -73,8 +103,8 @@ function GetNewRecordID()
 			<ntb:textcolumn		label="Checkbox"	xdatafld="BulkAction"	sortenabled="false"	width="75">
 				<ntb:checkboxeditor datasource="[{value:'yes',display:'Yes!'},{value:'no',display:'No'}]" checkedvalue="yes" uncheckedvalue="no" displayfields="display" valuefield="value"></ntb:checkboxeditor>
 			</ntb:textcolumn>
-			<ntb:textcolumn		label="Text"		xdatafld="ProductName"	width="200"></ntb:textcolumn>
-			<ntb:textcolumn		label="Lookup"		xdatafld="ProductCategoryName" width="150">
+			<ntb:textcolumn		label="Text"		xdatafld="ProductName"	width="200" Wrap="0"></ntb:textcolumn>
+			<ntb:textcolumn		label="Lookup"		xdatafld="ProductCategoryName" width="150" align="right">
 				<ntb:lookupeditor  delay="1000" gethandler="lookuphandler.asp" displayfields="ProductCategoryName" valuefield="ProductCategoryName" ></ntb:lookupeditor>
 			</ntb:textcolumn>
 			<ntb:numbercolumn 	label="Number (with mask)"	xdatafld="ProductSKU" mask="#,##0"	negativemask="-#,##0" width="150"></ntb:numbercolumn>

@@ -145,7 +145,7 @@ nitobi.grid.Grid = function(uid) {
 	// We need to check if the horizontal scroll bar needs to be drawn after it's
 	// rendered and everytime the grid is resized.
 	this.subscribeOnce("HtmlReady", this.adjustHorizontalScrollBars);
-	this.subscribe("AfterGridResize", this.adjustHorizontalScrollBars)
+	this.subscribe("AfterGridResize", this.adjustHorizontalScrollBars);
 
 	/**
 	 * Various events that are attached to the root of the Grid HTML.
@@ -338,6 +338,7 @@ nitobi.grid.Grid.prototype.xColumnProperties = {
 		visible:{n:"Visible",t:"b",d:true},
 		xdatafld:{n:"xdatafld",t:"s",d:""},
 		value:{n:"Value",t:"s",d:""},
+		wrap:{n:"Wrap",t:"b",d:false},
 		xi:{n:"xi",t:"i",d:100},
 		oncellclickevent:{n:"OnCellClickEvent"},
 		onbeforecellclickevent:{n:"OnBeforeCellClickEvent"},
@@ -956,8 +957,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseDown=function(evt)
 	}
 	else
 	{
-		this.headerClicked(colNumber);
-		this.fire("HeaderDown", colNumber);
+    // Do the cell move here
+	  this.dragDropColumn.pickUp(this, colNumber, cell, evt);
+    this.fire("HeaderDown", colNumber);
 	}
 }
 
@@ -1026,8 +1028,9 @@ nitobi.grid.Grid.prototype.handleHeaderMouseUp = function(evt)
 		this.focus();
 		return;
 	}
-	var columnNumber = parseInt(domMouseUpCell.getAttribute("xi"));
-	this.fire("HeaderUp",columnNumber);
+	var columnNumber = parseInt(domMouseUpCell.getAttribute("col"));
+  var hover = this.headerResizeHover(evt,domMouseUpCell);
+ 	this.fire("HeaderUp",columnNumber);
 }
 
 /**
@@ -1551,7 +1554,13 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	 */
 	var cr = new nitobi.grid.ColumnResizer(this);
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
-	this.columnResizer = cr;
+  	this.columnResizer = cr;
+
+  	// This is the drag/drop column, this is for resorting columns
+
+  	var db = new nitobi.grid.DragDropColumn(this);
+  	db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  	this.dragDropColumn = db;
 
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
@@ -1570,6 +1579,8 @@ nitobi.grid.Grid.prototype.createChildren= function()
 	var sc = this.Scroller = this.scroller = new nitobi.grid.Scroller3x3(this, this.getHeight(), this.getDisplayedRowCount(), this.getColumnCount(), this.getfreezetop(), this.getFrozenLeftColumnCount());
 	sc.setRowHeight(this.getRowHeight());
 	sc.setHeaderHeight(this.getHeaderHeight());
+
+	this.populateColumnList();
 
 	// Set up default key handlers - eventually move these out into editor factory
 //	var kh = function(k) {if ((k > 64 && k < 91) || (k > 47 && k < 58) || (k > 95 && k < 111) || (k > 188 && k < 191) || (k == 113) ) {_this.edit();}};
@@ -1652,6 +1663,26 @@ nitobi.grid.Grid.prototype.createToolbars = function(visibleToolbars)
 	tb.subscribe("Refresh",L.close(this,this.refresh));
 
 	this.subscribe("AfterGridResize", L.close(this,this.resizeToolbars));
+}
+
+
+nitobi.grid.Grid.prototype.populateColumnList = function()
+{
+  var uid = this.uid;
+  var listDiv = $ntb('ntb-grid-showhide' + uid);
+  var list = $ntb('ntb-grid-colcheck' + uid);
+  var count = this.getColumnCount();
+  for (var i = 0; i < count; ++i)
+  {
+      var hdr = this.getColumnObject(i);
+      var hdrTitle = hdr.getLabel();
+      var list_item = document.createElement("li");
+      var id = "ntb-hidecol_" + i + "_" + uid;
+      list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+      list.appendChild(list_item);
+      //Attach event here
+      nitobi.html.attachEvent($ntb("ntb-hidecol_"+ i + "_" + this.uid), "mouseup", hdr.toggleVis, hdr); 
+  } 
 }
 
 /**
@@ -2002,6 +2033,30 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 	var col = this.getColumnObject(resizer.column);
 	var prevWidth = col.getWidth();
 	this.columnResize(col, prevWidth + resizer.dx);
+	this.syncViewports();
+}
+
+/** 
+ * Executes after a user initiated column move event occurs
+ * @param {Object} 
+ * @private
+ */
+nitobi.grid.Grid.prototype.afterDragDropColumn = function(dragbox)
+{
+  var source = this.getColumnObject(dragbox.column);
+  if (this.targetCol == null)
+    var target = this.findColumnWithX(dragbox.x);
+  else
+    var target = this.targetCol;
+
+  if (source == target || target == null)
+  {
+    this.headerClicked(dragbox.column);
+  }
+  else
+  {
+    this.moveColumns(source, target);
+  }
 }
 
 /**
@@ -2024,16 +2079,12 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	this.updateCellRanges();
 
 	/*
-	 * This is absolutely stupid!  Not only does IE7 have issues with properly generating CSS, 
-	 * but Firefox can't find style descriptors for styles that have both an ID and a style!
-	 * 
-	 * TODO: File a bug in Bugzilla and remove this check when 3.1 comes out?
-	 * 
-	 * Gecko FAIL!
-	 */
-	if (nitobi.browser.IE7 || nitobi.browser.FF3)
+	 * Found the stupidity in the CSS class that should fix this.  This code
+   	 * depends on nitobi.html.Css.getRule.
+        */
+	if (nitobi.browser.IE7)
 	{
-		this.generateCss();
+      		this.generateCss();
 	}
 	else
 	{
@@ -2067,7 +2118,90 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
+nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
+{
+  var srcIndex = source.column;
+  var destIndex = dest.column;
+  
+  // This manipulates the Grid XML
+  var columns = this.Declaration.columns.firstChild;
+  var destCol = columns.childNodes[destIndex];
+  var srcCol = columns.childNodes[srcIndex];
+  var tmpNode = srcCol.cloneNode(true);
+  columns.removeChild(srcCol);
+  columns.insertBefore(tmpNode, destCol);
 
+  // Dump the old cached stuff out, redefine everything and bind it!
+  this.columns = [];
+  this.defineColumns(columns);
+  this.bind();
+}
+
+nitobi.grid.Grid.prototype.reloadColumnDef = function()
+{
+  // Dump the old cached stuff out, redefine everything and bind it!
+  this.columns = [];
+  this.defineColumns(columns);
+  this.bind();
+}
+
+nitobi.grid.Grid.prototype.findColumnWithX = function(x)
+{
+  var C = nitobi.html.Css;
+  var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+ 
+  if (nitobi.browser.IE)
+  {
+    var leftStyleWidth = this.scroller.view.topleft.element.clientWidth;
+  }
+  else
+  {
+	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.uid).width);
+  }
+  var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+  // The header width will be the same as the grid width
+  var viewport = this.scroller.view.topcenter;
+  var frznCount = this.getFrozenLeftColumnCount();
+
+  // We're trying to figure out the state of the grid on the DOM now
+  if(frznCount > 0 && leftStyleWidth < x)
+  {
+     var new_range = ((x - gridLeft) - leftStyleWidth) + this.scroller.getScrollLeft();
+     for(var i = frznCount; i < this.getColumnCount(); ++i)
+     {
+         if( this.getColumnObject(i).inRange(new_range) )
+           return this.getColumnObject(i);
+     } 
+  }
+  else
+  {
+    for (var i = 0; i < this.getColumnCount(); ++i)
+    {
+      if( this.getColumnObject(i).inRange(x - gridLeft) )
+        return this.getColumnObject(i);
+    }
+  }
+
+  return null;
+}
+
+nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
+{
+  	var C = nitobi.html.Css;
+		// Things are different if we are resizing a frozen or unfrozen column
+		if (columnIndex < this.getFrozenLeftColumnCount())
+		{
+			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
+			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
+		}
+		else
+		{
+			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
+		}
+}
 /**
  * Loads the Grid Model from XML. The Model is essentially a serialization of the Grid state which contains all the property values and 
  * child object information.
@@ -2278,6 +2412,10 @@ nitobi.grid.Grid.prototype.bindComplete=function()
 	// TODO: this setRowCount should not be here ...
 	// TODO: But this is in conflict with grouping grid / block rendering mechanism so I am leaving it.  
 	this.setRowCount(this.datatable.getRemoteRowCount());
+	
+	// TODO: This toolbar calc should not be here either
+	this.toolbars.calculateRange();
+	
 	// The bound property indicates that events from the datasource to which
 	// we are bound will now be able to cause re-renders of our interface
 	this.setBound(true);
@@ -3790,7 +3928,7 @@ nitobi.grid.Grid.prototype.generateFrameCss= function()
 
 	if (!nitobi.browser.SAFARI && !nitobi.browser.CHROME && this.stylesheet == null)
 		this.stylesheet = nitobi.html.Css.createStyleSheet();
-
+	
 	var ss = this.getScrollSurface(); // Viewport. (id= gridviewport*)
 	var scrollTop = 0;
 	var scrollLeft = 0;
@@ -4607,7 +4745,7 @@ nitobi.grid.Grid.prototype.getRendererForColumn= function(col) {
 	var columnCount = this.getColumnCount();
 	if (col >= columnCount)
 		col = columnCount - 1;
-	var frozeneft = this.getFrozenLeftColumnCount();
+	var frozenLeft = this.getFrozenLeftColumnCount();
 	if (col < frozenLeft)
 		return this.MidLeftRenderer;
 	else
@@ -5516,6 +5654,7 @@ nitobi.grid.Grid.prototype.setDisplayedRowCount= function(newVal)
 		this.Scroller.view.midcenter.rows = newVal;
 		this.Scroller.view.midleft.rows	= newVal;
 	}
+	
 	this.displayedRowCount = newVal;
 }
 
@@ -5553,6 +5692,49 @@ nitobi.grid.Grid.prototype.getScrollerContainer = function()
 nitobi.grid.Grid.prototype.getGridContainer = function()
 {
 	return nitobi.html.getFirstChild(this.UiContainer);
+}
+
+/**
+ * Sync the frozen left column and the right column
+ *
+ */
+
+nitobi.grid.Grid.prototype.syncViewports = function()
+{
+	if (this.getPagingMode() != nitobi.grid.PAGINGMODE_STANDARD) 
+		return;
+	var frozenLeft = this.getFrozenLeftColumnCount();
+	if (frozenLeft == 0)
+		return;
+	var count = this.getColumnCount();
+	var wrap_column = false;
+	var i = 0;
+	while (wrap_column == false && i < count)
+	{
+		var col = this.getColumnObject(i);
+		if(col.getWrap() > 0)
+			wrap_column = true;
+		++i;	
+	}
+	if (wrap_column)
+	{
+		var left_viewport = this.scroller.view.midleft;
+		var right_viewport = this.scroller.view.midcenter;
+  		var rowCount = this.getRowsPerPage();
+  		for(i = 0; i < rowCount; ++i)
+  		{
+    			left_row = $ntb('row_'+ i + 'left_' + this.uid);
+    			right_row = $ntb('row_'+ i+ '_' + this.uid);
+    			if (left_row.clientHeight > right_row.clientHeight)
+    			{
+      				right_row.style.height = left_row.clientHeight + "px";
+    			}
+    			else
+    			{
+      				left_row.style.height = right_row.clientHeight + "px";
+    			}
+  		}
+	}
 }
 
 /**
@@ -5738,7 +5920,6 @@ nitobi.grid.Grid.prototype.pasteComplete = function(preMergedEbaXml,startRow,end
 {
 	// Call Viewport.render() (or notify with event)
 	this.Scroller.reRender(startRow, endRow);
-
 	this.subscribeOnce("HtmlReady", this.handleAfterPaste, this, [pasteEventArgs]);
 }
 
@@ -5783,6 +5964,8 @@ nitobi.grid.Grid.prototype.getSelection = function()
  */
 nitobi.grid.Grid.prototype.handleHtmlReady = function(evtArgs)
 {
+ 	// Clean up the rows, then fire this up
+	this.syncViewports();	
 	this.fire("HtmlReady", new nitobi.base.EventArgs(this));
 }
 

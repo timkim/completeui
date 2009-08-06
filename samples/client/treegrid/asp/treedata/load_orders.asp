@@ -1,5 +1,5 @@
 <%@ Language=VBScript%>
-<!--#include file="../../../../server/asp/base_gethandler.inc"-->
+<!--#include file="nitobi.xml.inc"-->
 
 <%
 
@@ -28,13 +28,13 @@
 	' *******************************************************************
 	
 	dim MyTableName
-	MyTableName = "tblOrders"
+	MyTableName = "tblMDOrders"
 	
 	dim DefaultOrderByColumn
 	DefaultOrderByColumn = "OrderID"
 	
 	dim FileandFolder
-	FileandFolder = "..\..\..\..\..\server\common\datasources\en\NorthWindUltra.mdb"	
+	FileandFolder = "\nitobitestdb.mdb"	
 	
 	' *******************************************************************
 	' Now we get all the parameters we'll need to construct the query
@@ -84,8 +84,7 @@
 	' This code is just for MS Access Databases because it doesn't support proper paging,
 	' we need to know how many records are in the table
 	' *******************************************************************'	
-
-	countRecordSet = objConn.execute("SELECT COUNT(*) FROM " & MyTableName & " WHERE CustomerID = " & CustomerID)
+	countRecordSet = objConn.execute("SELECT COUNT(*) FROM " & MyTableName & " WHERE CustomerID = '" & CustomerID & "'")
 	dim MaxRecords
 	dim totalRowCount
 	totalRowCount = countRecordSet(0)
@@ -99,7 +98,7 @@
 	if MaxRecords > StartRecordIndex then
 		' Access doesn't support paging so we must execute a triple-nested query where the top n records are flipped and clipped
 		dim RecordSet
-		Set RecordSet = objConn.execute("SELECT * FROM (SELECT TOP " & PageSize & " * FROM (SELECT TOP " & MaxRecords &  "  * FROM " & MyTableName & " WHERE CustomerID = " & CustomerID & " ORDER BY " & SortColumn & " " & SortDirection & ") ORDER BY " & SortColumn & " " & ReverseDirection & ") ORDER BY " & SortColumn & " " & SortDirection)
+		Set RecordSet = objConn.execute("SELECT * FROM (SELECT TOP " & PageSize & " * FROM (SELECT TOP " & MaxRecords &  "  * FROM " & MyTableName & " WHERE CustomerID = '" & CustomerID & "' ORDER BY " & SortColumn & " " & SortDirection & ") ORDER BY " & SortColumn & " " & ReverseDirection & ") ORDER BY " & SortColumn & " " & SortDirection)
 	end if
 	
 	' *******************************************************************
@@ -114,7 +113,7 @@
 	EBAGetHandler_DefineField("OrderID")
 	EBAGetHandler_DefineField("OrderDate") 'column index 1
 	EBAGetHandler_DefineField("ShippedDate") 'column index 2
-	EBAGetHandler_DefineField("ProductID")
+	EBAGetHandler_DefineField("ProductName") 'column index 3
 	
 	' We also need to let the Grid know which field is the foreign key for the subgroup.
 	EBAGetHandler_DefineForeignKey("CustomerID")
@@ -130,7 +129,7 @@
 				EBAGetHandler_DefineRecordFieldValue "OrderID", RecordSet("OrderID")
 				EBAGetHandler_DefineRecordFieldValue "OrderDate", RecordSet("OrderDate")
 				EBAGetHandler_DefineRecordFieldValue "ShippedDate", RecordSet("ShippedDate")
-				EBAGetHandler_DefineRecordFieldValue "ProductID", RecordSet("ProductID")
+				EBAGetHandler_DefineRecordFieldValue "ProductName", RecordSet("ProductName")
 				
 			EBAGetHandler_SaveRecord
 	
@@ -142,6 +141,7 @@
 	objConn.close
 	EBAGetHandler_SetTotalRowCount(totalRowCount)
 	EBAGetHandler_CompleteGet
+
 
 
 %>

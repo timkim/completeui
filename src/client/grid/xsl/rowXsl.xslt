@@ -50,14 +50,15 @@
 				<xsl:attribute name="class">ntb-header-row<xsl:value-of select="$uniqueId" /></xsl:attribute>
 
 				<xsl:for-each select="$columns">
-					<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+					<xsl:if test="(position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 						<td ebatype="columnheader" xi="{position()-1}" col="{position()-1}">
 						<xsl:attribute name="id">columnheader_<xsl:value-of select="position()-1"/>_<xsl:value-of select="$uniqueId" /></xsl:attribute>
 						<xsl:attribute name="onmouseover">$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOver(this);</xsl:attribute>
 						<xsl:attribute name="onmouseout">$ntb('grid<xsl:value-of select="$uniqueId" />').jsObject.handleHeaderMouseOut(this);</xsl:attribute>
 						<!-- note that the ntb-columnUID_POSITION class is for a safari bug -->
-						<xsl:attribute name="class">ntb-column-indicator-border<xsl:choose><xsl:when test="$sortColumn=position()-1 and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=position()-1 and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
-							<div class="ntb-column-indicator">
+						<xsl:attribute name="class">ntb-column-header ntb-column-indicator-border<xsl:choose><xsl:when test="$sortColumn=position()-1 and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=position()-1 and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
+							<div>
+								<xsl:attribute name="class">ntb-column-indicator ntb-column-indicator<xsl:value-of select="$uniqueId" /></xsl:attribute>
 								<xsl:choose>
 									<xsl:when test="@Label and not(@Label = '') and not(@Label = ' ')"><xsl:value-of select="@Label" /></xsl:when>
 									<xsl:when test="ntb:label and not(ntb:label = '') and not(ntb:label = ' ')"><xsl:value-of select="ntb:label" /></xsl:when>
@@ -86,9 +87,8 @@
 <xsl:template name="colgroup">
 	<colgroup>
 		<xsl:for-each select="$columns">
-			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+			<xsl:if test="(position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 				<col>
-					<xsl:attribute name="class">ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text><xsl:if test="not(@Editable='1')">ntb-column-readonly</xsl:if></xsl:attribute>
 				</col>
 			</xsl:if>
 		</xsl:for-each>
@@ -112,7 +112,7 @@
 
 		<xsl:for-each select="$columns">
 
-			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+			<xsl:if test="(position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 
 				<xsl:call-template name="render-cell">
 					<xsl:with-param name="row" select="$row"/>
@@ -137,8 +137,8 @@
             <!-- note the use of the ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /> class ... that is for a safari bug -->
             <xsl:attribute name="class">ntb-cell-border<xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-column-<xsl:choose><xsl:when test="$sortColumn=$pos and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=$pos and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text>ntb-column-<xsl:value-of select="@DataType"/><xsl:text> </xsl:text><xsl:call-template name="ClassName"><xsl:with-param name="row" select="$row"/></xsl:call-template><xsl:text> </xsl:text><xsl:if test="@type = 'NUMBER' and $value &lt; 0">ntb-cell-negativenumber</xsl:if><xsl:text> </xsl:text>ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /></xsl:attribute>
 
-            <div style="overflow:hidden;white-space:nowrap;">
-            	<xsl:attribute name="class">ntb-row<xsl:value-of select="$uniqueId"/><xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-cell</xsl:attribute>
+            <div>
+            	<xsl:attribute name="class">ntb-row<xsl:value-of select="$uniqueId"/><xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-cell-col_<xsl:value-of select="position()" /></xsl:attribute>
 	            <xsl:if test="$toolTipsEnabled='1'"> 
 		            	<xsl:attribute name="title"> 
 	            		<xsl:value-of select="$value" />

@@ -183,6 +183,12 @@ nitobi.grid.TreeGrid = function(uid) {
 	 * @type Array
 	 */
 	this.keyEvents = [];
+
+	/**
+	 * This is how many childHeaders are visible on the treegrid;
+	 */
+
+	this.childHeaders = 0;
 }
 
 nitobi.lang.implement(nitobi.grid.TreeGrid, nitobi.Object);
@@ -515,11 +521,11 @@ nitobi.grid.TreeGrid.prototype.initializeFromCss = function()
 	if (rowHeight != null && rowHeight != "")
 		this.setRowHeight(parseInt(rowHeight));
 
-	var headerHeight = this.getThemedStyle("ntb-grid-header", "height");
+	var headerHeight = this.getThemedStyle("ntb-treegrid-header", "height");
 	if (headerHeight != null && headerHeight != "")
 		this.setHeaderHeight(parseInt(headerHeight));
 	
-	var ntbSubgroup = this.getThemedClass("ntb-grid-subgroup");
+	var ntbSubgroup = this.getThemedClass("ntb-treegrid-subgroup");
 	if (ntbSubgroup != null && ntbSubgroup.left != null && ntbSubgroup.left != "" && this.getGroupOffset() == 0)
 		this.setGroupOffset(parseInt(ntbSubgroup.left));
 	
@@ -828,7 +834,7 @@ nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
 	if (nitobi.browser.IE)
 		this.keyNav = this.getScrollerContainer();
 	else
-		this.keyNav = $ntb("ntb-grid-keynav"+this.uid);
+		this.keyNav = $ntb("ntb-treegrid-keynav"+this.uid);
 
 	this.keyEvents = [
 		{type:'keydown', handler:this.handleKey},
@@ -838,8 +844,8 @@ nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
 	nitobi.html.attachEvents(this.keyNav, this.keyEvents, this);
 
 	// Attach the DOM events for grid resizing
-	var rightGrabby = $ntb("ntb-grid-resizeright" + this.uid);
-	var btmGrabby = $ntb("ntb-grid-resizebottom" + this.uid);
+	var rightGrabby = $ntb("ntb-treegrid-resizeright" + this.uid);
+	var btmGrabby = $ntb("ntb-treegrid-resizebottom" + this.uid);
 	if (rightGrabby != null)
 	{
 		nitobi.html.attachEvent(rightGrabby, "mousedown", this.beforeResize, this);
@@ -990,9 +996,10 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 
 	var colNumber = nitobi.grid.Cell.getColumnNumber(cell);
 	var surfacePath = nitobi.grid.Cell.getSurfacePath(cell);
+	var columnObj = this.getColumnObject(colNumber, surfacePath);
+
 	if (this.headerResizeHover(evt, cell))
 	{
-		var columnObj = this.getColumnObject(colNumber, nitobi.grid.Cell.getSurfacePath(cell));
 		var beforeColumnResizeEventArgs = new nitobi.grid.OnBeforeColumnResizeEventArgs(this, columnObj);
 		if (!nitobi.event.evaluate(columnObj.getOnBeforeResizeEvent(), beforeColumnResizeEventArgs)) return;
 
@@ -1002,7 +1009,8 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 	}
 	else
 	{
-		this.headerClicked(colNumber, surfacePath);
+		// Do the cell move here
+		this.dragDropColumn.pickUp(this, columnObj, cell, evt);
 		this.fire("HeaderDown", colNumber);
 	}
 }
@@ -1529,7 +1537,7 @@ nitobi.grid.TreeGrid.prototype.getToolbars = function()
 nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
 {
 	var viewableWidth = this.getViewableWidth();
-	var hScrollbarContainer = $ntb("ntb-grid-hscrollshow" + this.uid);
+	var hScrollbarContainer = $ntb("ntb-treegrid-hscrollshow" + this.uid);
 	if ((viewableWidth <= parseInt(this.getWidth())))
 	{
 		hScrollbarContainer.style.display = "none";
@@ -1541,7 +1549,7 @@ nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
 		var pctW = this.getWidth()/this.getViewableWidth();
 		this.hScrollbar.setRange(pctW);
 	}
-	var scrollStyle = nitobi.html.Css.getClass(".ntb-grid-scrollerheight" + this.uid, true);
+	var scrollStyle = nitobi.html.Css.getClass(".ntb-treegrid-scrollerheight" + this.uid, true);
 	if (viewableWidth > this.getWidth())
 	{
 		scrollStyle.height = this.getHeight() - this.getscrollbarHeight() - (this.isToolbarEnabled()?this.getToolbarHeight():0) + "px";
@@ -1588,7 +1596,17 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.subscribe("HtmlReady", L.close(ls,ls.hide));
 	this.subscribe("AfterGridResize", L.close(ls,ls.resize));
 	ls.initialize();
-	ls.attachToElement($ntb("ntb-grid-overlay"+this.uid));
+
+	// This is for the IE7 z-index bug!
+        if(nitobi.browser.IE7 && nitobi.lang.isStandards())
+        {
+                ls.attachToElement($ntb("grid" + this.uid));
+        }
+        else
+        {
+                ls.attachToElement($ntb("ntb-treegrid-overlay" + this.uid));
+        }
+
 	ls.show();
 
 //	nitobi.html.setBgImage($ntb("ntb-frozenshadow"+this.uid));
@@ -1602,6 +1620,12 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
 	this.columnResizer = cr;
 
+	// This is the drag/drop column, this is for resorting columns
+
+  	var db = new nitobi.grid.DragDropColumn(this);
+  	db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
+  	this.dragDropColumn = db;
+
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
 	 * @type nitobi.grid.GridResizer
@@ -1614,6 +1638,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	gr.onAfterResize.subscribe(L.close(this, this.afterResize));
 	this.gridResizer = gr;
 
+
 	// TODO: Scroller is deprecated
 	var sc = this.Scroller = this.scroller = new nitobi.grid.Scroller3x3(this, this.getHeight(), this.getDisplayedRowCount(), this.getColumnCount(), this.getfreezetop(), this.getFrozenLeftColumnCount());
 	sc.setRowHeight(this.getRowHeight());
@@ -1621,6 +1646,11 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.maxSurface = this.scroller.surface;
 	this.renderSurface();
 	this.attachDomEvents();
+
+
+	this.populateColumnLists();
+
+
 	// Set up default key handlers - eventually move these out into editor factory
 //	var kh = function(k) {if ((k > 64 && k < 91) || (k > 47 && k < 58) || (k > 95 && k < 111) || (k > 188 && k < 191) || (k == 113) ) {_this.edit();}};
 //	var gh = function(k) {if (k==32) {var group =  _this.activeCell.getAttribute("xig");_this.toggleGroup(group);}}; 
@@ -1657,7 +1687,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	var vs = this.vScrollbar = new nitobi.ui.VerticalScrollbar();
 	vs.attachToParent(this.element, $ntb("vscroll"+this.uid));
 	vs.subscribe("ScrollByUser",L.close(this,this.scrollVertical));
-	this.subscribe("PercentHeightChanged",L.close(vs, vs.setRange)); // I had to do it this way ... context wasn't being passed properly
+	this.subscribe("PercentHeightChanged", L.close(vs, vs.setRange)); // I had to do it this way ... context wasn't being passed properly
 	this.subscribe("ScrollVertical",L.close(vs, vs.setScrollPercent)); 
 	this.setscrollbarWidth(vs.getWidth());
 
@@ -1670,6 +1700,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	this.subscribe("PercentWidthChanged",L.close(hs, hs.setRange)); // I had to do it this way ... context wasn't being passed properly
 	this.subscribe("ScrollHorizontal",L.close(hs, hs.setScrollPercent));
 	this.setscrollbarHeight(hs.getHeight());
+
 }
 
 /**
@@ -1706,6 +1737,63 @@ nitobi.grid.TreeGrid.prototype.resizeToolbars = function()
 {
 	this.toolbars.setWidth(this.getWidth());
 	this.toolbars.resize();
+}
+
+
+/**
+ * 
+ */
+
+nitobi.grid.TreeGrid.prototype.populateColumnLists = function()
+{
+	var sets = this.Declaration.columns;
+	for (var i = 0; i < sets.length; ++i)
+	{
+		this.populateColList(sets[i]);
+	}
+}
+
+nitobi.grid.TreeGrid.prototype.populateColList = function(colset)
+{
+	var uid = this.uid;
+	var setname = colset.firstChild.getAttribute('id');
+	var columns = colset.firstChild.childNodes;
+	var listDiv = $ntb('ntb-treegrid-showhide' + uid);
+	var menuDiv = document.createElement('div');
+	var list = document.createElement('ul');
+	menuDiv.setAttribute('id',  "ntb-treegrid-colmenu-" + setname);
+	menuDiv.setAttribute('style', 'display: none;');
+	menuDiv.setAttribute('class', 'ntb-showhide');
+	list.setAttribute('id', "ntb-treegrid-colcheck-" + setname);
+	menuDiv.appendChild(list);
+	listDiv.appendChild(menuDiv);
+	for (var i = 0; i < columns.length; ++i)
+	{
+		var hdrTitle = columns[i].getAttribute('label');
+		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
+		if (hdrTitle != null)
+		{
+			var list_item = document.createElement('li');
+			var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
+			list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+			list.appendChild(list_item);
+			nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
+			$ntb(id).style.width = "20px";
+		}
+	}
+	// This is stupid, but is required for IE
+	rendered_menu = $ntb('ntb-treegrid-colmenu-' + setname);
+	rendered_menu.style.display = "none";
+}
+
+nitobi.grid.TreeGrid.prototype.toggleVis = function(evt)
+{
+	var colAttr = evt.srcElement.id.split('_');
+	var col = parseInt(colAttr[1]);
+	var colset = colAttr[2];
+	var surface = this.scroller.getSurfacesByColSet(colset)[0];
+	var column = surface.getColumnObject(col);
+	column.toggleVis();
 }
 
 /**
@@ -1932,8 +2020,22 @@ nitobi.grid.TreeGrid.prototype.updateCellRanges= function()
 		this.measure();
 		this.resizeScroller();
 
-		this.fire("PercentHeightChanged",this.getHeight()/this.calculateHeight());
-		this.fire("PercentWidthChanged",this.getWidth()/this.calculateWidth());
+		var surfaceHeight = this.scroller.scrollSurface.clientHeight;
+		var ratio = surfaceHeight/(this.calculateHeight() + this.calculateHdrHeight());
+		var maxWidth = this.calculateWidth();
+
+		
+		for (surf in this.scroller.surfaceMap)
+		{
+			var surface = this.scroller.getSurface(surf);
+			var width = surface.calculateWidth();
+			if (width > maxWidth && surface.isVisible)
+				maxWidth = width;	
+		}
+
+		// This is required because we need to get the height of the headers in the child grids
+		this.fire("PercentHeightChanged", ratio);
+		this.fire("PercentWidthChanged",this.getWidth()/maxWidth);
 	}
 }
 
@@ -2060,6 +2162,30 @@ nitobi.grid.TreeGrid.prototype.afterColumnResize = function(resizer)
 	this.columnResize(col, prevWidth + resizer.dx);
 }
 
+
+nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
+{
+	var source = dragbox.column;
+	var surface = dragbox.surface;
+	if (this.targetCol == null)
+	{
+		var target = this.findColumnWithCoords(dragbox.surface, dragbox.x, dragbox.y);
+	}
+	else
+	{
+		var target = this.targetCol;
+	}
+
+	if (source == target || target == null)
+	{
+		this.headerClicked(source.column, surface.key);
+	}
+	else
+	{
+		this.moveColumns(source, target);
+	}
+}
+
 /**
  * Resizes the grid column to the specified width. 
  * @param {Number} width The width (in pixels) of the column.
@@ -2108,14 +2234,14 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 		// Things are different if we are resizing a frozen or unfrozen column
 		if (columnIndex < this.getFrozenLeftColumnCount())
 		{
-			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
+			var leftStyle = C.getClass(".ntb-treegrid-leftwidth"+this.uid);
 			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
-			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
+			var centerStyle = C.getClass(".ntb-treegrid-centerwidth"+this.uid);
 			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
 		}
 		else
 		{
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth"+this.uid);
 			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
 		}
 		*/
@@ -2126,7 +2252,7 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 		do
 		{
 			var id = columns.getAttribute("id");
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth" + this.uid + "-" + id);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth" + this.uid + "-" + id);
 			var width = (id == rootId?maxWidth:maxWidth - (depth * parseInt(groupOffset)) - (depth + 1));
 			surfaceStyle.width = width + "px";
 			var childId = this.findChildColumnSet(id);
@@ -2140,6 +2266,54 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 	this.adjustHorizontalScrollBars()
 	var afterColumnResizeEventArgs = new nitobi.grid.OnAfterColumnResizeEventArgs(this, column);
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
+}
+
+nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
+{
+	var srcIndex = source.column;
+	var destIndex = dest.column;
+	var surfacePath = source.surface.key;
+ 	var parentNode = source.surface.columnsNode;
+	var surface = source.surface;		
+
+	var srcNode = parentNode.childNodes[srcIndex];
+	var destNode = parentNode.childNodes[destIndex];
+	var tmpNode = srcNode.cloneNode(true);
+	parentNode.removeChild(srcNode);
+	parentNode.insertBefore(tmpNode, destNode); 
+	
+	this.Selection.clear();
+	// If we move a column on the first surface, purge all the surfaces
+	if(surface.key == "0")
+		this.scroller.purgeSurfaces();
+
+	this.Scroller.clearSurface(null, null, null, null, surfacePath);
+	surface.cachedColumns=[];
+	surface.clearHeader();
+	surface.syncWithData();
+	surface.renderHeader();
+	// We need to generate the CSS here so the columns have the proper width 
+	this.generateCss();
+}
+
+nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
+{
+	var C = nitobi.html.Css;
+	var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+
+	if (surface.key == "0")
+		var colContainer = this;
+	else
+	   	var colContainer = surface;
+	var colCount = colContainer.getColumnCount();
+ 	
+	for (var i = 0; i < colCount; ++i)
+    	{
+      		if( this.getColumnObject(i, surface.key).inRange(x - gridLeft) )
+        		return this.getColumnObject(i, surface.key);
+    	}
+
+	return null;
 }
 
 nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()
@@ -2167,7 +2341,7 @@ nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()
 		{
 			var columnsNode = surface.columnsNode;
 			var id = columnsNode.getAttribute("id");
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth" + this.uid + "-" + id, true);
+			var surfaceStyle = C.getClass(".ntb-treegrid-surfacewidth" + this.uid + "-" + id, true);
 			var width = (id == rootId?maxWidth:maxWidth - (depth * parseInt(groupOffset)) - (depth + 1));
 			surfaceStyle.width = width + "px";
 			depth++;
@@ -3210,7 +3384,7 @@ nitobi.grid.TreeGrid.prototype.resetColumns=function()
 	this.fire("BeforeClearColumns");
 	this.inferredColumns=true;
 	this.columnsDefined=false;
-	var Existing = this.model.selectSingleNode("//ntb:columns");
+	var Existing = this.model.selectSingleNode("/state/Defaults/nitobi.grid.Column");
 
 	//Create columns based upon #of columns
 	var xDec = nitobi.xml.createElement(this.model, "columns");
@@ -3399,6 +3573,7 @@ nitobi.grid.TreeGrid.prototype.afterExpandSelection = function(evt)
 /**
  * Calculates the height of the rows in the Grid. If the start and end 
  * arguments are defined then it will calculate the height of those rows only.
+ *
  * @param {Number} start The zero based start row index.
  * @param {Number} end The end row index.
  * @type Number
@@ -3410,6 +3585,11 @@ nitobi.grid.TreeGrid.prototype.calculateHeight = function(start, end)
 	var numRows = this.getDisplayedRowCount();
 	end = (end != null)?end:numRows - 1;
 	return (end - start + 1) * this.getRowHeight();
+}
+
+nitobi.grid.TreeGrid.prototype.calculateHdrHeight = function()
+{
+	return this.childHeaders * this.getHeaderHeight();	
 }
 
 /**
@@ -3530,128 +3710,6 @@ nitobi.grid.TreeGrid.prototype.editorDataReady= function(column)
 	column.setAttribute("DisplayFields", displayFieldsString);
 	column.setAttribute("ValueField", valueField);
 }
-/*
-nitobi.grid.TreeGrid.prototype.calcForumlas = function(cell)
-{
-	//	Now we need to re-calculate all the formulas for this row ...
-	var cols = this.columns;
-	var len = cols.length;
-
-	//	Loop through each column and see if it is of type formula ... if so we need to re-calc it
-	for (var i=0; i<len; i++)
-	{
-		if (cols[i].type == "FORMULA")
-		{
-			//	re-calculate the formula ...
-			var f = cols[i].xdatafld;
-			var re = /$\{(.*?)\}/gi;
-			var reBG = f.match(re);
-			if (reBG != null)
-			{
-				var BGL = reBG.length;
-				for (var j=0; j<BGL; j++)
-				{
-					var curfld = reBG[j].replace(re,"$1");
-					var stp = 'this.GetXMLDataField("'+curfld+'", '+curRow+')';
-					f = f.replace(reBG[j],stp);
-				}
-
-				var newValue = eval(f)*1;
-				var val=0;
-
-				if (_getBoolean(cols[i].showSummary))
-				{
-					var msk = cols[i].mask || '###,##0.00';
-					var sumCell = document.getElementById(i + '_Column_Sum' + this.element.uniqueID);
-
-					//	Get the old cell value
-					var cellPrevValue = this.getCellValue(curRow, i);
-					//	Get the old summary value
-					var colPrevSummary = maskedToNumber(sumCell.innerText, this.decimalSeparator);
-
-					val = formatNumber(colPrevSummary - cellPrevValue + newValue, msk, this.decimalSeparator, this.groupingSeparator);
-					if (val=="false") continue;
-					//	Set the new summary value
-					sumCell.innerHTML = val;
-				}
-
-				val = formatNumber(newValue, msk, this.decimalSeparator, this.groupingSeparator);
-
-				//	Set this flag so that setCell will not attempt to call calcFormulas again and create a loop ...
-				cell.calculate = false;
-				cell.setValue(val);
-				cell.calculate = false;
-			}
-		}
-	}
-}
-
-
-/// <function name="calcSummary" access="private">
-/// <summary>Calculates the summary values for any FORMULA and NUMBER columns.</summary>
-/// </function>
-function _gridlist.prototype.calcSummary()
-{
-	var uniqueID = this.element.uniqueID;
-	var cols = this.columns;
-	var clen = cols.length;
-
-	var iRows = this.rowCount();
-
-	var oRows = document.getElementById("rows"+uniqueID);
-	var oFreezeRows = document.getElementById("freezerows"+uniqueID);
-
-	//	This is for summary rows on formula columns that cannot be calculated in the xsl
-	for (var m=0; m<clen; m++)
-	{
-		if (cols[m].type == "FORMULA" || cols[m].type == "NUMBER")
-		{
-			//	bSummary tells if we are showing the summary for THIS column or not
-			var bSummary = _getBoolean(cols[m].showSummary);
-			var curfld = cols[m].xdatafld;
-			var sum = 0;
-			var oCell = null;
-
-			for (var i=0; i<iRows; i++)
-			{
-				var xVal = this.getCellValue(i,m);
-
-				//	First we need to do a data update for the formula columns so that the values will be in the xml
-				if (cols[m].type == "FORMULA")
-				{
-					var xslfld = this.fieldmap[curfld]+"";
-					if (xVal != null && !gEsc) 
-					{
-						var xk = this.getKey(i);
-						xNode = this.oXML.documentElement.selectSingleNode("*[@xk = '"+xk+"']");
-						if (xNode != null) {
-							xVal = maskedToNumber(xVal, this.decimalSeparator)+"";
-							xNode.setAttribute(xslfld.substr(1),xVal);
-						}
-					}
-				}
-
-				//	Then we sum the values if we are in a summary column
-				if (bSummary)
-					sum += xVal*1;
-			}
-
-			//	Also need to set the summary cell for this column as the sum value ...
-			if (bSummary)
-			{
-				var msk = cols[m].mask || '###,##0.00';
-				var val = formatNumber(sum, msk, this.decimalSeparator, this.groupingSeparator);
-
-				if (val=="false") return;
-
-				//	Get a handle to the summary cell for the current column
-				var sumCell = document.getElementById(m + '_Column_Sum' + uniqueID);
-				sumCell.innerHTML = val;
-			}
-		}
-	}
-}
-*/
 
 /**
  * Handles clicks on the header by the user.
@@ -3963,19 +4021,19 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 	var midHeight = scrollerHeight-this.gettop();
 
 	var addRule = nitobi.html.Css.addRule;
-	var p = "ntb-grid-";
+	var p = "ntb-treegrid-";
 
 	if (this.rules == null)
 	{
 		this.rules = {};
 
 		// Static private styles - only set them once and no need to store them for later.
-		this.rules[".ntb-grid-datablock"] = addRule(ss, ".ntb-grid-datablock", "table-layout:fixed;width:100%;");
-		this.rules[".ntb-grid-headerblock"] = addRule(ss, ".ntb-grid-headerblock", "table-layout:fixed;width:100%;");
+		this.rules[".ntb-treegrid-datablock"] = addRule(ss, ".ntb-treegrid-datablock", "table-layout:fixed;width:100%;");
+		this.rules[".ntb-treegrid-headerblock"] = addRule(ss, ".ntb-treegrid-headerblock", "table-layout:fixed;width:100%;");
 		addRule(ss, ".ntbcellborder"+u, "overflow:hidden;text-decoration:none;margin:0px;border-right:1px solid #c0c0c0;border-bottom:1px solid #c0c0c0;white-space:nowrap;");
 		addRule(ss, "."+p+"overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
 		addRule(ss, "."+p+"scroller"+u, "overflow:hidden;text-align:left;");
-		addRule(ss, ".ntb-grid", "padding:0px;margin:0px;border:1px solid #cccccc;");
+		addRule(ss, ".ntb-treegrid", "padding:0px;margin:0px;border:1px solid #cccccc;");
 		addRule(ss, ".ntb-scroller", "padding:0px;spacing:0px;");
 		addRule(ss, ".ntb-scrollcorner", "padding:0px;spacing:0px;");
 		addRule(ss, ".ntb-input-border", "table-layout:fixed;overflow:hidden;position:absolute;z-index:2000;top:-2000px;left:-2000px;;");
@@ -3989,26 +4047,26 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 	addRule(ss, ".vScrollbarRange"+u, "");
 	addRule(ss, "."+t+" .ntb-cell", "overflow:hidden;white-space:nowrap;");
 	addRule(ss, "."+t+" .ntb-cell-border", "overflow:hidden;white-space:nowrap;"+(nitobi.browser.IE?"height:auto;":"")+";");
-	addRule(ss, ".ntb-grid-headershow"+u, "padding:0px;spacing:0px;"+(this.isColumnIndicatorsEnabled()?"display:none;":"")+"");
-	addRule(ss, ".ntb-grid-vscrollshow"+u, "padding:0px;spacing:0px;"+(showvscroll?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-hscrollshow"+u, "padding:0px;spacing:0px;"+(showhscroll?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-toolbarshow"+u, ""+(showtoolbar?"":"display:none;")+"");
-	addRule(ss, ".ntb-grid-height"+u, "height:"+height+"px;overflow:hidden;");
-	addRule(ss, ".ntb-grid-width"+u, "width:"+width+"px;overflow:hidden;");
-	addRule(ss, ".ntb-grid-overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
-	addRule(ss, ".ntb-grid-scroller"+u, "overflow:hidden;text-align:left;");
-	//addRule(ss, ".ntb-grid-scrollerheight"+u, "height:"+(totalColumnsWidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight())+"px;");
-	addRule(ss, ".ntb-grid-scrollerwidth"+u, "width:"+scrollerWidth+"px;");
-	addRule(ss, ".ntb-grid-topheight"+u, "height:"+this.gettop()+"px;overflow:hidden;"+(this.gettop()==0?"display:none;":"")+"");
-	//addRule(ss, ".ntb-grid-midheight"+u, "overflow:hidden;height:"+(totalColumnsWidth > width?midHeight:midHeight+this.getscrollbarHeight())+"px;");
-	addRule(ss, ".ntb-grid-leftwidth"+u, "width:"+this.getleft()+"px;overflow:hidden;text-align:left;");
+	addRule(ss, ".ntb-treegrid-headershow"+u, "padding:0px;spacing:0px;"+(this.isColumnIndicatorsEnabled()?"display:none;":"")+"");
+	addRule(ss, ".ntb-treegrid-vscrollshow"+u, "padding:0px;spacing:0px;"+(showvscroll?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-hscrollshow"+u, "padding:0px;spacing:0px;"+(showhscroll?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-toolbarshow"+u, ""+(showtoolbar?"":"display:none;")+"");
+	addRule(ss, ".ntb-treegrid-height"+u, "height:"+height+"px;overflow:hidden;");
+	addRule(ss, ".ntb-treegrid-width"+u, "width:"+width+"px;overflow:hidden;");
+	addRule(ss, ".ntb-treegrid-overlay"+u, "position:relative;z-index:1000;top:0px;left:0px;");
+	addRule(ss, ".ntb-treegrid-scroller"+u, "overflow:hidden;text-align:left;");
+	//addRule(ss, ".ntb-treegrid-scrollerheight"+u, "height:"+(totalColumnsWidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight())+"px;");
+	addRule(ss, ".ntb-treegrid-scrollerwidth"+u, "width:"+scrollerWidth+"px;");
+	addRule(ss, ".ntb-treegrid-topheight"+u, "height:"+this.gettop()+"px;overflow:hidden;"+(this.gettop()==0?"display:none;":"")+"");
+	//addRule(ss, ".ntb-treegrid-midheight"+u, "overflow:hidden;height:"+(totalColumnsWidth > width?midHeight:midHeight+this.getscrollbarHeight())+"px;");
+	addRule(ss, ".ntb-treegrid-leftwidth"+u, "width:"+this.getleft()+"px;overflow:hidden;text-align:left;");
 	// TODO: centerwidth should target the root surface
-	addRule(ss, ".ntb-grid-centerwidth"+u, "width:"+(width-this.getleft()-this.getscrollbarWidth()*showvscroll)+"px;");
-	addRule(ss, ".ntb-grid-scrollbarheight"+u, "height:"+this.getscrollbarHeight()+"px;");
-	addRule(ss, ".ntb-grid-scrollbarwidth"+u, "width:"+this.getscrollbarWidth()+"px;");
-	addRule(ss, ".ntb-grid-toolbarheight"+u, "height:"+this.getToolbarHeight()+"px;");
-	//addRule(ss, ".ntb-grid-surfacewidth"+u, "width:"+unfrozenColumnsWidth+"px;");
-	addRule(ss, ".ntb-grid-surfaceheight"+u, "height:100px;");
+	addRule(ss, ".ntb-treegrid-centerwidth"+u, "width:"+(width-this.getleft()-this.getscrollbarWidth()*showvscroll)+"px;");
+	addRule(ss, ".ntb-treegrid-scrollbarheight"+u, "height:"+this.getscrollbarHeight()+"px;");
+	addRule(ss, ".ntb-treegrid-scrollbarwidth"+u, "width:"+this.getscrollbarWidth()+"px;");
+	addRule(ss, ".ntb-treegrid-toolbarheight"+u, "height:"+this.getToolbarHeight()+"px;");
+	//addRule(ss, ".ntb-treegrid-surfacewidth"+u, "width:"+unfrozenColumnsWidth+"px;");
+	addRule(ss, ".ntb-treegrid-surfaceheight"+u, "height:100px;");
 	//addRule(ss, ".ntb-hscrollbar", (totalColumnsWidth > width?"display:block;":"display:none;"));
 	addRule(ss, ".ntb-row"+u, "height:"+this.getRowHeight()+"px;margin:0px;line-height:"+this.getRowHeight()+"px;");
 	addRule(ss, ".ntb-header-row"+u, "height:"+this.getHeaderHeight()+"px;");
@@ -4037,18 +4095,18 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 		var depth = this.calculateColumnDepth(colset, 0);
 		
 		addRule(ss, ".ntb-hscrollbar", (colwidth > width?"display:block":"display:none"));
-		addRule(ss, ".ntb-grid-midheight"+u+"-0", "overflow:hidden;height:" + (colwidth > width?midHeight:midHeight + this.getscrollbarHeight()) + "px;");
+		addRule(ss, ".ntb-treegrid-midheight"+u+"-0", "overflow:hidden;height:" + (colwidth > width?midHeight:midHeight + this.getscrollbarHeight()) + "px;");
 		if (id == this.getRootColumns())
-			addRule(ss, ".ntb-grid-scrollerheight"+u, "height:" + (colwidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight()) + "px;");
+			addRule(ss, ".ntb-treegrid-scrollerheight"+u, "height:" + (colwidth > width?scrollerHeight:scrollerHeight + this.getscrollbarHeight()) + "px;");
 		addRule(ss, ".hScrollbarRange"+u, "width:" + colwidth + "px;");
 	
 		if (id == this.getRootColumns())
 		{
-			var rule = addRule(ss, ".ntb-grid-surfacewidth"+u+"-"+id, "width:" + this.getViewableWidth() + "px;");
+			var rule = addRule(ss, ".ntb-treegrid-surfacewidth"+u+"-"+id, "width:" + this.getViewableWidth() + "px;");
 		}
 		else
 		{
-			addRule(ss, ".ntb-grid-surfacewidth"+u+"-"+id, "width:" + (this.getViewableWidth() - (depth * this.getGroupOffset()) - 1) + "px;");
+			addRule(ss, ".ntb-treegrid-surfacewidth"+u+"-"+id, "width:" + (this.getViewableWidth() - (depth * this.getGroupOffset()) - 1) + "px;");
 		}
 	}
 }
@@ -4122,8 +4180,8 @@ nitobi.grid.TreeGrid.prototype.renderSurface = function()
 		throw "Can't render the surface without a Scroller";
 	}
 	var surfaceHtml = this.Scroller.surface.renderContainer(this.uid);
-	// The ntb-grid-surface-container element is defined and created by frameXslProc
-	$ntb("ntb-grid-surface-container-" + this.uid).innerHTML = surfaceHtml;
+	// The ntb-treegrid-surface-container element is defined and created by frameXslProc
+	$ntb("ntb-treegrid-surface-container-" + this.uid).innerHTML = surfaceHtml;
 }
 
 /**
@@ -5813,28 +5871,28 @@ nitobi.grid.TreeGrid.prototype.getDisplayedRowCount = function()
 
 nitobi.grid.TreeGrid.prototype.getToolsContainer = function() 
 {
-	this.toolsContainer = this.toolsContainer || document.getElementById("ntb-grid-toolscontainer"+this.uid);
+	this.toolsContainer = this.toolsContainer || document.getElementById("ntb-treegrid-toolscontainer"+this.uid);
 	return this.toolsContainer;
 }
 
 nitobi.grid.TreeGrid.prototype.getHeaderContainer = function()
 {
-	return document.getElementById("ntb-grid-header"+this.uid+"_" + this.scroller.surface.key);
+	return document.getElementById("ntb-treegrid-header"+this.uid+"_" + this.scroller.surface.key);
 }
 
 nitobi.grid.TreeGrid.prototype.getSubHeaderContainer = function()
 {
-	return document.getElementById("ntb-grid-subheader-container" + this.uid);
+	return document.getElementById("ntb-treegrid-subheader-container" + this.uid);
 }
 
 nitobi.grid.TreeGrid.prototype.getDataContainer = function()
 {
-	return document.getElementById("ntb-grid-data"+this.uid);
+	return document.getElementById("ntb-treegrid-data"+this.uid);
 }
 
 nitobi.grid.TreeGrid.prototype.getScrollerContainer = function()
 {
-	return document.getElementById("ntb-grid-scroller"+this.uid)
+	return document.getElementById("ntb-treegrid-scroller"+this.uid)
 }
 
 nitobi.grid.TreeGrid.prototype.getGridContainer = function()
@@ -6000,7 +6058,7 @@ nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
 	if (!editable)
 	{
 		// TODO: what is the approach to these sorts of alerts???
-		// TODO: put a default class on read only columns ntb-grid-columnreadonly
+		// TODO: put a default class on read only columns ntb-treegrid-columnreadonly
 		this.fire("PasteFailed", new nitobi.base.EventArgs(this));
 		this.handleAfterPaste();
 		return;
@@ -6157,13 +6215,22 @@ nitobi.grid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 	if (eventArgs.visible)
 	{
 		this.setRowCount(this.rowCount + rows);
+		this.childHeaders++;
 		surface.parent.onAfterExpand.notify();
 	}
 	else
 	{
 		this.setRowCount(this.rowCount - rows);
+		if(this.childHeaders > 0)
+			this.childHeaders--;
 		surface.parent.onAfterCollapse.notify();
 	}
+	// Do the calculation here for toggling the row height
+	// TODO: Clean this up and maybe put it somewhere else
+	var outer_height = this.scroller.surface.view.midcenter.container.clientHeight; 
+	var inner_height = this.scroller.surface.view.midcenter.element.clientHeight;
+	var ratio = inner_height/outer_height;
+	this.vScrollbar.setRange(ratio);
 }
 
 nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
@@ -6208,7 +6275,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	he.push({type:'mousedown', handler:this.handleHeaderMouseDown});
 	he.push({type:'mouseup', handler:this.handleHeaderMouseUp});
 	he.push({type:'mousemove', handler:this.handleHeaderMouseMove});
-	nitobi.html.attachEvents($ntb("ntb-grid-header" + this.uid + "_" + subSurface.key), he, this);
+	nitobi.html.attachEvents($ntb("ntb-treegrid-header" + this.uid + "_" + subSurface.key), he, this);
 	
 	var columnsElement = subSurface.columnsNode;
 	var getHandler = columnsElement.getAttribute("gethandler");

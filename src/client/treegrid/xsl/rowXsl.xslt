@@ -48,7 +48,7 @@
 	<div>
 	<xsl:choose>
 	<xsl:when test="$showHeaders = 1">
-		<table cellpadding="0" cellspacing="0" border="0" class="ntb-grid-headerblock">
+		<table cellpadding="0" cellspacing="0" border="0" class="ntb-treegrid-headerblock">
 			<tr>
 				<xsl:attribute name="class">ntb-header-row<xsl:value-of select="$uniqueId" /></xsl:attribute>
 
@@ -78,7 +78,7 @@
 		</table>
 	</xsl:when>
 	<xsl:otherwise>
-	<table cellpadding="0" cellspacing="0" border="0" class="ntb-grid-datablock">
+	<table cellpadding="0" cellspacing="0" border="0" class="ntb-treegrid-datablock">
 		<xsl:apply-templates select="key('data-source', $dataTableId)/ntb:data/ntb:e[@xi &gt;= $start and @xi &lt; $end]" >
 			<xsl:sort select="@xi" data-type="number" />
 		</xsl:apply-templates>
@@ -94,7 +94,6 @@
 		<xsl:for-each select="$columns">
 			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 				<col>
-					<xsl:attribute name="class">ntb-column<xsl:value-of select="$uniqueId"/><xsl:if test="$columnsId">_<xsl:value-of select="$columnsId"/></xsl:if>_<xsl:value-of select="position()" /><xsl:text> </xsl:text><xsl:if test="not(@Editable='1')">ntb-column-readonly</xsl:if></xsl:attribute>
 				</col>
 			</xsl:if>
 		</xsl:for-each>
@@ -141,7 +140,7 @@
         <td id="cell_{$xi}_{$pos}_{$uniqueId}_{$surfaceKey}" style="vertical-align:middle;" xi="{$xi}" col="{$pos}" path="{$surfaceKey}">
 			<xsl:attribute name="style"><xsl:call-template name="CssStyle"><xsl:with-param name="row" select="$row"/></xsl:call-template></xsl:attribute>
             <!-- note the use of the ntb-column<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /> class ... that is for a safari bug -->
-            <xsl:attribute name="class">ntb-cell-border<xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /><xsl:text> </xsl:text>ntb-column-<xsl:choose><xsl:when test="$sortColumn=$pos and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=$pos and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text><xsl:choose><xsl:when test="@DataType = 'expand'">ntb-column-collapsed</xsl:when><xsl:otherwise>ntb-column-<xsl:value-of select="@DataType"/></xsl:otherwise></xsl:choose><xsl:text> </xsl:text><xsl:call-template name="ClassName"><xsl:with-param name="row" select="$row"/></xsl:call-template><xsl:text> </xsl:text><xsl:if test="@type = 'NUMBER' and $value &lt; 0">ntb-cell-negativenumber</xsl:if>ntb-column<xsl:value-of select="$uniqueId"/><xsl:if test="$columnsId">_<xsl:value-of select="$columnsId"/></xsl:if>_<xsl:value-of select="position()" /></xsl:attribute>
+            <xsl:attribute name="class">ntb-cell-border<xsl:text> </xsl:text>ntb-column-data<xsl:value-of select="$uniqueId"/>_<xsl:value-of select="position()" /> <xsl:text> </xsl:text>ntb-column-<xsl:choose><xsl:when test="$sortColumn=$pos and $sortDirection='Asc'">ascending</xsl:when><xsl:when test="$sortColumn=$pos and $sortDirection='Desc'">descending</xsl:when><xsl:otherwise></xsl:otherwise></xsl:choose><xsl:text> </xsl:text><xsl:choose><xsl:when test="@DataType = 'expand'">ntb-column-collapsed</xsl:when><xsl:otherwise>ntb-column-<xsl:value-of select="@DataType"/></xsl:otherwise></xsl:choose><xsl:text> </xsl:text><xsl:call-template name="ClassName"><xsl:with-param name="row" select="$row"/></xsl:call-template><xsl:text> </xsl:text><xsl:if test="@type = 'NUMBER' and $value &lt; 0">ntb-cell-negativenumber</xsl:if>ntb-column<xsl:value-of select="$uniqueId"/><xsl:if test="$columnsId">_<xsl:value-of select="$columnsId"/></xsl:if>_<xsl:value-of select="position()" /></xsl:attribute>
 
 			<xsl:choose>
         		<xsl:when test="@type = 'EXPAND'">

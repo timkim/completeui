@@ -29,7 +29,7 @@ nitobi.grid.LoadingScreen.prototype.initialize = function()
 	{
 		msg = "<img src='"+cssUrl+"loading.gif'  class='ntb-loading-Icon' valign='absmiddle'></img>"; 
 	}
-	this.loadingScreen.innerHTML = "<table style='padding:0px;margin:0px;' border='0' width='100%' height='100%'><tr style='padding:0px;margin:0px;'><td style='padding:0px;margin:0px;text-align:center;font:verdana;font-size:10pt;'>"+msg+"</td></tr></table>";
+	this.loadingScreen.innerHTML = "<table style='padding:0px;margin:0px;' border='0' width='100%' height='100%'><tr style='padding:0px;margin:0px;'><td id='ntb-loading-cell"+ this.grid.uid +"' style='padding:0px;margin:0px;text-align:center;font:verdana;font-size:10pt;'>"+msg+"</td></tr></table>";
 	this.loadingScreen.className = 'ntb-loading';
 	var lss = this.loadingScreen.style;
 	lss.verticalAlign="middle";
