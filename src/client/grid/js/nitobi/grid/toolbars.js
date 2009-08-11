@@ -285,14 +285,15 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  element = _this.show_hide_btn;
 						  // Find the 2nd level
 						  var colset = null;
+						  var clientSurf = null;
 						  for( surf in grid.Scroller.surfaceMap)
 						  {
 							if(surf.indexOf('0_') != -1 && surf.length == 3)
 							{
-								colset = grid.Scroller.surfaceMap[surf].columnSetId;			
+								colset = grid.Scroller.surfaceMap[surf].columnSetId;
 							}		
 						  }
-						  if(colset != null)
+						  if(colset != null && grid.Scroller.isColSetVisible(colset))
 						  {
 						  	var menu = $ntb('ntb-treegrid-colmenu-' + colset);
 							nitobi.ui.Toolbars.showMenu(menu, element);
