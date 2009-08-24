@@ -122,7 +122,7 @@
 		z-index:800;
 	}
 
-	.<xsl:value-of select="$t"/> .ntb-row<xsl:value-of select="$u" /> {min-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin:0px;}
+	.<xsl:value-of select="$t"/> .ntb-row<xsl:value-of select="$u" /> {min-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@CellBorderHeight)" />px;line-height:<xsl:value-of select="number($g/@RowHeight)-number($g/@InnerCellBorder)" />px;margin-left:5px;margin-right:5px;}
 	.<xsl:value-of select="$t"/> .ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
 	.<xsl:value-of select="$t"/> .ntb-column-indicator<xsl:value-of select="$u" /> {height:<xsl:value-of select="number($g/@HeaderHeight)-2" />px;}
 
