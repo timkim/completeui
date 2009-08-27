@@ -1992,7 +1992,13 @@ nitobi.grid.Grid.prototype.resize= function(width, height)
 {
 	this.setWidth(width);
 	this.setHeight(height);
-
+	var gridDeclaration = this.Declaration.grid.selectSingleNode('ntb:grid');
+	if(width != undefined || height != undefined)
+	{	
+		gridDeclaration.setAttribute('width', width);
+		gridDeclaration.setAttribute('height', height);
+	}
+	
 	// Just generate the CSS
 	this.generateCss();
 
@@ -2071,7 +2077,11 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	column = (typeof column == "object"?column:this.getColumnObject(column));
 	var prevWidth = column.getWidth();
 	column.setWidth(width);
-
+	
+	var columnIndex = column.column;
+	this.Declaration.columns.firstChild.childNodes[columnIndex].setAttribute('width',width);
+	this.Declaration.grid.firstChild.firstChild.childNodes[columnIndex].setAttribute('width',width);
+	
 	//	TODO: this is a hack to fix a problem with the fixed column header not resizing.
 	// This was causing some hacky code to be added in EBASelection.collapse 
 	// see the following - tix for details.
@@ -2088,7 +2098,6 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	}
 	else
 	{
-		var columnIndex = column.column;
 		var dx = width - prevWidth;
 		var C = nitobi.html.Css;
 		// Things are different if we are resizing a frozen or unfrozen column
@@ -2113,7 +2122,7 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	}
 
 	this.Selection.collapse(this.activeCell);
-
+	
 	var afterColumnResizeEventArgs = new nitobi.grid.OnAfterColumnResizeEventArgs(this, column);
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
@@ -2123,7 +2132,7 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   var srcIndex = source.column;
   var destIndex = dest.column;
   
-  // This manipulates the Grid XML
+  // This manipulates the columns XML
   var columns = this.Declaration.columns.firstChild;
   var destCol = columns.childNodes[destIndex];
   var srcCol = columns.childNodes[srcIndex];
@@ -2131,6 +2140,12 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   columns.removeChild(srcCol);
   columns.insertBefore(tmpNode, destCol);
 
+  // Update the grid xml as well
+  var gridXml = this.Declaration.grid.firstChild;
+  tmpNode = columns.cloneNode(true);
+  gridXml.removeChild(gridXml.childNodes[0]);
+  gridXml.appendChild(tmpNode);
+  
   // Dump the old cached stuff out, redefine everything and bind it!
   this.columns = [];
   this.defineColumns(columns);
