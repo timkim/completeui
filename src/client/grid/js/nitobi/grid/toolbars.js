@@ -426,9 +426,16 @@ nitobi.ui.Toolbars.showMenu = function(menu, element)
 nitobi.ui.Toolbars.prototype.resetCounter = function()
 {
 	var start_page = $ntb('startPage' + this.uid);
+	var total_items = $ntb('endRow' + this.uid);
+	var disp_start = $ntb('startRow' + this.uid);
+	var disp_end = $ntb('numRows' + this.uid);
+	var rows_per_page = this.grid.getRowsPerPage();
 	if (start_page)
 	{		
-		start_page.value = String(1);	
+		start_page.value = String(1);
+		total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
+		disp_start.innerHTML = "&nbsp;1";
+		disp_end.innerHTML = "&nbsp;" + rows_per_page;
 	}	
 }
 
@@ -441,23 +448,38 @@ nitobi.ui.Toolbars.prototype.maxCounter = function()
 		start_page.value = String(Math.ceil(pages));	
 	}	
 }
+
 nitobi.ui.Toolbars.prototype.incrementCounter = function()
 {
 	var start_page = $ntb('startPage' + this.uid);
+	var disp_start = $ntb('startRow' + this.uid);
+	var disp_end = $ntb('numRows' + this.uid);
+	var rows_per_page = this.grid.getRowsPerPage();
 	if (start_page)
 	{		
 		var val = parseInt(start_page.value);
-		start_page.value = String(++val);	
+		start_page.value = String(++val);
+		var start_disp = val*rows_per_page;
+		var end_disp = start_disp+rows_per_page;
+		disp_start.innerHTML = "&nbsp;" + start_disp;
+		disp_end.innerHTML = "&nbsp;" + end_disp;
 	}	
 }
 
 nitobi.ui.Toolbars.prototype.decrementCounter = function()
 {
 	var start_page = $ntb('startPage' + this.uid);
+	var disp_start = $ntb('startRow' + this.uid);
+	var disp_end = $ntb('numRows' + this.uid);
+	var rows_per_page = this.grid.getRowsPerPage();
 	if (start_page)
 	{		
 		var val = parseInt(start_page.value);
-		start_page.value = String(--val);	
+		start_page.value = String(--val);
+		var start_disp = val*rows_per_page;
+		var end_disp = val+rows_per_page;
+		disp_start.innerHTML = "&nbsp;" + start_disp;
+		disp_end.innerHTML = "&nbsp;" + end_disp;	
 	}	
 }
 
@@ -483,7 +505,10 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 {
 	var startPage = 1;
 	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
+	var total_items = $ntb('endRow' + this.uid);
 	var last_page =  $ntb('endPage' + this.uid);
+	total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
+
 	if(last_page)
 	{
 		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);

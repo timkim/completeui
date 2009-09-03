@@ -50,6 +50,7 @@ nitobi.ui.ToolbarXsl =
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
    nitobi.ui.InputXsl +
+   nitobi.ui.DropDownXsl + 
 
       "<xsl:template match=\"separator\">"+
          "<div align='center'>"+
@@ -182,6 +183,11 @@ nitobi.ui.Toolbar.prototype.attachButtonObjects = function ()
 					case("ntb-inputtext"):
 					{
 						newElement = new nitobi.ui.InputText(null,child.id);
+						break;
+					}
+					case("ntb-dropdown"):
+					{
+						newElement = new nitobi.ui.DropDown(null, child.id);
 						break;
 					}
 					default:

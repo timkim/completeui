@@ -93,17 +93,16 @@ function empty()
 		autosaveenabled="true"
 		toolbarenabled="true"
 		theme="flex"
-		frozenleftcolumncount="3"
 		>
 
 		<ntb:columns>
-			<ntb:textcolumn		label="Image"		xdatafld="ProductIcon"	sortenabled="false"	width="75" initial="docicon.gif">
+			<ntb:textcolumn		label="Image"		xdatafld="ProductIcon"	sortenabled="false"	width="75" initial="docicon.gif" visible='1'>
 				<ntb:imageeditor></ntb:imageeditor>
 			</ntb:textcolumn>
 			<ntb:textcolumn		label="Checkbox"	xdatafld="BulkAction"	sortenabled="false"	width="75">
 				<ntb:checkboxeditor datasource="[{value:'yes',display:'Yes!'},{value:'no',display:'No'}]" checkedvalue="yes" uncheckedvalue="no" displayfields="display" valuefield="value"></ntb:checkboxeditor>
 			</ntb:textcolumn>
-			<ntb:textcolumn		label="Text"		xdatafld="ProductName"	width="200" Wrap="0"></ntb:textcolumn>
+			<ntb:textcolumn		label="Wrap Text Test Of The System"		xdatafld="ProductName"	width="200" Wrap="1"></ntb:textcolumn>
 			<ntb:textcolumn		label="Lookup"		xdatafld="ProductCategoryName" width="150" align="right">
 				<ntb:lookupeditor  delay="1000" gethandler="lookuphandler.asp" displayfields="ProductCategoryName" valuefield="ProductCategoryName" ></ntb:lookupeditor>
 			</ntb:textcolumn>
