@@ -120,6 +120,7 @@
 	<jsfile path="../toolkit/js/nitobi/toolbar/button.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/binarystatebutton.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/inputtext.js" />
+	<jsfile path="../toolkit/js/nitobi/toolbar/dropdown.js" />
 	<jsfile path="../toolkit/js/nitobi/toolbar/toolbar.js" />
 	
 	
