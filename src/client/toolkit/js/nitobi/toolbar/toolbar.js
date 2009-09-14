@@ -26,7 +26,7 @@ nitobi.ui.RowCountXsl =
             "<xsl:value-of select=\"@id\" />"+
          "</xsl:attribute>"+
 	"<xsl:attribute name=\"style\">"+
-			"<xsl:value-of select=\"concat('margin-top: 5','px; margin-bottom: 0','px')\" />"+
+			"<xsl:value-of select=\"concat('float: left;margin-top: 5','px; margin-bottom: 0','px')\" />"+
 	 "</xsl:attribute>"+
 	"&#xa0;<xsl:value-of select=\"@value\"/>"+
 	"</div>" +

@@ -319,12 +319,23 @@ nitobi.grid.Column.prototype.show = function()
 
 nitobi.grid.Column.prototype.toggleVis = function()
 {
+  var columnXml = this.grid.Declaration.columns.firstChild.childNodes[this.column];
+  var gridxml = this.grid.Declaration.grid.firstChild.firstChild.childNodes[this.column];
+
   var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
   var classDef = nitobi.html.getClass(className, true);
   if (classDef.display == "none")
+  {
+    columnXml.setAttribute('visible','1');
+	gridxml.setAttribute('visible','1');
   	this.show();
-  else 
+  }
+  else
+  { 
+    columnXml.setAttribute('visible','0');
+	gridxml.setAttribute('visible','0');
 	this.hide();
+  }
 }
 
 /**
