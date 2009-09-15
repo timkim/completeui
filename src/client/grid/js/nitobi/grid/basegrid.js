@@ -3835,7 +3835,7 @@ nitobi.grid.Grid.prototype.clearColumnHeaderSortOrder= function()
 nitobi.grid.Grid.prototype.setColumnSortOrder= function(colIndex,sortDir)
 {
 	this.clearColumnHeaderSortOrder();
-
+	//debugger;
 	//	TODO: This does not need to be called in the case of sorting on the server
 	//	since the entire grid is refiltered and the sort column stuff gets rendered in the XSLT
 	var headerColumn = this.getColumnObject(colIndex);
@@ -3854,8 +3854,8 @@ nitobi.grid.Grid.prototype.setColumnSortOrder= function(colIndex,sortDir)
 	{
 		//var clazz = (sortDir=="Desc" ? "ntb-descending" : "ntb-ascending");
 		//C.addClass(headerCell, clazz, true);
-		headerCell.className = css.replace(/(ntb-column-indicator-border)(.*?)(\s|$)/g,function(m)
-		{
+		headerCell.className = css.replace(/(ntb-column-indicator-border)/g,function(m)
+		{	
 			var repl = (sortDir=="Desc" ? "descending" : "ascending");
 			return (m.indexOf("hover") > 0 ? m.replace("hover", repl+"hover") : m + repl);
 		});
