@@ -507,11 +507,14 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
 	var total_items = $ntb('endRow' + this.uid);
 	var last_page =  $ntb('endPage' + this.uid);
-	total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
-
-	if(last_page)
+	if(total_items != null || last_page != null)
 	{
-		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
+		total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
+	
+		if(last_page)
+		{
+			last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
+		}
 	}
 }
 
