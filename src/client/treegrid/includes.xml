@@ -2,28 +2,28 @@
 <includes>
 	<jsfile path="../toolkit/js/nitobi/base/toolkitdetection.js"/>
 	
-	<xmlfile path="xml/model.xml" namespace="nitobi.grid" name="modelDoc"/>
-	<xmlfile path="xml/toolbar.xml" namespace="nitobi.grid" name="toolbarDoc"/>
-	<xmlfile path="xml/toolbarpaging.xml" namespace="nitobi.grid" name="pagingToolbarDoc"/>
+	<xmlfile path="xml/model.xml" namespace="nitobi.treegrid" name="modelDoc"/>
+	<xmlfile path="xml/toolbar.xml" namespace="nitobi.treegrid" name="toolbarDoc"/>
+	<xmlfile path="xml/toolbarpaging.xml" namespace="nitobi.treegrid" name="pagingToolbarDoc"/>
 
 	<xslfile path="../grid/xsl/addXid.xslt" namespace="nitobi.data" name="addXidXslProc"/>
 	<xslfile path="../grid/xsl/adjustXi.xslt" namespace="nitobi.data" name="adjustXiXslProc"/>
 	<xslfile path="xsl/dataTranslatorXsl.xslt" namespace="nitobi.data" name="dataTranslatorXslProc"/>
-	<xslfile path="xsl/dateFormatTemplates.xslt" namespace="nitobi.grid" name="dateFormatTemplatesXslProc"/>
+	<xslfile path="xsl/dateFormatTemplates.xslt" namespace="nitobi.treegrid" name="dateFormatTemplatesXslProc"/>
 	<xslfile path="xsl/dateEditor.xslt" namespace="nitobi.form" name="dateXslProc"/>
-	<xslfile path="xsl/declarationConverter.xslt" namespace="nitobi.grid" name="declarationConverterXslProc"/>
-	<xslfile path="xsl/frameCssXsl.xslt" namespace="nitobi.grid" name="frameCssXslProc"/>
-	<xslfile path="xsl/frameXsl.xslt" namespace="nitobi.grid" name="frameXslProc"/>
+	<xslfile path="xsl/declarationConverter.xslt" namespace="nitobi.treegrid" name="declarationConverterXslProc"/>
+	<xslfile path="xsl/frameCssXsl.xslt" namespace="nitobi.treegrid" name="frameCssXslProc"/>
+	<xslfile path="xsl/frameXsl.xslt" namespace="nitobi.treegrid" name="frameXslProc"/>
 	<xslfile path="xsl/listboxXsl.xslt" namespace="nitobi.form" name="listboxXslProc"/>
 	<xslfile path="xsl/mergeEbaXmlToLog.xslt" namespace="nitobi.data" name="mergeEbaXmlToLogXslProc"/>
 	<xslfile path="xsl/mergeEbaXml.xslt" namespace="nitobi.data" name="mergeEbaXmlXslProc"/>
 	<xslfile path="../grid/xsl/numberFormatTemplates.xslt" namespace="nitobi.grid" name="numberFormatTemplatesXslProc"/>
 	<xslfile path="../grid/xsl/numberEditor.xslt" namespace="nitobi.form" name="numberXslProc"/>
-	<xslfile path="xsl/rowXsl.xslt" namespace="nitobi.grid" name="rowXslProc"/>
+	<xslfile path="xsl/rowXsl.xslt" namespace="nitobi.treegrid" name="rowXslProc"/>
 	<xslfile path="../grid/xsl/sort.xslt" namespace="nitobi.data" name="sortXslProc"/>
 	<xslfile path="xsl/fillColumn.xslt" namespace="nitobi.data" name="fillColumnXslProc"/>
 	<xslfile path="xsl/updategramTranslatorXsl.xslt" namespace="nitobi.data" name="updategramTranslatorXslProc"/>
-	<xslfile path="xsl/surfaceXsl.xslt" namespace="nitobi.grid" name="surfaceXslProc" />
+	<xslfile path="xsl/surfaceXsl.xslt" namespace="nitobi.treegrid" name="surfaceXslProc" />
 	
 	<jsfile path="../toolkit/js/nitobi/ui/scrollbar.js"/>
 	<jsfile path="../toolkit/js/nitobi/ui/verticalscrollbar.js"/>
