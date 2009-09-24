@@ -6534,9 +6534,3 @@ nitobi.treegrid.TreeGrid.prototype.dispose = function()
 
 	}
 }
-
-// backwards compatibility.
-/**
- * @private
- */
-nitobi.treegrid = nitobi.treegrid.TreeGrid;
