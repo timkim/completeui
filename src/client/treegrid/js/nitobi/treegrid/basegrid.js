@@ -5,6 +5,7 @@
  * 
  * http://www.nitobi.com/license
  */
+
 nitobi.lang.defineNs("nitobi.treegrid");
 
 if (false)
@@ -6538,6 +6539,4 @@ nitobi.treegrid.TreeGrid.prototype.dispose = function()
 /**
  * @private
  */
-nitobi.treegrid = nitobi.treegrid.Grid;
-
-debugger;
+nitobi.treegrid = nitobi.treegrid.TreeGrid;

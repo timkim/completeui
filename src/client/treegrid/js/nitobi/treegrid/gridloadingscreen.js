@@ -1,0 +1,91 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
+/**
+ * @class
+ * @private
+ */
+nitobi.treegrid.LoadingScreen = function(grid)
+ {
+ 	this.loadingScreen = null;
+ 	this.grid = grid;
+	this.loadingImg = null;
+ 
+ }
+nitobi.treegrid.LoadingScreen.prototype.initialize = function()
+{
+	this.loadingScreen = document.createElement("div");
+	var cssUrl = this.findCssUrl();
+	var msg="";
+	if (cssUrl == null)
+	{
+		msg = "Loading...";	
+	}
+	else
+	{
+		msg = "<img src='"+cssUrl+"loading.gif'  class='ntb-loading-Icon' valign='absmiddle'></img>"; 
+	}
+	this.loadingScreen.innerHTML = "<table style='padding:0px;margin:0px;' border='0' width='100%' height='100%'><tr style='padding:0px;margin:0px;'><td id='ntb-loading-cell"+ this.grid.uid +"' style='padding:0px;margin:0px;text-align:center;font:verdana;font-size:10pt;'>"+msg+"</td></tr></table>";
+	this.loadingScreen.className = 'ntb-loading';
+	var lss = this.loadingScreen.style;
+	lss.verticalAlign="middle";
+	lss.visibility = 'hidden';
+	lss.position = "absolute";
+	lss.top = "0px";
+	lss.left = "0px";
+}
+
+nitobi.treegrid.LoadingScreen.prototype.attachToElement = function(element)
+{
+	element.appendChild(this.loadingScreen);
+}
+
+nitobi.treegrid.LoadingScreen.prototype.findCssUrl = function()
+{
+	var sheet = nitobi.html.findParentStylesheet("." + this.grid.getTheme() + " .ntb-loading-Icon");
+	if (sheet==null)
+	{
+		return null;
+	}
+	var retVal = nitobi.html.normalizeUrl(sheet.href);
+	if (nitobi.browser.IE)
+	{
+		while (sheet.parentStyleSheet)
+		{
+			sheet = sheet.parentStyleSheet;
+			retVal = nitobi.html.normalizeUrl(sheet.href) + retVal;
+		}
+	}
+	return retVal;
+}
+ 
+nitobi.treegrid.LoadingScreen.prototype.show = function()
+{
+	try
+	{
+		this.resize();
+
+		this.loadingScreen.style.visibility="visible";
+		this.loadingScreen.style.display="block";
+	}
+	catch(e)
+	{
+		
+	}
+}
+
+nitobi.treegrid.LoadingScreen.prototype.resize = function()
+{
+	this.loadingScreen.style.width = this.grid.getWidth() + "px";
+	this.loadingScreen.style.height = this.grid.getHeight() + "px";
+}
+
+nitobi.treegrid.LoadingScreen.prototype.hide = function()
+{
+	this.loadingScreen.style.display="none";
+}
+

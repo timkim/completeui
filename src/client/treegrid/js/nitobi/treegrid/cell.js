@@ -23,6 +23,7 @@
  * required if the row argument is specified as a row index and not a Cell HTML element.
  * @see nitobi.treegrid.Grid#getCellObject
  */
+
 nitobi.treegrid.Cell = function(grid, row, column, surface)
 {
 	// Row should not be null
