@@ -39,25 +39,25 @@
 	<jsfile path="js/nitobi/treegrid/basegrid.js" />
 	<jsfile path="js/nitobi/treegrid/cell.js" />
 
-	<jsfile path="js/nitobi/grid/cellEventArgs.js" />
-	<jsfile path="js/nitobi/grid/rowEventArgs.js" />
-	<jsfile path="js/nitobi/grid/selectioneventargs.js" />
+	<jsfile path="js/nitobi/treegrid/cellEventArgs.js" />
+	<jsfile path="js/nitobi/treegrid/rowEventArgs.js" />
+	<jsfile path="js/nitobi/treegrid/selectioneventargs.js" />
 
 	<jsfile path="js/nitobi/treegrid/column.js" />
 
-	<jsfile path="js/nitobi/grid/columnEventArgs.js" />
+	<jsfile path="js/nitobi/treegrid/columnEventArgs.js" />
 
 	<jsfile path="js/nitobi/treegrid/columnresizer.js" />
 
-	<jsfile path="js/nitobi/grid/gridresizer.js" />
+	<jsfile path="js/nitobi/treegrid/gridresizer.js" />
 
 	<jsfile path="js/nitobi/treegrid/dataformatconverter.js" />
 	<jsfile path="js/nitobi/treegrid/datecolumn.js" />
 	<jsfile path="js/nitobi/treegrid/declaration.js" />
 	<jsfile path="js/nitobi/treegrid/dragdrop.js" />
 
-	<jsfile path="js/nitobi/grid/editcompleteeventargs.js" />
-	<jsfile path="js/nitobi/grid/getcompleteeventargs.js" />
+	<jsfile path="js/nitobi/treegrid/editcompleteeventargs.js" />
+	<jsfile path="js/nitobi/treegrid/getcompleteeventargs.js" />
 
 	<jsfile path="js/nitobi/treegrid/grid.js" />
 	<jsfile path="js/nitobi/treegrid/gridlivescrolling.js" />
