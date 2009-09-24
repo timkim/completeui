@@ -33,18 +33,18 @@
  * @constructor
  * @param {String} uid The unique ID of the Grid.
  */
-nitobi.grid.GridStandard = function(uid) {
-	nitobi.grid.GridStandard.baseConstructor.call(this, uid);
+nitobi.treegrid.GridStandard = function(uid) {
+	nitobi.treegrid.GridStandard.baseConstructor.call(this, uid);
 	this.mode = "standard";
 }
-nitobi.lang.extend(nitobi.grid.GridStandard, nitobi.grid.TreeGrid);
+nitobi.lang.extend(nitobi.treegrid.GridStandard, nitobi.treegrid.TreeGrid);
 
-nitobi.grid.GridStandard.prototype.createChildren=function() {
+nitobi.treegrid.GridStandard.prototype.createChildren=function() {
 	var args = arguments;
 
-	nitobi.grid.GridStandard.base.createChildren.call(this,args);
+	nitobi.treegrid.GridStandard.base.createChildren.call(this,args);
 
-	nitobi.grid.GridStandard.base.createToolbars.call(this, nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
+	nitobi.treegrid.GridStandard.base.createToolbars.call(this, nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
 
 	// Attach events
 	this.toolbars.subscribe("NextPage",nitobi.lang.close(this,this.pageNext));
@@ -58,9 +58,9 @@ nitobi.grid.GridStandard.prototype.createChildren=function() {
 	this.subscribe("BeforeLoadDataPage", this.clearSubHeaders);
 }
 
-nitobi.grid.GridStandard.prototype.connectToTable = function(table)
+nitobi.treegrid.GridStandard.prototype.connectToTable = function(table)
 {
-	if (nitobi.grid.GridStandard.base.connectToTable.call(this, table) != false)
+	if (nitobi.treegrid.GridStandard.base.connectToTable.call(this, table) != false)
 	{
 		this.datatable.subscribe("RowInserted",nitobi.lang.close(this,this.incrementDisplayedRowCount));
 		this.datatable.subscribe("RowDeleted",nitobi.lang.close(this,this.decrementDisplayedRowCount));	
@@ -70,7 +70,7 @@ nitobi.grid.GridStandard.prototype.connectToTable = function(table)
 /**
  * @private
  */
-nitobi.grid.GridStandard.prototype.incrementDisplayedRowCount = function(quantity)
+nitobi.treegrid.GridStandard.prototype.incrementDisplayedRowCount = function(quantity)
 {
 	this.setDisplayedRowCount(this.getDisplayedRowCount()+(quantity||1));
 	this.updateCellRanges();
@@ -79,62 +79,62 @@ nitobi.grid.GridStandard.prototype.incrementDisplayedRowCount = function(quantit
 /**
  * @private
  */
-nitobi.grid.GridStandard.prototype.decrementDisplayedRowCount = function(quantity)
+nitobi.treegrid.GridStandard.prototype.decrementDisplayedRowCount = function(quantity)
 {
 	// TODO: Are these still used or not?
 	this.setDisplayedRowCount(this.getDisplayedRowCount()-(quantity||1));
 	this.updateCellRanges();
 }
 
-nitobi.grid.GridStandard.prototype.subscribeToRowCountReady = function()
+nitobi.treegrid.GridStandard.prototype.subscribeToRowCountReady = function()
 {
 	//this.datatable.subscribe("RowCountReady",nitobi.lang.close(this,this.updateDisplayedRowCount));
 }
 
-nitobi.grid.GridStandard.prototype.updateDisplayedRowCount = function(eventArgs)
+nitobi.treegrid.GridStandard.prototype.updateDisplayedRowCount = function(eventArgs)
 {
 	this.setDisplayedRowCount(eventArgs.numRowsReturned);
 }
-nitobi.grid.GridStandard.prototype.disableNextPage = function()
+nitobi.treegrid.GridStandard.prototype.disableNextPage = function()
 {
 	this.disableButton("nextPage");
 }
-nitobi.grid.GridStandard.prototype.disablePreviousPage = function()
+nitobi.treegrid.GridStandard.prototype.disablePreviousPage = function()
 {
 	this.disableButton("previousPage");
 }
-nitobi.grid.GridStandard.prototype.disableButton = function(button)
+nitobi.treegrid.GridStandard.prototype.disableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
 		t.getUiElements()[button+this.toolbars.uid].disable();
 }
-nitobi.grid.GridStandard.prototype.enableNextPage = function()
+nitobi.treegrid.GridStandard.prototype.enableNextPage = function()
 {
 	this.enableButton("nextPage");
 }
-nitobi.grid.GridStandard.prototype.enablePreviousPage = function()
+nitobi.treegrid.GridStandard.prototype.enablePreviousPage = function()
 {
 	this.enableButton("previousPage");
 }
-nitobi.grid.GridStandard.prototype.enableButton = function(button)
+nitobi.treegrid.GridStandard.prototype.enableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
 		t.getUiElements()[button+this.toolbars.uid].enable();
 }
-nitobi.grid.GridStandard.prototype.pagePrevious=function() {
+nitobi.treegrid.GridStandard.prototype.pagePrevious=function() {
 	this.fire("BeforeLoadPreviousPage");
 	this.loadDataPage(Math.max(this.getCurrentPageIndex()-1,0));
 	this.fire("AfterLoadPreviousPage");
 }
 
-nitobi.grid.GridStandard.prototype.pageNext=function() {
+nitobi.treegrid.GridStandard.prototype.pageNext=function() {
 	this.fire("BeforeLoadNextPage");
 	this.loadDataPage(this.getCurrentPageIndex()+1);
 	this.fire("AfterLoadNextPage");
 }
-nitobi.grid.GridStandard.prototype.loadDataPage = function(newPageNumber) 
+nitobi.treegrid.GridStandard.prototype.loadDataPage = function(newPageNumber) 
 {
 	// Clear the selection if there is one.
 	this.fire('BeforeLoadDataPage');
@@ -173,7 +173,7 @@ nitobi.grid.GridStandard.prototype.loadDataPage = function(newPageNumber)
 	// Set focus to topleft cell
 	this.fire('AfterLoadDataPage');
 }
-nitobi.grid.GridStandard.prototype.afterLoadDataPage=function(eventArgs) 
+nitobi.treegrid.GridStandard.prototype.afterLoadDataPage=function(eventArgs) 
 {
 	this.setDisplayedRowCount(eventArgs.numRowsReturned);
 	this.setRowCount(eventArgs.numRowsReturned)
@@ -198,9 +198,9 @@ nitobi.grid.GridStandard.prototype.afterLoadDataPage=function(eventArgs)
 //	this.Scroller.view.midcenter.renderGap(startRow, endRow, false);
 }
 
-nitobi.grid.GridStandard.prototype.bind=function() 
+nitobi.treegrid.GridStandard.prototype.bind=function() 
 {
-	nitobi.grid.GridStandard.base.bind.call(this);	
+	nitobi.treegrid.GridStandard.base.bind.call(this);	
 
 	// TODO: What is all this pre-bind stuff? Is there any other pre-bind stuff.
 	this.setCurrentPageIndex(0);
@@ -212,7 +212,7 @@ nitobi.grid.GridStandard.prototype.bind=function()
 	
 }
 
-nitobi.grid.GridStandard.prototype.getComplete=function(evtArgs)
+nitobi.treegrid.GridStandard.prototype.getComplete=function(evtArgs)
 {
 //	this.setDisplayedRowCount(evtArgs.numRowsReturned);
 //	if(evtArgs.numRowsReturned != this.getRowsPerPage()) {
@@ -230,7 +230,7 @@ nitobi.grid.GridStandard.prototype.getComplete=function(evtArgs)
 
 
 	this.afterLoadDataPage(evtArgs);
-	nitobi.grid.GridStandard.base.getComplete.call(this, evtArgs);
+	nitobi.treegrid.GridStandard.base.getComplete.call(this, evtArgs);
 
 	// TODO: This is not needed since the connected datatable will fire all the
 	// right events on the Grid when it gets the data back.
@@ -241,9 +241,9 @@ nitobi.grid.GridStandard.prototype.getComplete=function(evtArgs)
 
 //PageUp-PageDown Keys
 
-      nitobi.grid.GridStandard.prototype.renderMiddle= function()
+      nitobi.treegrid.GridStandard.prototype.renderMiddle= function()
     {
-		nitobi.grid.GridStandard.base.renderMiddle.call(this,arguments);
+		nitobi.treegrid.GridStandard.base.renderMiddle.call(this,arguments);
 		var startRow = this.getfreezetop();
 		endRow = this.getRowsPerPage()-1;
 		this.Scroller.view.midcenter.renderGap(startRow, endRow, false);

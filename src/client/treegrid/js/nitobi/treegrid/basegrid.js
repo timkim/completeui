@@ -5,37 +5,37 @@
  * 
  * http://www.nitobi.com/license
  */
-nitobi.lang.defineNs("nitobi.grid");
+nitobi.lang.defineNs("nitobi.treegrid");
 
 if (false)
 {
 	/**
 	 * <i>There is no constructor for this class.</i>
-	 * @class <code>nitobi.grid</code> is the namespace for classes that make up 
+	 * @class <code>nitobi.treegrid</code> is the namespace for classes that make up 
 	 * the Nitobi Grid component.  You're probably looking for documentation about one of
-	 * the classes below.  {@link nitobi.grid.Grid} is the class of object you will get if you
+	 * the classes below.  {@link nitobi.treegrid.Grid} is the class of object you will get if you
 	 * use {@link nitobi#getComponent} or <code>$ntb('&lt;COMPONENT_ID&gt;').jsObject</code>.
 	 * <p>
-	 * The most commonly used classes are {@link nitobi.grid.Grid}, {@link nitobi.grid.Cell},
-	 * and {@link nitobi.grid.Column}
+	 * The most commonly used classes are {@link nitobi.treegrid.Grid}, {@link nitobi.treegrid.Cell},
+	 * and {@link nitobi.treegrid.Column}
 	 * </p>
 	 * @constructor
 	 */
-	nitobi.grid = function(){};
+	nitobi.treegrid = function(){};
 }
 
 /**
  * Static property used to create a non-paging Grid.
  */
-nitobi.grid.PAGINGMODE_NONE="none";
+nitobi.treegrid.PAGINGMODE_NONE="none";
 /**
  * Static property used to create a standard paging Grid.
  */
-nitobi.grid.PAGINGMODE_STANDARD="standard";
+nitobi.treegrid.PAGINGMODE_STANDARD="standard";
 /**
  * Static property used to create a live scrolling Grid.
  */
-nitobi.grid.PAGINGMODE_LIVESCROLLING="livescrolling";
+nitobi.treegrid.PAGINGMODE_LIVESCROLLING="livescrolling";
 
 /*
 standard - remote standard paging (no caching)
@@ -48,7 +48,7 @@ locallivescrolling - local livescrolling
 
 /**
  * Creates a new Grid component.
- * @class The nitobi.grid.Grid class is used to create Grid components. More often than not, you'll be instantiating a Grid via a declaration.
+ * @class The nitobi.treegrid.Grid class is used to create Grid components. More often than not, you'll be instantiating a Grid via a declaration.
  * For example, a databound grid declaration might look like this:
  * <div class="code">
  * <pre><code class="html">
@@ -87,8 +87,8 @@ locallivescrolling - local livescrolling
  * To instantiate through script a specific version of the Grid class should be instantiated such as: 
  * <div class="code">
  * <pre><code class="javascript">
- * var myGrid = new nitobi.grid.GridLiveScrolling();
- * myGrid.setPagingMode(nitobi.grid.PAGINGMODE_LIVESCROLLING);
+ * var myGrid = new nitobi.treegrid.GridLiveScrolling();
+ * myGrid.setPagingMode(nitobi.treegrid.PAGINGMODE_LIVESCROLLING);
  * myGrid.setDataMode(nitobi.data.DATAMODE_CACHING);
  * myGrid.setGetHandler("data.xml");
  * myGrid.attachToParentDomElement(document.getElementById("myGrid"));
@@ -98,12 +98,12 @@ locallivescrolling - local livescrolling
  * @constructor
  * @param {String} uid The unique ID of the Grid. 
  * @see #mode
- * @see nitobi.grid.GridLiveScrolling
- * @see nitobi.grid.GridNonpaging
- * @see nitobi.grid.GridLocalPage
- * @see nitobi.grid.GridStandard
+ * @see nitobi.treegrid.GridLiveScrolling
+ * @see nitobi.treegrid.GridNonpaging
+ * @see nitobi.treegrid.GridLocalPage
+ * @see nitobi.treegrid.GridStandard
  */
-nitobi.grid.TreeGrid = function(uid) {
+nitobi.treegrid.TreeGrid = function(uid) {
 	//MJD:Commented out call to prepare because im having problems with it not generating the prepare now.
 	//Other controls dont seem to have this problem with the builds im doing.
 	//nitobi.prepare();
@@ -191,9 +191,9 @@ nitobi.grid.TreeGrid = function(uid) {
 	this.childHeaders = 0;
 }
 
-nitobi.lang.implement(nitobi.grid.TreeGrid, nitobi.Object);
+nitobi.lang.implement(nitobi.treegrid.TreeGrid, nitobi.Object);
 
-nitobi.grid.TreeGrid.prototype.properties = {
+nitobi.treegrid.TreeGrid.prototype.properties = {
 	// JS properties
 	id:{n:"ID",t:"",d:"",p:"j"},
 	selection:{n:"Selection",t:"",d:null,p:"j"},
@@ -327,7 +327,7 @@ nitobi.grid.TreeGrid.prototype.properties = {
 };
 
 // This is a temporary thing to map lowercase attribute names to uppercase ones
-nitobi.grid.TreeGrid.prototype.xColumnProperties = {
+nitobi.treegrid.TreeGrid.prototype.xColumnProperties = {
 	column: {
 		align:{n:"Align",t:"s",d:"left"},
 		classname:{n:"ClassName",t:"s",d:""},
@@ -470,25 +470,25 @@ nitobi.grid.TreeGrid.prototype.xColumnProperties = {
 	}
 };
 
-nitobi.grid.TreeGrid.prototype.typeAccessorCreators = {
+nitobi.treegrid.TreeGrid.prototype.typeAccessorCreators = {
 	s:function() {}, //string
 	b:function() {}, //bool
 	i:function() {}, //integer
 	n:function() {} //number
 	};
 
-nitobi.grid.TreeGrid.prototype.createAccessors = function(name) {
-	var item = nitobi.grid.TreeGrid.prototype.properties[name];
-	nitobi.grid.TreeGrid.prototype["set"+item.n] = function() {this[item.p+item.t+"SET"](item.n, arguments)};
-	nitobi.grid.TreeGrid.prototype["get"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
-	nitobi.grid.TreeGrid.prototype["is"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
-	nitobi.grid.TreeGrid.prototype[item.n] = item.d;
+nitobi.treegrid.TreeGrid.prototype.createAccessors = function(name) {
+	var item = nitobi.treegrid.TreeGrid.prototype.properties[name];
+	nitobi.treegrid.TreeGrid.prototype["set"+item.n] = function() {this[item.p+item.t+"SET"](item.n, arguments)};
+	nitobi.treegrid.TreeGrid.prototype["get"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
+	nitobi.treegrid.TreeGrid.prototype["is"+item.n] = function() {return this[item.p+item.t+"GET"](item.n, arguments)};
+	nitobi.treegrid.TreeGrid.prototype[item.n] = item.d;
 }
 
-//nitobi.grid.TreeGrid.prototype.properties
-for (var name in nitobi.grid.TreeGrid.prototype.properties)
+//nitobi.treegrid.TreeGrid.prototype.properties
+for (var name in nitobi.treegrid.TreeGrid.prototype.properties)
 {
-	nitobi.grid.TreeGrid.prototype.createAccessors(name);
+	nitobi.treegrid.TreeGrid.prototype.createAccessors(name);
 }
 
 /**
@@ -496,7 +496,7 @@ for (var name in nitobi.grid.TreeGrid.prototype.properties)
  * when the component is attached to a DOM element in the web page. This is primarily for use by component developers.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initialize= function() 
+nitobi.treegrid.TreeGrid.prototype.initialize= function() 
 {
 	// Called when parent.addChild() occurs 
 	this.fire("Preinitialize");
@@ -510,7 +510,7 @@ nitobi.grid.TreeGrid.prototype.initialize= function()
  * Initializes properties such as header height and row height from CSS classes.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeFromCss = function()
+nitobi.treegrid.TreeGrid.prototype.initializeFromCss = function()
 {
 	this.CellHoverColor = this.getThemedStyle("ntb-cell-hover", "backgroundColor") || "#C0C0FF";
 	this.RowHoverColor = this.getThemedStyle("ntb-row-hover", "backgroundColor") || "#FFFFC0";
@@ -555,7 +555,7 @@ nitobi.grid.TreeGrid.prototype.initializeFromCss = function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getThemedClass = function(clazz)
+nitobi.treegrid.TreeGrid.prototype.getThemedClass = function(clazz)
 {
 	var C = nitobi.html.Css;
 	var r = C.getRule("." + this.getTheme() + " ." + clazz) || C.getRule("."+clazz);
@@ -568,7 +568,7 @@ nitobi.grid.TreeGrid.prototype.getThemedClass = function(clazz)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getThemedStyle = function(clazz, style)
+nitobi.treegrid.TreeGrid.prototype.getThemedStyle = function(clazz, style)
 {
 	return nitobi.html.Css.getClassStyle("." + this.getTheme() + " ." + clazz, style);
 }
@@ -579,7 +579,7 @@ nitobi.grid.TreeGrid.prototype.getThemedStyle = function(clazz, style)
  * @param {nitobi.data.DataSet} dataSet The DataSet to connect the renders to.
  * @see #connectToDataSet
  */
-nitobi.grid.TreeGrid.prototype.connectRenderersToDataSet= function(dataset) 
+nitobi.treegrid.TreeGrid.prototype.connectRenderersToDataSet= function(dataset) 
 {
 	// TODO: Tree Grid diff
 	// TODO: Subscribe scroller to the connecting of dataset
@@ -598,7 +598,7 @@ nitobi.grid.TreeGrid.prototype.connectRenderersToDataSet= function(dataset)
  * @see #connectToDataSet
  * @private
  */
-nitobi.grid.TreeGrid.prototype.connectToDataSet= function(dataset,table) 
+nitobi.treegrid.TreeGrid.prototype.connectToDataSet= function(dataset,table) 
 {
 	this.data = dataset;
 	// TODO: Tree Grid diff
@@ -618,16 +618,16 @@ nitobi.grid.TreeGrid.prototype.connectToDataSet= function(dataset,table)
  * The component subscribes to the following events from the 
  * nitobi.data.DataTable:
  * &lt;ul&gt;
- * &lt;li&gt;RowCountChanged - nitobi.grid.Grid.setRowCount()&lt;/li&gt;
- * &lt;li&gt;RowCountKnown - nitobi.grid.Grid.setRowCount()&lt;/li&gt;
+ * &lt;li&gt;RowCountChanged - nitobi.treegrid.Grid.setRowCount()&lt;/li&gt;
+ * &lt;li&gt;RowCountKnown - nitobi.treegrid.Grid.setRowCount()&lt;/li&gt;
  * &lt;li&gt;StructureChanged - nitobigrid..Grid.updateStructure()&lt;/li&gt;
- * &lt;li&gt;ColumnsInitialized - nitobi.grid.Grid.updateStructure()&lt;/li&gt;
+ * &lt;li&gt;ColumnsInitialized - nitobi.treegrid.Grid.updateStructure()&lt;/li&gt;
  * &lt;/ul&gt;
  * After the DataTable is connected, the OnTableConnectedEvent will fire.
  * @param {String} table The table to which the Grid should connect.
  * @return {Boolean} Returns true if the table was successfully connected to and false otherwise.
  */
-nitobi.grid.TreeGrid.prototype.connectToTable= function(table) 
+nitobi.treegrid.TreeGrid.prototype.connectToTable= function(table) 
 {
 	// Use the table as the table id if it is a string
 	if (typeof(table) == "string")
@@ -672,14 +672,14 @@ nitobi.grid.TreeGrid.prototype.connectToTable= function(table)
  * DataTable it will create a new DataTable with ID "_default" and use the 
  * GetHandler, SaveHandler and DataMode properties on the Grid.
  */
-nitobi.grid.TreeGrid.prototype.ensureConnected = function() 
+nitobi.treegrid.TreeGrid.prototype.ensureConnected = function() 
 {
 	// Case: nodataSet has been been defined
 	if (this.data == null) {
 		this.data = new nitobi.data.DataSet();
 		this.data.initialize();
 
-		this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()},this.isAutoKeyEnabled());
+		this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.treegrid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()},this.isAutoKeyEnabled());
 		this.datatable.initialize("_default",this.getGetHandler(),this.getSaveHandler());
 		this.data.add(this.datatable);
 		this.connectToDataSet(this.data);
@@ -690,7 +690,7 @@ nitobi.grid.TreeGrid.prototype.ensureConnected = function()
 	if (this.datatable == null) {
 		this.datatable=this.data.getTable("_default");
 		if (this.datatable == null) {
-			this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
+			this.datatable = new nitobi.data.DataTable(this.getDataMode(), this.getPagingMode() == nitobi.treegrid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
 			this.datatable.initialize("_default",this.getGetHandler(),this.getSaveHandler());
 			this.data.add(this.datatable);
 		}
@@ -704,7 +704,7 @@ nitobi.grid.TreeGrid.prototype.ensureConnected = function()
  * or OnColumnsInitializedEvent is fired from the DataTable.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.updateStructure = function() 
+nitobi.treegrid.TreeGrid.prototype.updateStructure = function() 
 {
 	if (this.inferredColumns) {
 		this.defineColumns(this.datatable);
@@ -723,7 +723,7 @@ nitobi.grid.TreeGrid.prototype.updateStructure = function()
  * Sets the <code>fieldMap</code> property of the Grid to match that of the connected DataTable. This is called from <code>updateStructure()</code>.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.mapColumns= function() 
+nitobi.treegrid.TreeGrid.prototype.mapColumns= function() 
 {
 	// TODO: This seems a bit sketchy to keep in sync if we ever use this.fieldMap
 	// if so we should be using a setter and preferably creating the connection between the two properties
@@ -733,7 +733,7 @@ nitobi.grid.TreeGrid.prototype.mapColumns= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.configureDefaults= function() 
+nitobi.treegrid.TreeGrid.prototype.configureDefaults= function() 
 {
 	// Note: properties should be assigned before components are attached or initialized (to avoid duplicate code execution)
 	// Assume that accessors expect that sub-components haven't been created yet.
@@ -761,8 +761,8 @@ nitobi.grid.TreeGrid.prototype.configureDefaults= function()
 	this.oldVersion = false;
 
 	// create XSL Processors
-	this.frameCssXslProc = nitobi.grid.frameCssXslProc;
-	this.frameXslProc = nitobi.grid.frameXslProc;
+	this.frameCssXslProc = nitobi.treegrid.frameCssXslProc;
+	this.frameXslProc = nitobi.treegrid.frameXslProc;
 }
 
 /**
@@ -770,7 +770,7 @@ nitobi.grid.TreeGrid.prototype.configureDefaults= function()
  * @private
  * @align
  */
-nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
+nitobi.treegrid.TreeGrid.prototype.attachDomEvents= function()
 {
 	// The only way to attach the selection-prevention event in an XHTML compliant way.
 	// This is only used (and will only work) for IE - for Moz/others we have CSS that handles it.
@@ -856,7 +856,7 @@ nitobi.grid.TreeGrid.prototype.attachDomEvents= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.hoverCell=function(cell) 
+nitobi.treegrid.TreeGrid.prototype.hoverCell=function(cell) 
 {
 	var css = nitobi.html.Css;
 	var has = nitobi.html.Css.hasClass;
@@ -905,7 +905,7 @@ nitobi.grid.TreeGrid.prototype.hoverCell=function(cell)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.hoverRow=function(row) 
+nitobi.treegrid.TreeGrid.prototype.hoverRow=function(row) 
 {
 	if (!this.isRowHighlightEnabled()) return;
 
@@ -924,9 +924,9 @@ nitobi.grid.TreeGrid.prototype.hoverRow=function(row)
 
 	var rowCell = nitobi.html.getFirstChild(row);
 
-	var rowNumber = nitobi.grid.Row.getRowNumber(row);
+	var rowNumber = nitobi.treegrid.Row.getRowNumber(row);
 	var surfacePath = row.getAttribute("path");
-	var rowNodes = nitobi.grid.Row.getRowElements(this, rowNumber, surfacePath);
+	var rowNodes = nitobi.treegrid.Row.getRowElements(this, rowNumber, surfacePath);
 
 	if (rowNodes.left!=null && rowNodes.left!=this.leftActiveRow) {
 		this.leftrowhoveredbg=rowNodes.left.style.backgroundColor;
@@ -946,7 +946,7 @@ nitobi.grid.TreeGrid.prototype.hoverRow=function(row)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearHover = function()
+nitobi.treegrid.TreeGrid.prototype.clearHover = function()
 {
 	// Clear hover
 	this.hoverCell();
@@ -958,7 +958,7 @@ nitobi.grid.TreeGrid.prototype.clearHover = function()
  * @param {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleMouseOver = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleMouseOver = function(evt)
 {
 	this.fire("MouseOver", evt);
 }
@@ -968,7 +968,7 @@ nitobi.grid.TreeGrid.prototype.handleMouseOver = function(evt)
  * @param {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleMouseOut = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleMouseOut = function(evt)
 {
 	this.clearHover();
 	this.fire("MouseOut", evt);
@@ -979,7 +979,7 @@ nitobi.grid.TreeGrid.prototype.handleMouseOut = function(evt)
  * @param {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleMouseDown = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleMouseDown = function(evt)
 {
 	// check if grid is in edit mode - if so, validate input first
 	//if (this.isEditMode())
@@ -989,18 +989,18 @@ nitobi.grid.TreeGrid.prototype.handleMouseDown = function(evt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 {
 	var cell  = this.findActiveCell(evt.srcElement);
 	if (cell==null) return;
 
-	var colNumber = nitobi.grid.Cell.getColumnNumber(cell);
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(cell);
+	var colNumber = nitobi.treegrid.Cell.getColumnNumber(cell);
+	var surfacePath = nitobi.treegrid.Cell.getSurfacePath(cell);
 	var columnObj = this.getColumnObject(colNumber, surfacePath);
 
 	if (this.headerResizeHover(evt, cell))
 	{
-		var beforeColumnResizeEventArgs = new nitobi.grid.OnBeforeColumnResizeEventArgs(this, columnObj);
+		var beforeColumnResizeEventArgs = new nitobi.treegrid.OnBeforeColumnResizeEventArgs(this, columnObj);
 		if (!nitobi.event.evaluate(columnObj.getOnBeforeResizeEvent(), beforeColumnResizeEventArgs)) return;
 
 		this.columnResizer.startResize(this, columnObj, cell, evt);
@@ -1018,7 +1018,7 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseDown=function(evt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleCellMouseDown=function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleCellMouseDown=function(evt)
 {
 	var cell  = this.findActiveCell(evt.srcElement) || this.activeCell;
 	if (cell==null) return;
@@ -1034,7 +1034,7 @@ nitobi.grid.TreeGrid.prototype.handleCellMouseDown=function(evt)
 	{
 		// Fire the beforecellclick event on the grid and column
 		var activeColumn = this.getSelectedColumnObject();
-		var clickEventArgs = new nitobi.grid.OnCellClickEventArgs(this, this.getSelectedCellObject());
+		var clickEventArgs = new nitobi.treegrid.OnCellClickEventArgs(this, this.getSelectedCellObject());
 		if (!this.fire("BeforeCellClick", clickEventArgs) || (!!activeColumn && !nitobi.event.evaluate(activeColumn.getOnBeforeCellClickEvent(), clickEventArgs))) return;
 
 		// Set the state variable indicating that we are have started a click...
@@ -1048,7 +1048,7 @@ nitobi.grid.TreeGrid.prototype.handleCellMouseDown=function(evt)
 
 		// Fire the cellclick event on the grid and column
 		var activeColumn = this.getSelectedColumnObject();
-		var clickEventArgs = new nitobi.grid.OnCellClickEventArgs(this, this.getSelectedCellObject());
+		var clickEventArgs = new nitobi.treegrid.OnCellClickEventArgs(this, this.getSelectedCellObject());
 		this.fire("CellClick", clickEventArgs);
 		if (!!activeColumn) nitobi.event.evaluate(activeColumn.getOnCellClickEvent(), clickEventArgs);
 	}
@@ -1057,7 +1057,7 @@ nitobi.grid.TreeGrid.prototype.handleCellMouseDown=function(evt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleMouseUp = function(evtObj)
+nitobi.treegrid.TreeGrid.prototype.handleMouseUp = function(evtObj)
 {
 	// This mouseup may be due to a selection expansion - so lets just pass 
 	// this on to the selection mouseup handler to where it will deal with it if we are in expanding mode.
@@ -1067,7 +1067,7 @@ nitobi.grid.TreeGrid.prototype.handleMouseUp = function(evtObj)
 /**
  * MouseUp event handler for the Grid header.
  */
-nitobi.grid.TreeGrid.prototype.handleHeaderMouseUp = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleHeaderMouseUp = function(evt)
 {
 	var domMouseUpCell = this.findActiveCell(evt.srcElement);
 	if (!domMouseUpCell) 
@@ -1083,7 +1083,7 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseUp = function(evt)
  * @private
  * Event handler for the mouse move event.
  */
-nitobi.grid.TreeGrid.prototype.handleMouseMove = function(evt) 
+nitobi.treegrid.TreeGrid.prototype.handleMouseMove = function(evt) 
 {
 	this.fire("MouseMove", evt);
 }
@@ -1091,7 +1091,7 @@ nitobi.grid.TreeGrid.prototype.handleMouseMove = function(evt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHeaderMouseMove=function(evt) {
+nitobi.treegrid.TreeGrid.prototype.handleHeaderMouseMove=function(evt) {
 	var cell=this.findActiveCell(evt.srcElement);
 	if (cell == null) return;
 
@@ -1109,10 +1109,10 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseMove=function(evt) {
  * @param {Object} evt
  * @param {Object} cell
  */
-nitobi.grid.TreeGrid.prototype.headerResizeHover = function(evt, cell)
+nitobi.treegrid.TreeGrid.prototype.headerResizeHover = function(evt, cell)
 {
 	var x = evt.clientX;
-	var rect = cell.getBoundingClientRect(0, (nitobi.grid.Cell.getColumnNumber(cell)>this.getFrozenLeftColumnCount()?this.scroller.getScrollLeft():0));
+	var rect = cell.getBoundingClientRect(0, (nitobi.treegrid.Cell.getColumnNumber(cell)>this.getFrozenLeftColumnCount()?this.scroller.getScrollLeft():0));
 	return (x < rect.right && x > rect.right-10 );
 }
 
@@ -1120,7 +1120,7 @@ nitobi.grid.TreeGrid.prototype.headerResizeHover = function(evt, cell)
  * Manages the application of hover classes to column headers
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHeaderMouseOver = function(e)
+nitobi.treegrid.TreeGrid.prototype.handleHeaderMouseOver = function(e)
 {
 	// nitobi.html.Css.addClass(e, "ntb-hover", true); // one day we can use this ... when no one uses IE anymore
 	e.className = e.className.replace(/(ntb-column-indicator-border)(.*?)(\s|$)/g,function(){
@@ -1132,7 +1132,7 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseOver = function(e)
  * Manages the application of hover classes to column headers
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHeaderMouseOut = function(e)
+nitobi.treegrid.TreeGrid.prototype.handleHeaderMouseOut = function(e)
 {
 	// nitobi.html.Css.removeClass(e, "ntb-hover", true);
 	e.className = e.className.replace(/(ntb-column-indicator-border)(.*?)(\s|$)/g,function(){
@@ -1143,7 +1143,7 @@ nitobi.grid.TreeGrid.prototype.handleHeaderMouseOut = function(e)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleCellMouseMove=function(evt) {
+nitobi.treegrid.TreeGrid.prototype.handleCellMouseMove=function(evt) {
 
 	// Clear a possible cell clicked state
 	this.setCellClicked(false);
@@ -1219,7 +1219,7 @@ nitobi.grid.TreeGrid.prototype.handleCellMouseMove=function(evt) {
  * @param {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleMouseWheel = function(evtObj)
+nitobi.treegrid.TreeGrid.prototype.handleMouseWheel = function(evtObj)
 {
 	this.focus() // blurs active cell; see ticket 871
 	var delta = 0;
@@ -1243,7 +1243,7 @@ nitobi.grid.TreeGrid.prototype.handleMouseWheel = function(evtObj)
  * @param {Boolean} multi Indicates whether multi-row select should be used.
  * @see #selectCellByCoords
  */
-nitobi.grid.TreeGrid.prototype.setActiveCell=function(cell,multi) 
+nitobi.treegrid.TreeGrid.prototype.setActiveCell=function(cell,multi) 
 {
 	// At this point if cell is null we can't do the activation of the cell
 	if (!cell) return;
@@ -1274,7 +1274,7 @@ nitobi.grid.TreeGrid.prototype.setActiveCell=function(cell,multi)
 
 	// Finally focus on the cell 
 	// NOTE: The cell is focused after the row is focused and the cell is blurred before the row is blurred ...
-	var focusEventArgs = new nitobi.grid.OnCellFocusEventArgs(this, this.getSelectedCellObject());
+	var focusEventArgs = new nitobi.treegrid.OnCellFocusEventArgs(this, this.getSelectedCellObject());
 	this.fire("CellFocus", focusEventArgs);
 	if (!!activeColumnObject) nitobi.event.evaluate(activeColumnObject.getOnCellFocusEvent(), focusEventArgs);
 }
@@ -1284,10 +1284,10 @@ nitobi.grid.TreeGrid.prototype.setActiveCell=function(cell,multi)
  * Sets Grid properties activeCell, activeCellObject and activeColumnObject for the new active cell.
  * @param {HTMLElement} activeCell The new active cell in the Grid.
  */
-nitobi.grid.TreeGrid.prototype.activateCell = function(cell)
+nitobi.treegrid.TreeGrid.prototype.activateCell = function(cell)
 {
 	this.activeCell = cell;
-	this.activeCellObject = new nitobi.grid.Cell(this, cell);
+	this.activeCellObject = new nitobi.treegrid.Cell(this, cell);
 	this.activeColumnObject = this.getSelectedColumnObject();
 }
 
@@ -1298,12 +1298,12 @@ nitobi.grid.TreeGrid.prototype.activateCell = function(cell)
  * @param {HTMLElement} oldCell The previously selected cell. When bluring the entire grid 
  * one may want to set oldCell to be null. 
  */
-nitobi.grid.TreeGrid.prototype.blurActiveCell = function(oldCell) {
+nitobi.treegrid.TreeGrid.prototype.blurActiveCell = function(oldCell) {
 	// Setup the oldCell property which can be null if we are clearing the grid or the new activeCell otherwise
 	this.oldCell = oldCell;
 	// First do the blur stuff since this can happen if cell is null
 	var oldColumn = this.activeColumnObject;
-	var blurEventArgs = new nitobi.grid.OnCellBlurEventArgs(this, this.getSelectedCellObject());
+	var blurEventArgs = new nitobi.treegrid.OnCellBlurEventArgs(this, this.getSelectedCellObject());
 	if (!!oldColumn)
 		if(!this.fire("CellBlur", blurEventArgs) || !nitobi.event.evaluate(oldColumn.getOnCellBlurEvent(), blurEventArgs)) return;
 	
@@ -1313,9 +1313,9 @@ nitobi.grid.TreeGrid.prototype.blurActiveCell = function(oldCell) {
  * @deprecated
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getRowNodes = function(row)
+nitobi.treegrid.TreeGrid.prototype.getRowNodes = function(row)
 {
-	return nitobi.grid.Row.getRowElements(this, nitobi.grid.Row.getRowNumber(row));
+	return nitobi.treegrid.Row.getRowElements(this, nitobi.treegrid.Row.getRowNumber(row));
 }
 
 /**
@@ -1323,9 +1323,9 @@ nitobi.grid.TreeGrid.prototype.getRowNodes = function(row)
  * @param {HTMLElement} row The HTML element for the row to be made active.
  * @param {Boolean} multi Indicates whether multi-row select should be used.
  */
-nitobi.grid.TreeGrid.prototype.setActiveRow=function(row,multi) 
+nitobi.treegrid.TreeGrid.prototype.setActiveRow=function(row,multi) 
 {
-	var Row = nitobi.grid.Row;
+	var Row = nitobi.treegrid.Row;
 
 	var newRowNum = Row.getRowNumber(row);
 	var oldRowNum = -1;
@@ -1340,7 +1340,7 @@ nitobi.grid.TreeGrid.prototype.setActiveRow=function(row,multi)
 	{
 		// Check if the old and newly selected / clicked rows are the same or not
 		if (newRowNum != oldRowNum && oldRowNum != -1) {
-			var blurEventArgs = new nitobi.grid.OnRowBlurEventArgs(this,this.getRowObject(oldRowNum));
+			var blurEventArgs = new nitobi.treegrid.OnRowBlurEventArgs(this,this.getRowObject(oldRowNum));
 			if (!this.fire("RowBlur", blurEventArgs) || !nitobi.event.evaluate(this.getOnRowBlurEvent(), blurEventArgs)) return;
 		}
 		this.clearActiveRows();
@@ -1367,7 +1367,7 @@ nitobi.grid.TreeGrid.prototype.setActiveRow=function(row,multi)
 		}
 	}
 	if (newRowNum != oldRowNum) {
-		var focusEventArgs = new nitobi.grid.OnRowFocusEventArgs(this,this.getRowObject(newRowNum));
+		var focusEventArgs = new nitobi.treegrid.OnRowFocusEventArgs(this,this.getRowObject(newRowNum));
 		this.fire("RowFocus", focusEventArgs);
 		nitobi.event.evaluate(this.getOnRowFocusEvent(), focusEventArgs);
 	}
@@ -1400,14 +1400,14 @@ nitobi.grid.TreeGrid.prototype.setActiveRow=function(row,multi)
  * @type Array
  * @see #getCellObject
  */
-nitobi.grid.TreeGrid.prototype.getSelectedRows=function() 
+nitobi.treegrid.TreeGrid.prototype.getSelectedRows=function() 
 {
 	return this.selectedRows;
 }
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearActiveRows=function() 
+nitobi.treegrid.TreeGrid.prototype.clearActiveRows=function() 
 {
 	for (var i=0;i<this.selectedRows.length;i++) {
 		var row=this.selectedRows[i];
@@ -1423,7 +1423,7 @@ nitobi.grid.TreeGrid.prototype.clearActiveRows=function()
  * </p>
  * @type Array
  */
-nitobi.grid.TreeGrid.prototype.selectAllRows=function() 
+nitobi.treegrid.TreeGrid.prototype.selectAllRows=function() 
 {
 	this.clearActiveRows();
 	for (var i=0;i<this.getDisplayedRowCount() ;i++ )
@@ -1440,10 +1440,10 @@ nitobi.grid.TreeGrid.prototype.selectAllRows=function()
 /**
  * Clears any active rows in the Grid.
  */
-nitobi.grid.TreeGrid.prototype.clearActiveRow=function(row) 
+nitobi.treegrid.TreeGrid.prototype.clearActiveRow=function(row) 
 {
-	var rowNumber = nitobi.grid.Row.getRowNumber(row)
-	var rowNodes = nitobi.grid.Row.getRowElements(this,rowNumber);
+	var rowNumber = nitobi.treegrid.Row.getRowNumber(row)
+	var rowNodes = nitobi.treegrid.Row.getRowElements(this,rowNumber);
 
 	if (rowNodes.left!=null) {
 		rowNodes.left.removeAttribute("select");
@@ -1458,7 +1458,7 @@ nitobi.grid.TreeGrid.prototype.clearActiveRow=function(row)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.applyCellStyle=function(cell) {
+nitobi.treegrid.TreeGrid.prototype.applyCellStyle=function(cell) {
 	if (cell==null) return;
 	cell.style.background=this.CellActiveColor;
 }
@@ -1466,7 +1466,7 @@ nitobi.grid.TreeGrid.prototype.applyCellStyle=function(cell) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.removeCellStyle=function(cell) {
+nitobi.treegrid.TreeGrid.prototype.removeCellStyle=function(cell) {
 	if (cell==null) return;
 	cell.style.background="";
 }
@@ -1474,7 +1474,7 @@ nitobi.grid.TreeGrid.prototype.removeCellStyle=function(cell) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.applyRowStyle=function(row) {
+nitobi.treegrid.TreeGrid.prototype.applyRowStyle=function(row) {
 	if (row==null) return;
 	row.style.background=this.RowActiveColor;
 }
@@ -1482,7 +1482,7 @@ nitobi.grid.TreeGrid.prototype.applyRowStyle=function(row) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.removeRowStyle=function(row) {
+nitobi.treegrid.TreeGrid.prototype.removeRowStyle=function(row) {
 	if (row==null) return;
 	row.style.background="";
 }
@@ -1490,7 +1490,7 @@ nitobi.grid.TreeGrid.prototype.removeRowStyle=function(row) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.findActiveCell = function(domSrcElem)
+nitobi.treegrid.TreeGrid.prototype.findActiveCell = function(domSrcElem)
 {
 	var breakOut = 5;
 	domSrcElem == null;
@@ -1511,7 +1511,7 @@ nitobi.grid.TreeGrid.prototype.findActiveCell = function(domSrcElem)
  * @param {HTMLElement} parentElement The HTML DOM element where the component 
  * will be rendered.
  */
-nitobi.grid.TreeGrid.prototype.attachToParentDomElement= function(parentElement) 
+nitobi.treegrid.TreeGrid.prototype.attachToParentDomElement= function(parentElement) 
 {
 	this.UiContainer=parentElement;
 	// This event key is created in the constructor and connected to initialize
@@ -1524,7 +1524,7 @@ nitobi.grid.TreeGrid.prototype.attachToParentDomElement= function(parentElement)
  * if the grid is set to standard mode.
  * @type nitobi.ui.Toolbars
  */
-nitobi.grid.TreeGrid.prototype.getToolbars = function()
+nitobi.treegrid.TreeGrid.prototype.getToolbars = function()
 {
 	return this.toolbars;
 }
@@ -1534,7 +1534,7 @@ nitobi.grid.TreeGrid.prototype.getToolbars = function()
  * to the viewable area of the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
+nitobi.treegrid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
 {
 	var viewableWidth = this.getViewableWidth();
 	var hScrollbarContainer = $ntb("ntb-treegrid-hscrollshow" + this.uid);
@@ -1565,7 +1565,7 @@ nitobi.grid.TreeGrid.prototype.adjustHorizontalScrollBars = function()
  * panels, toolbars or managers.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.createChildren= function()
+nitobi.treegrid.TreeGrid.prototype.createChildren= function()
 {
 	var L = nitobi.lang;
 
@@ -1591,7 +1591,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	// Moved this to the createChildren method since it is a child of the Grid.
 	// To fix the loading screen aligment problem it needs to be attached the grid tag - not the body
 
-	var ls = this.loadingScreen = new nitobi.grid.LoadingScreen(this);
+	var ls = this.loadingScreen = new nitobi.treegrid.LoadingScreen(this);
 	this.subscribe("Preinitialize", L.close(ls,ls.show));
 	this.subscribe("HtmlReady", L.close(ls,ls.hide));
 	this.subscribe("AfterGridResize", L.close(ls,ls.resize));
@@ -1614,23 +1614,23 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 	// TODO: these resizers should be inheriting from one resizer base class to reduce code.
 	/**
 	 * The object that is responsible for managing runtime resizing of Grid Columns.
-	 * @type nitobi.grid.ColumnResizer
+	 * @type nitobi.treegrid.ColumnResizer
 	 */
-	var cr = new nitobi.grid.ColumnResizer(this);
+	var cr = new nitobi.treegrid.ColumnResizer(this);
 	cr.onAfterResize.subscribe(L.close(this, this.afterColumnResize));
 	this.columnResizer = cr;
 
 	// This is the drag/drop column, this is for resorting columns
 
-  	var db = new nitobi.grid.DragDropColumn(this);
+  	var db = new nitobi.treegrid.DragDropColumn(this);
   	db.onAfterDragDrop.subscribe(L.close(this, this.afterDragDropColumn));
   	this.dragDropColumn = db;
 
 	/**
 	 * The object that is responsible for managing runtime resizing of the Grid.
-	 * @type nitobi.grid.GridResizer
+	 * @type nitobi.treegrid.GridResizer
 	 */
-	var gr = new nitobi.grid.GridResizer(this);
+	var gr = new nitobi.treegrid.GridResizer(this);
 	gr.widthFixed = this.isWidthFixed();
 	gr.heightFixed = this.isHeightFixed();
 	gr.minWidth = this.getMinWidth();
@@ -1640,7 +1640,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
 
 
 	// TODO: Scroller is deprecated
-	var sc = this.Scroller = this.scroller = new nitobi.grid.Scroller3x3(this, this.getHeight(), this.getDisplayedRowCount(), this.getColumnCount(), this.getfreezetop(), this.getFrozenLeftColumnCount());
+	var sc = this.Scroller = this.scroller = new nitobi.treegrid.Scroller3x3(this, this.getHeight(), this.getDisplayedRowCount(), this.getColumnCount(), this.getfreezetop(), this.getFrozenLeftColumnCount());
 	sc.setRowHeight(this.getRowHeight());
 	sc.setHeaderHeight(this.getHeaderHeight());
 	this.maxSurface = this.scroller.surface;
@@ -1710,7 +1710,7 @@ nitobi.grid.TreeGrid.prototype.createChildren= function()
  * @param {nitobi.ui.Toolbars.VisibleToolbars} visibleToolbars A bitmask representing which toolbars are being shown.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.createToolbars = function(visibleToolbars)
+nitobi.treegrid.TreeGrid.prototype.createToolbars = function(visibleToolbars)
 {
 	var tb = this.toolbars = new nitobi.ui.Toolbars(this, (this.isToolbarEnabled() ? visibleToolbars : 0) );
 	var TBContainer = document.getElementById("toolbarContainer"+this.uid);
@@ -1741,7 +1741,7 @@ nitobi.grid.TreeGrid.prototype.createToolbars = function(visibleToolbars)
  * Called on the <code>AfterGridResize</code> event.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.resizeToolbars = function()
+nitobi.treegrid.TreeGrid.prototype.resizeToolbars = function()
 {
 	this.toolbars.setWidth(this.getWidth());
 	this.toolbars.resize();
@@ -1752,7 +1752,7 @@ nitobi.grid.TreeGrid.prototype.resizeToolbars = function()
  * 
  */
 
-nitobi.grid.TreeGrid.prototype.populateColumnLists = function()
+nitobi.treegrid.TreeGrid.prototype.populateColumnLists = function()
 {
 	var sets = this.Declaration.columns;
 	for (var i = 0; i < sets.length; ++i)
@@ -1761,7 +1761,7 @@ nitobi.grid.TreeGrid.prototype.populateColumnLists = function()
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.populateColList = function(colset)
+nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 {
 	var uid = this.uid;
 	var setname = colset.firstChild.getAttribute('id');
@@ -1794,7 +1794,7 @@ nitobi.grid.TreeGrid.prototype.populateColList = function(colset)
 	rendered_menu.style.display = "none";
 }
 
-nitobi.grid.TreeGrid.prototype.toggleVis = function(evt)
+nitobi.treegrid.TreeGrid.prototype.toggleVis = function(evt)
 {
 	var colAttr = evt.srcElement.id.split('_');
 	var col = parseInt(colAttr[1]);
@@ -1825,7 +1825,7 @@ nitobi.grid.TreeGrid.prototype.toggleVis = function(evt)
  * </div>
  * @param {Number} offset The amount by which to scroll the Grid with respect to its current vertical scroll value.
  */
-nitobi.grid.TreeGrid.prototype.scrollVerticalRelative= function(offset)
+nitobi.treegrid.TreeGrid.prototype.scrollVerticalRelative= function(offset)
 {
 	var st = this.scroller.getScrollTop()+offset;
 
@@ -1858,7 +1858,7 @@ nitobi.grid.TreeGrid.prototype.scrollVerticalRelative= function(offset)
  * </div>
  * @param {decimal} percent A value between 0 and 1 that specifies how far to vertically scroll, 0 being left and 1 being right.
  */
-nitobi.grid.TreeGrid.prototype.scrollVertical= function(percent)
+nitobi.treegrid.TreeGrid.prototype.scrollVertical= function(percent)
 {
 	this.clearHover();
 	var origPct = this.scroller.getScrollTopPercent();
@@ -1894,7 +1894,7 @@ nitobi.grid.TreeGrid.prototype.scrollVertical= function(percent)
  * @param {Number} offset The pixel amount by which to scroll the Grid with 
  * respect to its current horizontal scroll value.
  */
-nitobi.grid.TreeGrid.prototype.scrollHorizontalRelative= function(offset)
+nitobi.treegrid.TreeGrid.prototype.scrollHorizontalRelative= function(offset)
 {
 	var sl = this.scroller.getScrollLeft()+offset;
 	var mc = this.scroller.surface.view.midcenter;
@@ -1920,7 +1920,7 @@ nitobi.grid.TreeGrid.prototype.scrollHorizontalRelative= function(offset)
  * </div>
  * @param {decimal} percent A value between 0 and 1 that specifies how far to horizontally scroll, 0 being left and 1 being right.
  */
-nitobi.grid.TreeGrid.prototype.scrollHorizontal= function(percent)
+nitobi.treegrid.TreeGrid.prototype.scrollHorizontal= function(percent)
 {
 	this.focus();
 	this.clearHover();
@@ -1938,7 +1938,7 @@ nitobi.grid.TreeGrid.prototype.scrollHorizontal= function(percent)
  * used to get the scrollTop and scrollLeft values for the grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getScrollSurface = function()
+nitobi.treegrid.TreeGrid.prototype.getScrollSurface = function()
 {
 	if (this.Scroller != null)
 	{
@@ -1948,11 +1948,11 @@ nitobi.grid.TreeGrid.prototype.getScrollSurface = function()
 
 /**
  * @private
- * @type nitobi.grid.Viewport
+ * @type nitobi.treegrid.Viewport
  */
-nitobi.grid.TreeGrid.prototype.getActiveView = function()
+nitobi.treegrid.TreeGrid.prototype.getActiveView = function()
 {
-	var C = nitobi.grid.Cell;
+	var C = nitobi.treegrid.Cell;
 	return this.Scroller.getViewportByCoords(
 		C.getRowNumber(this.activeCell), 
 		C.getColumnNumber(this.activeCell),
@@ -1978,7 +1978,7 @@ nitobi.grid.TreeGrid.prototype.getActiveView = function()
  * </div>
  * @param {HTMLElement} cell The cell that is to be in view.
  */
-nitobi.grid.TreeGrid.prototype.ensureCellInView=function(cell)
+nitobi.treegrid.TreeGrid.prototype.ensureCellInView=function(cell)
 {
 	var SS = this.getScrollSurface();
 
@@ -2006,7 +2006,7 @@ nitobi.grid.TreeGrid.prototype.ensureCellInView=function(cell)
 	if (up<0) this.scrollVerticalRelative(up);
 	if (down>0) this.scrollVerticalRelative(down);
 
-	if (nitobi.grid.Cell.getColumnNumber(AC) > this.getFrozenLeftColumnCount()-1) {
+	if (nitobi.treegrid.Cell.getColumnNumber(AC) > this.getFrozenLeftColumnCount()-1) {
 		if (left<0) this.scrollHorizontalRelative(left);
 		if (right>0) this.scrollHorizontalRelative(right);
 	}
@@ -2019,7 +2019,7 @@ nitobi.grid.TreeGrid.prototype.ensureCellInView=function(cell)
  * also propagated to child object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.updateCellRanges= function() 
+nitobi.treegrid.TreeGrid.prototype.updateCellRanges= function() 
 {
 	if(this.frameRendered) {
 		var rows = this.getRowCount();
@@ -2051,7 +2051,7 @@ nitobi.grid.TreeGrid.prototype.updateCellRanges= function()
  * Re-calculates the dimensions of the component.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.measure= function() {
+nitobi.treegrid.TreeGrid.prototype.measure= function() {
 	// Invoked by the framework when a components invalidateSize is called
 	// Components calculate their natural size based on content and layout rules
 	// Implicitly invoked when component children change size
@@ -2073,7 +2073,7 @@ nitobi.grid.TreeGrid.prototype.measure= function() {
  * Calls both <code>measureColumns</code> and <code>measureRows</code>.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.measureViews= function() {
+nitobi.treegrid.TreeGrid.prototype.measureViews= function() {
 	this.measureRows();
 	this.measureColumns();	
 }
@@ -2081,7 +2081,7 @@ nitobi.grid.TreeGrid.prototype.measureViews= function() {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.measureColumns= function() {
+nitobi.treegrid.TreeGrid.prototype.measureColumns= function() {
 	var fL=this.getFrozenLeftColumnCount();
 	var wL = 0;
 	var wT = 0;
@@ -2101,7 +2101,7 @@ nitobi.grid.TreeGrid.prototype.measureColumns= function() {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.measureRows= function()
+nitobi.treegrid.TreeGrid.prototype.measureRows= function()
 {
 	var hdrH = this.isColumnIndicatorsEnabled()?this.getHeaderHeight():0;
 	this.settop(this.calculateHeight(0,this.getfreezetop()-1) + hdrH); // should compute because heights may vary
@@ -2111,7 +2111,7 @@ nitobi.grid.TreeGrid.prototype.measureRows= function()
  * Resizes the scroller dimensions.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.resizeScroller = function()
+nitobi.treegrid.TreeGrid.prototype.resizeScroller = function()
 {
 	// TODO: refactor, the toolbars should not be taken into account .... that should all alredy be set in the this.getHeight property 
 	var tbDelta=(this.getToolbars() != null && this.isToolbarEnabled() ? this.getToolbarHeight() : 0);
@@ -2125,7 +2125,7 @@ nitobi.grid.TreeGrid.prototype.resizeScroller = function()
  * @param {Number} height The height (in pixels) of the grid.
  * @return {Boolean} Returns true if the table was successfully connected to and false otherwise.
  */
-nitobi.grid.TreeGrid.prototype.resize= function(width, height) 
+nitobi.treegrid.TreeGrid.prototype.resize= function(width, height) 
 {
 	this.setWidth(width);
 	this.setHeight(height);
@@ -2141,7 +2141,7 @@ nitobi.grid.TreeGrid.prototype.resize= function(width, height)
  * Executes before a user initiated resize event occurs.
  * @param {Object} evt Event arguments 
  */
-nitobi.grid.TreeGrid.prototype.beforeResize = function(evt)
+nitobi.treegrid.TreeGrid.prototype.beforeResize = function(evt)
 {
 	var beforeResizeEventArgs = new nitobi.base.EventArgs(this);
 		if (!nitobi.event.evaluate(this.getOnBeforeResizeEvent(), beforeResizeEventArgs)) return;
@@ -2152,7 +2152,7 @@ nitobi.grid.TreeGrid.prototype.beforeResize = function(evt)
 /**
  * Executes after a user initiated resize event occurs.
  */
-nitobi.grid.TreeGrid.prototype.afterResize = function()
+nitobi.treegrid.TreeGrid.prototype.afterResize = function()
 {
 	this.resize(this.gridResizer.newWidth, this.gridResizer.newHeight);
 	this.syncWithData();
@@ -2162,7 +2162,7 @@ nitobi.grid.TreeGrid.prototype.afterResize = function()
  * Executes after a user initiated column resize event occurs.
  * @param {Object} evt Event arguments 
  */
-nitobi.grid.TreeGrid.prototype.afterColumnResize = function(resizer)
+nitobi.treegrid.TreeGrid.prototype.afterColumnResize = function(resizer)
 {
 	//var col = this.getColumnObject(resizer.column);
 	var col = resizer.column;
@@ -2171,7 +2171,7 @@ nitobi.grid.TreeGrid.prototype.afterColumnResize = function(resizer)
 }
 
 
-nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
+nitobi.treegrid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 {
 	var source = dragbox.column;
 	var surface = dragbox.surface;
@@ -2197,9 +2197,9 @@ nitobi.grid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 /**
  * Resizes the grid column to the specified width. 
  * @param {Number} width The width (in pixels) of the column.
- * @param {Number|nitobi.grid.Column} column The index of the column to resize or the Column object.
+ * @param {Number|nitobi.treegrid.Column} column The index of the column to resize or the Column object.
  */
-nitobi.grid.TreeGrid.prototype.columnResize= function(column, width) 
+nitobi.treegrid.TreeGrid.prototype.columnResize= function(column, width) 
 {
 	if (isNaN(width)) return;
 
@@ -2272,11 +2272,11 @@ nitobi.grid.TreeGrid.prototype.columnResize= function(column, width)
 
 	this.Selection.collapse(this.activeCell);
 	this.adjustHorizontalScrollBars()
-	var afterColumnResizeEventArgs = new nitobi.grid.OnAfterColumnResizeEventArgs(this, column);
+	var afterColumnResizeEventArgs = new nitobi.treegrid.OnAfterColumnResizeEventArgs(this, column);
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
-nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
+nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest)
 {
 	var srcIndex = source.column;
 	var destIndex = dest.column;
@@ -2304,7 +2304,7 @@ nitobi.grid.TreeGrid.prototype.moveColumns = function(source, dest)
 	this.generateCss();
 }
 
-nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
+nitobi.treegrid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
 {
 	var C = nitobi.html.Css;
 	var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
@@ -2324,7 +2324,7 @@ nitobi.grid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
 	return null;
 }
 
-nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()
+nitobi.treegrid.TreeGrid.prototype.resizeSurfaces = function()
 {
 	var maxWidth = 0;
 	var oldWidth = this.getViewableWidth();
@@ -2375,9 +2375,9 @@ nitobi.grid.TreeGrid.prototype.resizeSurfaces = function()
  * child object information.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeModel= function()
+nitobi.treegrid.TreeGrid.prototype.initializeModel= function()
 {
-	this.model = nitobi.xml.createXmlDoc(nitobi.xml.serialize(nitobi.grid.modelDoc));
+	this.model = nitobi.xml.createXmlDoc(nitobi.xml.serialize(nitobi.treegrid.modelDoc));
 	//this.model = nitobi.xml.parseHtml($ntb(this.uid));
 	//this.model = nitobi.xml.createXmlDoc(this.defaultDeclarationModel);
 	//this.model = nitobi.xml.createXmlDoc(nitobi.xml.serialize(this.defaultModel.selectSingleNode("//ntb:grid")));
@@ -2394,12 +2394,12 @@ nitobi.grid.TreeGrid.prototype.initializeModel= function()
 	}
 
 	// Set up column definitions - Do this in XSL
-	//var xDec = this.model.selectSingleNode("state/nitobi.grid.Columns");
+	//var xDec = this.model.selectSingleNode("state/nitobi.treegrid.Columns");
 	
 	var xDec = this.model.selectSingleNode("//ntb:columns");
 	if (xDec == null) 
 	{
-		//var xDec=this.model.createElement("nitobi.grid.Columns");
+		//var xDec=this.model.createElement("nitobi.treegrid.Columns");
 		var xDec = nitobi.xml.createElement(this.model, "columns");
 		this.model.selectSingleNode("//ntb:treegrid").appendChild(xDec);
 	}
@@ -2425,7 +2425,7 @@ nitobi.grid.TreeGrid.prototype.initializeModel= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearDefaultData= function(rows) {
+nitobi.treegrid.TreeGrid.prototype.clearDefaultData= function(rows) {
 	// Set up default rows - Do this in XSL
 	for (var i=0; i<rows;i++){
 		var e=this.model.createElement("e");
@@ -2437,7 +2437,7 @@ nitobi.grid.TreeGrid.prototype.clearDefaultData= function(rows) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.bind=function()
+nitobi.treegrid.TreeGrid.prototype.bind=function()
 {
 	//	bind() should do two things:
 	//	1) look at all the columns and get any data for external datasources before grid rendering takes place
@@ -2487,7 +2487,7 @@ nitobi.grid.TreeGrid.prototype.bind=function()
  * @see #getDataSource
  * @see nitobi.data.DataTable#setGetHandlerParameter
  */
-nitobi.grid.TreeGrid.prototype.dataBind = function()
+nitobi.treegrid.TreeGrid.prototype.dataBind = function()
 {
 	this.bind();
 }
@@ -2517,7 +2517,7 @@ nitobi.grid.TreeGrid.prototype.dataBind = function()
  * @see nitobi.data.DataTable#setGetHandlerParameter
  * @see #dataBind
  */
-nitobi.grid.TreeGrid.prototype.getDataSource=function(paramTableId)
+nitobi.treegrid.TreeGrid.prototype.getDataSource=function(paramTableId)
 {
 	var tableID = this.dataTableId || "_default";
 	if(paramTableId)
@@ -2548,7 +2548,7 @@ nitobi.grid.TreeGrid.prototype.getDataSource=function(paramTableId)
  * be null if the grid is not using local data.
  * @type XMLDocument
  */
-nitobi.grid.TreeGrid.prototype.getChangeLogXmlDoc=function(paramTableId)
+nitobi.treegrid.TreeGrid.prototype.getChangeLogXmlDoc=function(paramTableId)
 {
 	return this.getDataSource(paramTableId).getChangeLogXmlDoc();
 }
@@ -2558,7 +2558,7 @@ nitobi.grid.TreeGrid.prototype.getChangeLogXmlDoc=function(paramTableId)
  * @param {nitobi.data.GetCompleteEventArgs}
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getComplete=function(evtArgs) 
+nitobi.treegrid.TreeGrid.prototype.getComplete=function(evtArgs) 
 {
 	// This is ok here, but we should use the error handlers in table data source.
 	if(null == evtArgs.dataSource.xmlDoc)
@@ -2576,7 +2576,7 @@ nitobi.grid.TreeGrid.prototype.getComplete=function(evtArgs)
  * Fired when binding - to either a local or remote datasource - is complete. 
  * At this point the the data is rendered and the Grid is ready for use.
  */
-nitobi.grid.TreeGrid.prototype.bindComplete=function()
+nitobi.treegrid.TreeGrid.prototype.bindComplete=function()
 {
 	// If columns haven't been defined yet then define them
 	// This is the case where the columns are defined by the data
@@ -2598,7 +2598,7 @@ nitobi.grid.TreeGrid.prototype.bindComplete=function()
 /**
  * Keeps the Grid UI surfaces in sync with the data in the connected DataTable.
  */
-nitobi.grid.TreeGrid.prototype.syncWithData=function(eventArgs)
+nitobi.treegrid.TreeGrid.prototype.syncWithData=function(eventArgs)
 {
 	// Only if we are in the "Bound" state do we want to actually render changes to the data.
 	if (this.isBound())
@@ -2615,7 +2615,7 @@ nitobi.grid.TreeGrid.prototype.syncWithData=function(eventArgs)
  * @see #OnRowCountKnownEvent
  * @private
  */
-nitobi.grid.TreeGrid.prototype.finalizeRowCount= function(rows) 
+nitobi.treegrid.TreeGrid.prototype.finalizeRowCount= function(rows) 
 {
 	this.rowCountKnown=true;
 	this.setRowCount(rows);
@@ -2626,7 +2626,7 @@ nitobi.grid.TreeGrid.prototype.finalizeRowCount= function(rows)
  * @param {Number} pct The percentage that the vertical scroll should be set to.
  * @see #OnPastEndOfData
  */
-nitobi.grid.TreeGrid.prototype.adjustRowCount= function(pct) 
+nitobi.treegrid.TreeGrid.prototype.adjustRowCount= function(pct) 
 {
 //	alert("Past End-of-data "+ pct+" : "+this.rowCount)
 	this.scrollVertical(pct)
@@ -2637,10 +2637,10 @@ nitobi.grid.TreeGrid.prototype.adjustRowCount= function(pct)
  * Sets the number of rows in the Grid
  * @private
  */
-nitobi.grid.TreeGrid.prototype.setRowCount= function(rows) 
+nitobi.treegrid.TreeGrid.prototype.setRowCount= function(rows) 
 {
 	this.xSET("RowCount",arguments);
-	if (this.getPagingMode() == nitobi.grid.PAGINGMODE_STANDARD) 
+	if (this.getPagingMode() == nitobi.treegrid.PAGINGMODE_STANDARD) 
 	{
 		if (this.getDataMode() == nitobi.data.DATAMODE_LOCAL)
 			this.setDisplayedRowCount(this.getRowsPerPage());
@@ -2659,7 +2659,7 @@ nitobi.grid.TreeGrid.prototype.setRowCount= function(rows)
  * Returns the number of rows in the Grid.
  * @type Number
  */
-nitobi.grid.TreeGrid.prototype.getRowCount= function() 
+nitobi.treegrid.TreeGrid.prototype.getRowCount= function() 
 {
 	return this.rowCount
 }
@@ -2667,7 +2667,7 @@ nitobi.grid.TreeGrid.prototype.getRowCount= function()
  * Applies all measurements that were calculated in <code>measure()</code> and adjusts layout or re-renders things that need to be re-rendered.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.layout= function(columns) 
+nitobi.treegrid.TreeGrid.prototype.layout= function(columns) 
 {
 	if (this.prevHeight!=this.getHeight() || this.prevWidth!=this.getWidth()) {
 		this.prevHeight=this.getHeight();
@@ -2684,7 +2684,7 @@ nitobi.grid.TreeGrid.prototype.layout= function(columns)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.layoutFrame= function(columns) 
+nitobi.treegrid.TreeGrid.prototype.layoutFrame= function(columns) 
 {
 	if (!this.frameRendered) return;		//Exit if frameRendered is not true
 	if (!this.Scroller) return;				//Exit if Scroller not initialized
@@ -2772,7 +2772,7 @@ nitobi.grid.TreeGrid.prototype.layoutFrame= function(columns)
  * @type XMLElement
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumns = function(columns, isRootColumns) 
+nitobi.treegrid.TreeGrid.prototype.defineColumns = function(columns, isRootColumns) 
 {
 	isRootColumns = (isRootColumns == null?true:isRootColumns);
 	this.fire("BeforeColumnsDefined"); // Everything other than the frame should be cleared
@@ -2837,7 +2837,7 @@ nitobi.grid.TreeGrid.prototype.defineColumns = function(columns, isRootColumns)
  * @param {Element} columns
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsFromXml= function(columns, isRootColumns) 
+nitobi.treegrid.TreeGrid.prototype.defineColumnsFromXml= function(columns, isRootColumns) 
 {
 	if (columns == null || columns.childNodes.length == 0)
 	{
@@ -2848,7 +2848,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromXml= function(columns, isRootCol
 	// then convert them to new-style defs
 	if (columns.childNodes[0].nodeName == nitobi.xml.nsPrefix+'columndefinition')
 	{
-		var xslDoc = nitobi.xml.createXslDoc(nitobi.grid.declarationConverterXslProc.stylesheet);
+		var xslDoc = nitobi.xml.createXslDoc(nitobi.treegrid.declarationConverterXslProc.stylesheet);
 		columns = nitobi.xml.transformToXml(columns, xslDoc);
 	}
 
@@ -2953,7 +2953,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromXml= function(columns, isRootCol
 				}
 
 			
-				var dt = new nitobi.data.DataTable('local', this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
+				var dt = new nitobi.data.DataTable('local', this.getPagingMode() == nitobi.treegrid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
 				dt.initialize(datasourceId, gethandler, null);
 				dt.async = false;
 
@@ -3010,7 +3010,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromXml= function(columns, isRootCol
  * Updates objects that are affected by changes to column structure.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsFinalize = function()
+nitobi.treegrid.TreeGrid.prototype.defineColumnsFinalize = function()
 {
 	this.setColumnsDefined(true);
 	if (this.connected) {
@@ -3029,7 +3029,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFinalize = function()
  * or the getHandler property that are both defined elsewhere for the moment.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnDatasource = function(xColumnModel)
+nitobi.treegrid.TreeGrid.prototype.defineColumnDatasource = function(xColumnModel)
 {
 	var val = xColumnModel.getAttribute('Datasource');
 	if (val != null)
@@ -3058,7 +3058,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnDatasource = function(xColumnModel)
 		{
 			// it could be a JavaScript array datasource
 			// in this case loop through the array and create a datasource
-			var oDataTable = new nitobi.data.DataTable('unbound', this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
+			var oDataTable = new nitobi.data.DataTable('unbound', this.getPagingMode() == nitobi.treegrid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()}, this.isAutoKeyEnabled());
 			var sTableId = 'columnDatasource'+new Date().getTime();
 			oDataTable.initialize(sTableId);
 			xColumnModel.setAttribute('DatasourceId', sTableId);
@@ -3094,7 +3094,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnDatasource = function(xColumnModel)
  * @private
  */
 /*
-nitobi.grid.TreeGrid.prototype.defineColumnEditor = function(xColumnModel, xColumnDeclaration)
+nitobi.treegrid.TreeGrid.prototype.defineColumnEditor = function(xColumnModel, xColumnDeclaration)
 {
 	var len = xColumnDeclaration.childNodes.length; 
 	if (len > 0)
@@ -3156,7 +3156,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnEditor = function(xColumnModel, xColu
  * Defines the Grid columns from the information in a nitobi.data.DataTable. This can be used to infer the columns in a grid based on the columns that exist in the DataTable.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsFromData= function(datatable) 
+nitobi.treegrid.TreeGrid.prototype.defineColumnsFromData= function(datatable) 
 {
 	if (datatable == null)
 	{
@@ -3194,7 +3194,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromData= function(datatable)
  * Defines the Grid columns from a bar ("|") separated list of columns. The string value for each column is used for the label as well as the xdatafld binding property.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsFromString= function(columns) 
+nitobi.treegrid.TreeGrid.prototype.defineColumnsFromString= function(columns) 
 {
 	return this.defineColumnsFromArray(columns.split("|"));	
 }
@@ -3203,7 +3203,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromString= function(columns)
  * It will also accept structs with the same field names that are in the nitobi.components.grid.Column class such as name, label, width, columntype, editortype, mask, initial.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsFromArray= function(columns) 
+nitobi.treegrid.TreeGrid.prototype.defineColumnsFromArray= function(columns) 
 {
 	var cols = columns.length;
 	var colDefs = this.defineColumnsCollection(cols);
@@ -3250,12 +3250,12 @@ nitobi.grid.TreeGrid.prototype.defineColumnsFromArray= function(columns)
  * XPath query in the DataTable for the column with that name.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnBindings = function() 
+nitobi.treegrid.TreeGrid.prototype.defineColumnBindings = function() 
 {
 	//	If the columns are defined in the declaration we need to loop through and set
 	//	the mappings from friendly column names like "ProductName" to @a etc.
 	//	This can only be done once the data is ready
-	var xslt = nitobi.grid.rowXslProc.stylesheet;
+	var xslt = nitobi.treegrid.rowXslProc.stylesheet;
 	var cols = this.getColumnDefinitions();
 	for (var i=0; i<cols.length;i++) {
 		var e = cols[i];
@@ -3263,13 +3263,13 @@ nitobi.grid.TreeGrid.prototype.defineColumnBindings = function()
 		this.defineColumnBinding(e, xslt);
 		e.setAttribute("xi",i);
 	}
-	nitobi.grid.rowXslProc = nitobi.xml.createXslProcessor(xslt);
+	nitobi.treegrid.rowXslProc = nitobi.xml.createXslProcessor(xslt);
 }
 /**
  * Method to set any special values on column definition for data binding
  * @private
  */
-nitobi.grid.TreeGrid.prototype.defineColumnBinding = function(element, xslt)
+nitobi.treegrid.TreeGrid.prototype.defineColumnBinding = function(element, xslt)
 {
 	if (this.fieldMap == null)
 	{
@@ -3310,7 +3310,7 @@ nitobi.grid.TreeGrid.prototype.defineColumnBinding = function(element, xslt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.formatBinding = function(element, attName, xslt)
+nitobi.treegrid.TreeGrid.prototype.formatBinding = function(element, attName, xslt)
 {
 	var attValue = element.getAttribute(attName);
 	var attValueOrig = element.getAttribute(attName+"_orig");
@@ -3360,7 +3360,7 @@ nitobi.grid.TreeGrid.prototype.formatBinding = function(element, attName, xslt)
  * @private
  * @param {Number} cols The number of columns that are going to be defined.
  */
-nitobi.grid.TreeGrid.prototype.defineColumnsCollection= function(cols) 
+nitobi.treegrid.TreeGrid.prototype.defineColumnsCollection= function(cols) 
 {
 	// Get the existing columns collection
 	var xDec = this.model.selectSingleNode("//ntb:columns");
@@ -3386,13 +3386,13 @@ nitobi.grid.TreeGrid.prototype.defineColumnsCollection= function(cols)
  * Removes all the column definitions from the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.resetColumns=function() 
+nitobi.treegrid.TreeGrid.prototype.resetColumns=function() 
 {
 	// Delete existing cols
 	this.fire("BeforeClearColumns");
 	this.inferredColumns=true;
 	this.columnsDefined=false;
-	var Existing = this.model.selectSingleNode("/state/Defaults/nitobi.grid.Column");
+	var Existing = this.model.selectSingleNode("/state/Defaults/nitobi.treegrid.Column");
 
 	//Create columns based upon #of columns
 	var xDec = nitobi.xml.createElement(this.model, "columns");
@@ -3409,7 +3409,7 @@ nitobi.grid.TreeGrid.prototype.resetColumns=function()
  * If there are columns defined, renders the header of each column in the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.renderHeaders=function() 
+nitobi.treegrid.TreeGrid.prototype.renderHeaders=function() 
 {
 	// If there are no column definitions then dont even try and render the columns...
 	if (this.getColumnDefinitions().length > 0)
@@ -3422,9 +3422,9 @@ nitobi.grid.TreeGrid.prototype.renderHeaders=function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeSelection = function() 
+nitobi.treegrid.TreeGrid.prototype.initializeSelection = function() 
 {
-	var sel = new nitobi.grid.Selection(this, this.isDragFillEnabled());
+	var sel = new nitobi.treegrid.Selection(this, this.isDragFillEnabled());
 	sel.setRowHeight(this.getRowHeight());
 	sel.onAfterExpand.subscribe(this.afterExpandSelection, this);
 	sel.onBeforeExpand.subscribe(this.beforeExpandSelection, this);
@@ -3436,7 +3436,7 @@ nitobi.grid.TreeGrid.prototype.initializeSelection = function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.beforeExpandSelection = function(evt)
+nitobi.treegrid.TreeGrid.prototype.beforeExpandSelection = function(evt)
 {
 	this.setExpanding(true);
 	this.fire("BeforeDragFill", new nitobi.base.EventArgs(this, evt));
@@ -3445,7 +3445,7 @@ nitobi.grid.TreeGrid.prototype.beforeExpandSelection = function(evt)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.afterExpandSelection = function(evt)
+nitobi.treegrid.TreeGrid.prototype.afterExpandSelection = function(evt)
 {
 	// Get the selection start and end size ...
 	var sel = this.selection;
@@ -3587,7 +3587,7 @@ nitobi.grid.TreeGrid.prototype.afterExpandSelection = function(evt)
  * @type Number
  * @private
  */
-nitobi.grid.TreeGrid.prototype.calculateHeight = function(start, end) 
+nitobi.treegrid.TreeGrid.prototype.calculateHeight = function(start, end) 
 {
 	start = (start != null)?start:0;
 	var numRows = this.getDisplayedRowCount();
@@ -3595,7 +3595,7 @@ nitobi.grid.TreeGrid.prototype.calculateHeight = function(start, end)
 	return (end - start + 1) * this.getRowHeight();
 }
 
-nitobi.grid.TreeGrid.prototype.calculateHdrHeight = function()
+nitobi.treegrid.TreeGrid.prototype.calculateHdrHeight = function()
 {
 	return this.childHeaders * this.getHeaderHeight();	
 }
@@ -3608,7 +3608,7 @@ nitobi.grid.TreeGrid.prototype.calculateHdrHeight = function()
  * @type Number
  * @private
  */
-nitobi.grid.TreeGrid.prototype.calculateWidth= function(start, end) 
+nitobi.treegrid.TreeGrid.prototype.calculateWidth= function(start, end) 
 {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
@@ -3626,7 +3626,7 @@ nitobi.grid.TreeGrid.prototype.calculateWidth= function(start, end)
 /**
  * Resizes grid to size of container div
  */
-nitobi.grid.TreeGrid.prototype.maximize = function()
+nitobi.treegrid.TreeGrid.prototype.maximize = function()
 {
 	// TODO: this should probably be parentNode rather than offsetParent?
  	var x,y;
@@ -3644,7 +3644,7 @@ nitobi.grid.TreeGrid.prototype.maximize = function()
  * @param {XMLElement} column XML column node from declaration / state.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.editorDataReady= function(column)
+nitobi.treegrid.TreeGrid.prototype.editorDataReady= function(column)
 {
 	//	TODO: all of these sorts of things should be done through an EBA API that checks if the attribute exists first etc.
 	var displayFields = column.getAttribute('DisplayFields').split('|');
@@ -3724,10 +3724,10 @@ nitobi.grid.TreeGrid.prototype.editorDataReady= function(column)
  * @param {Number} nColumn The header number clicked on.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.headerClicked= function(nColumn, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.headerClicked= function(nColumn, surfacePath)
 {
 	var column = this.getColumnObject(nColumn, surfacePath);
-	var headerClickEventArgs = new nitobi.grid.OnHeaderClickEventArgs(this, column);
+	var headerClickEventArgs = new nitobi.treegrid.OnHeaderClickEventArgs(this, column);
 
 	// TODO: here is not actually a headerclick even on the Grid itself ...
 	if (!this.fire("HeaderClick", headerClickEventArgs) || !nitobi.event.evaluate(column.getOnHeaderClickEvent(), headerClickEventArgs)) return;
@@ -3740,7 +3740,7 @@ nitobi.grid.TreeGrid.prototype.headerClicked= function(nColumn, surfacePath)
  * to reduce the set of data rendered in the Grid. By default there are no filters applied.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.addFilter= function() 
+nitobi.treegrid.TreeGrid.prototype.addFilter= function() 
 {
 	this.dataTable.addFilter(arguments);
 }
@@ -3748,7 +3748,7 @@ nitobi.grid.TreeGrid.prototype.addFilter= function()
  * Clears exisitng filters on the grid data.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearFilter=function() 
+nitobi.treegrid.TreeGrid.prototype.clearFilter=function() 
 {
 	this.dataTable.clearFilter();
 }
@@ -3770,14 +3770,14 @@ nitobi.grid.TreeGrid.prototype.clearFilter=function()
  * @param {Number} sortCol The index of the column to sort on, starting at 0.
  * @param {String} sortDir The direction to sort the column by. Values are "Asc" and "Desc".
  */
-nitobi.grid.TreeGrid.prototype.sort = function(sortCol, sortDir, surfacePath) 
+nitobi.treegrid.TreeGrid.prototype.sort = function(sortCol, sortDir, surfacePath) 
 {
 	ntbAssert(typeof(sortCol)!="undefined","No column to sort.");
 
 	var headerColumn = this.getColumnObject(sortCol, surfacePath);
 	if (headerColumn == null || !headerColumn.isSortEnabled()) return;
 
-	var beforeSortEventArgs = new nitobi.grid.OnBeforeSortEventArgs(this, headerColumn);
+	var beforeSortEventArgs = new nitobi.treegrid.OnBeforeSortEventArgs(this, headerColumn);
 	if (!this.fire("BeforeSort", beforeSortEventArgs) || !nitobi.event.evaluate(headerColumn.getOnBeforeSortEvent(), beforeSortEventArgs)) return;
 
 	if (sortDir == null || typeof(sortDir) == "undefined")
@@ -3809,12 +3809,12 @@ nitobi.grid.TreeGrid.prototype.sort = function(sortCol, sortDir, surfacePath)
 
 /**
  * Event handler that is fired after the data in the Grid is sorted. Fires the <code>AfterSort</code> event.
- * @param {nitobi.grid.Column} headerColumn The column that was sorted.
+ * @param {nitobi.treegrid.Column} headerColumn The column that was sorted.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleAfterSort = function(headerColumn)
+nitobi.treegrid.TreeGrid.prototype.handleAfterSort = function(headerColumn)
 {
-	var afterSortEventArgs = new nitobi.grid.OnAfterSortEventArgs(this, headerColumn);
+	var afterSortEventArgs = new nitobi.treegrid.OnAfterSortEventArgs(this, headerColumn);
 	this.fire("AfterSort", afterSortEventArgs);
 	nitobi.event.evaluate(headerColumn.getOnAfterSortEvent(), afterSortEventArgs);
 }
@@ -3823,12 +3823,12 @@ nitobi.grid.TreeGrid.prototype.handleAfterSort = function(headerColumn)
  * @param {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleDblClick = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleDblClick = function(evt)
 {
 	// TODO: pass the cell that was clicked on ... 
 	var cell = this.activeCellObject;
 	var col = this.activeColumnObject;
-	var dblClickEventArgs = new nitobi.grid.OnCellDblClickEventArgs(this, cell);
+	var dblClickEventArgs = new nitobi.treegrid.OnCellDblClickEventArgs(this, cell);
 	return this.fire("CellDblClick", dblClickEventArgs) && nitobi.event.evaluate(col.getOnCellDblClickEvent(), dblClickEventArgs);
 }
 /**
@@ -3837,7 +3837,7 @@ nitobi.grid.TreeGrid.prototype.handleDblClick = function(evt)
  * to cause a re-GET of the data from the server. 
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearData = function()
+nitobi.treegrid.TreeGrid.prototype.clearData = function()
 {
 	if(this.getDataMode()!="local") 
 	{
@@ -3848,7 +3848,7 @@ nitobi.grid.TreeGrid.prototype.clearData = function()
  * Clears the sort CSS styling of the currently sorted column in the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearColumnHeaderSortOrder= function()
+nitobi.treegrid.TreeGrid.prototype.clearColumnHeaderSortOrder= function()
 {
 	// TODO: Moved to surface, do we need it here?
 	if (this.sortColumn) {
@@ -3864,13 +3864,13 @@ nitobi.grid.TreeGrid.prototype.clearColumnHeaderSortOrder= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeState= function() {
+nitobi.treegrid.TreeGrid.prototype.initializeState= function() {
 }
 
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.mapToHtml= function(oNode)
+nitobi.treegrid.TreeGrid.prototype.mapToHtml= function(oNode)
 {
 	// Put all DOM node reference mapping here (if possible)
 	if (oNode==null) {
@@ -3905,7 +3905,7 @@ nitobi.grid.TreeGrid.prototype.mapToHtml= function(oNode)
  * @see #setHeight
  * @private
  */
-nitobi.grid.TreeGrid.prototype.generateCss= function() 
+nitobi.treegrid.TreeGrid.prototype.generateCss= function() 
 {
 	this.generateFrameCss();
 //	this.generateColumnCss();
@@ -3914,7 +3914,7 @@ nitobi.grid.TreeGrid.prototype.generateCss= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.generateColumnCss= function() 
+nitobi.treegrid.TreeGrid.prototype.generateColumnCss= function() 
 {
 	this.generateCss(); // Remove this once the real generateColumnCss code has been written
 }
@@ -3922,7 +3922,7 @@ nitobi.grid.TreeGrid.prototype.generateColumnCss= function()
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.generateFrameCss= function()
+nitobi.treegrid.TreeGrid.prototype.generateFrameCss= function()
 {
 	// Simple caching of the Model XML so that we don't gen CSS too often
 	var oldModel = nitobi.xml.serialize(this.model);
@@ -3985,7 +3985,7 @@ nitobi.grid.TreeGrid.prototype.generateFrameCss= function()
 	// TODO: refactor this code.
 	// grabbed from grid 3.1 to make rowhover work ...
 	// TODO: Probably won't work in Tree Grid...
-	if (nitobi.grid.RowHoverColor == null)
+	if (nitobi.treegrid.RowHoverColor == null)
 	{
 		var style = nitobi.html.getClass('ntb-row-hover');
 		if (style!=null) {
@@ -3993,11 +3993,11 @@ nitobi.grid.TreeGrid.prototype.generateFrameCss= function()
 			if (bgColor.indexOf("rgb")>-1) {
 				bgColor=eval('nitobi.drawing.'+bgColor);
 			}
-			nitobi.grid.RowHoverColor = bgColor;
+			nitobi.treegrid.RowHoverColor = bgColor;
 		}
 	}
 
-	if (nitobi.grid.CellHoverColor == null)
+	if (nitobi.treegrid.CellHoverColor == null)
 	{
 		var style = nitobi.html.getClass('ntb-cell-hover');
 		if (style!=null) {
@@ -4005,12 +4005,12 @@ nitobi.grid.TreeGrid.prototype.generateFrameCss= function()
 			if (bgColor.indexOf("rgb")>-1) {
 				bgColor=eval('nitobi.drawing.'+bgColor);
 			}
-			nitobi.grid.CellHoverColor = bgColor;
+			nitobi.treegrid.CellHoverColor = bgColor;
 		}
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function() 
+nitobi.treegrid.TreeGrid.prototype.generateFrameCssSafari = function() 
 {
 	// TODO: This needs to be one way in all browsers. I think we can do the normal XSLT way in Safari.
 	var ss = document.styleSheets[0];
@@ -4119,7 +4119,7 @@ nitobi.grid.TreeGrid.prototype.generateFrameCssSafari = function()
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.calculateColumnDepth = function(colset, curDepth){
+nitobi.treegrid.TreeGrid.prototype.calculateColumnDepth = function(colset, curDepth){
 	var id = colset.getAttribute("id");
 	if (id == this.getRootColumns()) {
 		return curDepth;
@@ -4132,7 +4132,7 @@ nitobi.grid.TreeGrid.prototype.calculateColumnDepth = function(colset, curDepth)
 /**
  * This is used to clear the data from the component as well as other visual artifacts such as the selection boxes. This is primarily for use by component developers.
  */
-nitobi.grid.TreeGrid.prototype.clearSurfaces= function() {
+nitobi.treegrid.TreeGrid.prototype.clearSurfaces= function() {
 	// Clearing the surface is called from insert, delete, sort, refresh.
 	this.selection.clearBoxes();
 	this.Scroller.clearSurface();
@@ -4144,7 +4144,7 @@ nitobi.grid.TreeGrid.prototype.clearSurfaces= function() {
  * This is used to clear the headers from the component and is called prior to rendering the columns. This is primarily for use by component developers.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clearHeader= function() {
+nitobi.treegrid.TreeGrid.prototype.clearHeader= function() {
 	this.Scroller.clearSurface(false,true);
 }
 
@@ -4154,7 +4154,7 @@ nitobi.grid.TreeGrid.prototype.clearHeader= function() {
  * The frame must be rendered before any columns or data can be rendered.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.renderFrame= function()
+nitobi.treegrid.TreeGrid.prototype.renderFrame= function()
 {
 	var browser = "IE";
 	if (nitobi.browser.MOZ)
@@ -4177,11 +4177,11 @@ nitobi.grid.TreeGrid.prototype.renderFrame= function()
 
 /**
  * Renders the Grid's root surface (i.e. the html container that holds the viewports).
- * The Grid's frame must be rendered first {@see nitobi.grid.Grid.renderFrame}
+ * The Grid's frame must be rendered first {@see nitobi.treegrid.Grid.renderFrame}
  * and the Grid's scroller must already be instantiated.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.renderSurface = function()
+nitobi.treegrid.TreeGrid.prototype.renderSurface = function()
 {
 	if (!this.Scroller)
 	{
@@ -4196,7 +4196,7 @@ nitobi.grid.TreeGrid.prototype.renderSurface = function()
  * Renders any frozen top rows along with the column headers.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.renderHeader= function() {
+nitobi.treegrid.TreeGrid.prototype.renderHeader= function() {
 	
 	// Top Left Corner
 	var startRow = 0;
@@ -4226,7 +4226,7 @@ nitobi.grid.TreeGrid.prototype.renderHeader= function() {
  * Clears the cacheMap and requestCache of the middle left and middle center Viewports of the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.renderMiddle= function()
+nitobi.treegrid.TreeGrid.prototype.renderMiddle= function()
 {
 	//	The cacheMaps should be flushed here to be ready for rendering
 	this.Scroller.view.midleft.flushCache();
@@ -4241,14 +4241,14 @@ nitobi.grid.TreeGrid.prototype.renderMiddle= function()
  * changes made by the user will be deleted. Call save first if you don't 
  * want these changes to be lost.
  */
-nitobi.grid.TreeGrid.prototype.refresh= function()
+nitobi.treegrid.TreeGrid.prototype.refresh= function()
 {
-	var eventArgs = null;//new nitobi.grid.EventArgs(this);
+	var eventArgs = null;//new nitobi.treegrid.EventArgs(this);
 	if (!this.fire('BeforeRefresh', eventArgs)) return;
 
 	ntbAssert(this.datatable != null,'The Grid must be conntected to a DataTable to call refresh.','',EBA_THROW);
 
-	var rows = (this.getPagingMode() == nitobi.grid.PAGINGMODE_STANDARD?this.getRowsPerPage():this.scroller.surface.rows)
+	var rows = (this.getPagingMode() == nitobi.treegrid.PAGINGMODE_STANDARD?this.getRowsPerPage():this.scroller.surface.rows)
 	this.setRowCount(rows);
 	this.scroller.surface.displayedRowCount = rows;
 	this.scroller.surface.rows = rows;
@@ -4264,9 +4264,9 @@ nitobi.grid.TreeGrid.prototype.refresh= function()
  * complete. Fires the <code>AfterRefresh</code> event
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleAfterRefresh = function()
+nitobi.treegrid.TreeGrid.prototype.handleAfterRefresh = function()
 {
-	var eventArgs = null;//new nitobi.grid.EventArgs(this);
+	var eventArgs = null;//new nitobi.treegrid.EventArgs(this);
 	this.fire("AfterRefresh", eventArgs);
 }
 
@@ -4274,7 +4274,7 @@ nitobi.grid.TreeGrid.prototype.handleAfterRefresh = function()
  * Clears all data and the surfaces.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.clear = function()
+nitobi.treegrid.TreeGrid.prototype.clear = function()
 {
 	this.selectedRows = [];
 	this.clearData();
@@ -4292,7 +4292,7 @@ nitobi.grid.TreeGrid.prototype.clear = function()
  * occured on.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleContextMenu= function(evt, obj)
+nitobi.treegrid.TreeGrid.prototype.handleContextMenu= function(evt, obj)
 {
 	var contextMenuFunc = this.getOnContextMenuEvent();
 	if (contextMenuFunc == null) {
@@ -4313,7 +4313,7 @@ nitobi.grid.TreeGrid.prototype.handleContextMenu= function(evt, obj)
  * @para {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleKeyPress = function(evt) {
+nitobi.treegrid.TreeGrid.prototype.handleKeyPress = function(evt) {
 	if (this.activeCell == null)
 		return;
 
@@ -4332,7 +4332,7 @@ nitobi.grid.TreeGrid.prototype.handleKeyPress = function(evt) {
  * @para {Event} evt The Event object.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleKeyUp = function(evt) {
+nitobi.treegrid.TreeGrid.prototype.handleKeyUp = function(evt) {
 	if (this.activeCell == null)
 		return;
 
@@ -4350,7 +4350,7 @@ nitobi.grid.TreeGrid.prototype.handleKeyUp = function(evt) {
  * occured on.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleKey = function(evt, obj)
+nitobi.treegrid.TreeGrid.prototype.handleKey = function(evt, obj)
 {
 	if (this.activeCell != null) {
 		var col = this.activeColumnObject;
@@ -4553,9 +4553,9 @@ nitobi.grid.TreeGrid.prototype.handleKey = function(evt, obj)
  * @param {Number} y Relative y offset to increase the selection box size by.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.reselect= function(x,y)
+nitobi.treegrid.TreeGrid.prototype.reselect= function(x,y)
 {
-	var C = nitobi.grid.Cell;
+	var C = nitobi.treegrid.Cell;
 	var S = this.selection;
 	var row = C.getRowNumber(S.endCell) + y;
 	var column = C.getColumnNumber(S.endCell) + x
@@ -4581,7 +4581,7 @@ nitobi.grid.TreeGrid.prototype.reselect= function(x,y)
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.pageSelect= function(dir)
+nitobi.treegrid.TreeGrid.prototype.pageSelect= function(dir)
 {
 	// TODO: This is only for live scrolling grid ... refactor pls. it is called from handlekey
 }
@@ -4589,10 +4589,10 @@ nitobi.grid.TreeGrid.prototype.pageSelect= function(dir)
 /**
  * Selects from the current active cell up to the first row.
  */
-nitobi.grid.TreeGrid.prototype.selectHome= function()
+nitobi.treegrid.TreeGrid.prototype.selectHome= function()
 {
 	var S = this.selection;
-	var row = nitobi.grid.Cell.getRowNumber(S.endCell);
+	var row = nitobi.treegrid.Cell.getRowNumber(S.endCell);
 	this.reselect(0, -row);
 }
 
@@ -4616,7 +4616,7 @@ nitobi.grid.TreeGrid.prototype.selectHome= function()
  * @see #OnBeforeCellEditEvent
  * @see #setPosition
  */
-nitobi.grid.TreeGrid.prototype.edit= function(evt)
+nitobi.treegrid.TreeGrid.prototype.edit= function(evt)
 {
 	if (this.activeCell == null)
 		return;
@@ -4629,7 +4629,7 @@ nitobi.grid.TreeGrid.prototype.edit= function(evt)
 		return;
 	}
 
-	var beforeEditEventArgs = new nitobi.grid.OnBeforeCellEditEventArgs(this, cell);
+	var beforeEditEventArgs = new nitobi.treegrid.OnBeforeCellEditEventArgs(this, cell);
 	if (!this.fire("BeforeCellEdit", beforeEditEventArgs) || !nitobi.event.evaluate(col.getOnBeforeCellEditEvent(), beforeEditEventArgs)) return;
 
 	var keyVal = null;
@@ -4700,7 +4700,7 @@ nitobi.grid.TreeGrid.prototype.edit= function(evt)
  * @param {nitobi.components.grid.EditCompleteEventArgs} editCompleteEventArgs
  * @see #OnCellValidateEvent
  */
-nitobi.grid.TreeGrid.prototype.editComplete= function(editCompleteEventArgs) {
+nitobi.treegrid.TreeGrid.prototype.editComplete= function(editCompleteEventArgs) {
 	//	update the value in the grid
 	//	update the value in the datasource 
 	var cell=editCompleteEventArgs.cell;
@@ -4708,7 +4708,7 @@ nitobi.grid.TreeGrid.prototype.editComplete= function(editCompleteEventArgs) {
 	var newValue = editCompleteEventArgs.databaseValue;
 	var newDisplay = editCompleteEventArgs.displayValue;
 
-	var validateEventArgs = new nitobi.grid.OnCellValidateEventArgs(this, cell, newValue, cell.getValue());
+	var validateEventArgs = new nitobi.treegrid.OnCellValidateEventArgs(this, cell, newValue, cell.getValue());
 
 	// CellValidate can be on a column and a grid level ...
 	if (!this.fire("CellValidate", validateEventArgs) || !nitobi.event.evaluate(column.getOnCellValidateEvent(), validateEventArgs))
@@ -4727,7 +4727,7 @@ nitobi.grid.TreeGrid.prototype.editComplete= function(editCompleteEventArgs) {
 	this.setEditMode(false);
 
 	// TODO: This will not be fired if the validate does not return true - is this correct???
-	var afterEditEventArgs = new nitobi.grid.OnAfterCellEditEventArgs(this, cell);
+	var afterEditEventArgs = new nitobi.treegrid.OnAfterCellEditEventArgs(this, cell);
 	this.fire("AfterCellEdit", afterEditEventArgs);
 	nitobi.event.evaluate(column.getOnAfterCellEditEvent(), afterEditEventArgs);
 
@@ -4742,7 +4742,7 @@ nitobi.grid.TreeGrid.prototype.editComplete= function(editCompleteEventArgs) {
  * This is a macro function for anywhere that autosave is used. Insert, delete and edit all should use this.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.autoSave = function()
+nitobi.treegrid.TreeGrid.prototype.autoSave = function()
 {
 	if (this.isAutoSaveEnabled())
 	{
@@ -4769,7 +4769,7 @@ nitobi.grid.TreeGrid.prototype.autoSave = function()
  * @param {Number} row The row number of the cell to activate.
  * @param {Number} column The column number of the cell to activate.
  */
-nitobi.grid.TreeGrid.prototype.selectCellByCoords= function(row, column, surfacePath) 
+nitobi.treegrid.TreeGrid.prototype.selectCellByCoords= function(row, column, surfacePath) 
 {
 	surfacePath = surfacePath || 0;
 	this.setPosition(row,column, surfacePath);
@@ -4781,7 +4781,7 @@ nitobi.grid.TreeGrid.prototype.selectCellByCoords= function(row, column, surface
  * @param {Number} row The row number of the cell to activate.
  * @param {Number} column The column number of the cell to activate.
  */
-nitobi.grid.TreeGrid.prototype.setPosition= function(row,column,surfacePath)
+nitobi.treegrid.TreeGrid.prototype.setPosition= function(row,column,surfacePath)
 {
 	surfacePath = surfacePath || 0;
 	if (row >= 0 && column >= 0)
@@ -4817,7 +4817,7 @@ nitobi.grid.TreeGrid.prototype.setPosition= function(row,column,surfacePath)
  * @see nitobi.data.DataTable#setSaveHandlerParameter
  * @see #getDataSource
  */
-nitobi.grid.TreeGrid.prototype.save = function()
+nitobi.treegrid.TreeGrid.prototype.save = function()
 {
 	// Debated on whether to put his in the table.save. Decided that save 
 	// really must mean SAVE, and that this save will only save if required. JG
@@ -4846,7 +4846,7 @@ nitobi.grid.TreeGrid.prototype.save = function()
  * @param {nitobi.data.OnSaveCompleteEventArgs} eventArgs
  * @private
  */
-nitobi.grid.TreeGrid.prototype.saveCompleteHandler= function(eventArgs)
+nitobi.treegrid.TreeGrid.prototype.saveCompleteHandler= function(eventArgs)
 {
 	if (this.getDataSource().getHandlerError())
 	{
@@ -4857,9 +4857,9 @@ nitobi.grid.TreeGrid.prototype.saveCompleteHandler= function(eventArgs)
 
 /**
  * Sets the focus of the web page to the component. OnFocusEvent is fired.
- * @see nitobi.grid.Grid#OnFocusEvent
+ * @see nitobi.treegrid.Grid#OnFocusEvent
  */
-nitobi.grid.TreeGrid.prototype.focus= function()
+nitobi.treegrid.TreeGrid.prototype.focus= function()
 {
 	//	This refocuses the grid after an edit takes place
 	try {
@@ -4883,9 +4883,9 @@ nitobi.grid.TreeGrid.prototype.focus= function()
 
 /**
  * Blurs the Grid removing any selection or row highlights.
- * @see nitobi.grid.Grid#OnBlurEvent
+ * @see nitobi.treegrid.Grid#OnBlurEvent
  */
-nitobi.grid.TreeGrid.prototype.blur=function()
+nitobi.treegrid.TreeGrid.prototype.blur=function()
 {
 	//	This clears the grid selection and row highlights
 
@@ -4908,7 +4908,7 @@ nitobi.grid.TreeGrid.prototype.blur=function()
  * @deprecated
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getRendererForColumn= function(col) {
+nitobi.treegrid.TreeGrid.prototype.getRendererForColumn= function(col) {
 	var columnCount = this.getColumnCount();
 	if (col >= columnCount)
 		col = columnCount - 1;
@@ -4922,14 +4922,14 @@ nitobi.grid.TreeGrid.prototype.getRendererForColumn= function(col) {
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getColumnOuterTemplate= function(col) {
+nitobi.treegrid.TreeGrid.prototype.getColumnOuterTemplate= function(col) {
 	return this.getRendererForColumn(col).xmlTemplate.selectSingleNode("//*[@match='ntb:e']/div/div["+col+"]");
 }
 
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.getColumnInnerTemplate= function(col) {
+nitobi.treegrid.TreeGrid.prototype.getColumnInnerTemplate= function(col) {
 	return this.getColumnOuterXslTemplate(col).selectSingleNode("*[2]");
 }
 
@@ -4938,7 +4938,7 @@ nitobi.grid.TreeGrid.prototype.getColumnInnerTemplate= function(col) {
  * DataTable are made and is called from the bind() method if required.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.makeXSL= function() {
+nitobi.treegrid.TreeGrid.prototype.makeXSL= function() {
 
 	// TODO: Do we need this?  Isn't called from anywhere
 	//	makeXSL impacts the number of columns that are generated for the rowXsl ...
@@ -4961,7 +4961,7 @@ nitobi.grid.TreeGrid.prototype.makeXSL= function() {
 
 	// Take anything that is in the column definitions and encode the & character and double encode any
 	// not sure what those # signs are for but probably something in nitobi.xml.parseHtml
-//	var sXml = nitobi.xml.serialize(this.model.selectSingleNode('state/nitobi.grid.Columns')).replace(/\#\&lt\;\#/g,"#<#").replace(/\#\&gt\;\#/g,"#>#").replace(/\#\&eq\;\#/g,"#=#").replace(/\#\&quot\;\#/g,"#\"#").replace(/\&/g,"&amp;").replace(/\#<\#/g,"&lt;").replace(/\#>\#/g,"&gt;").replace(/\#=\#/g,"&eq;").replace(/\#\"\#/g,"&quot;");
+//	var sXml = nitobi.xml.serialize(this.model.selectSingleNode('state/nitobi.treegrid.Columns')).replace(/\#\&lt\;\#/g,"#<#").replace(/\#\&gt\;\#/g,"#>#").replace(/\#\&eq\;\#/g,"#=#").replace(/\#\&quot\;\#/g,"#\"#").replace(/\&/g,"&amp;").replace(/\#<\#/g,"&lt;").replace(/\#>\#/g,"&gt;").replace(/\#=\#/g,"&eq;").replace(/\#\"\#/g,"&quot;");
 
 	// Need to make sure that we don't accidentally have double escaped XSLT statemtents ...
 //	sXml = sXml.replace(/(\&amp;lt;xsl\:)(.*?)(\/&amp;gt;)/g, function() {return "&lt;xsl:"+arguments[2].replace(/\&amp;/g, "&")+"/&gt;";});
@@ -4970,7 +4970,7 @@ nitobi.grid.TreeGrid.prototype.makeXSL= function() {
 //	{
 //		this.oldColDefs = sXml;
 
-		var colDefs = this.model.selectSingleNode('state/nitobi.grid.Columns');
+		var colDefs = this.model.selectSingleNode('state/nitobi.treegrid.Columns');
 		this.scroller.surface.view.topleft.rowRenderer.generateXslTemplate(colDefs, null, startColumn, columns, this.isColumnIndicatorsEnabled(), this.isRowIndicatorsEnabled(),rh);
 		this.scroller.surface.view.topleft.rowRenderer.dataTableId = dataTableId;
 
@@ -4997,7 +4997,7 @@ nitobi.grid.TreeGrid.prototype.makeXSL= function() {
  * in that refresh will re-retrieve the data from the server as well as 
  * re-render the data.
  */
-nitobi.grid.TreeGrid.prototype.render = function()
+nitobi.treegrid.TreeGrid.prototype.render = function()
 {
 	// This will clear the surfaces and remove any selections ... this might have to be done
 	this.generateCss();
@@ -5007,21 +5007,21 @@ nitobi.grid.TreeGrid.prototype.render = function()
 /**
  * @ignore
  */
-nitobi.grid.TreeGrid.prototype.refilter = nitobi.grid.TreeGrid.prototype.render; 
+nitobi.treegrid.TreeGrid.prototype.refilter = nitobi.treegrid.TreeGrid.prototype.render; 
 
 /**
  * Returns an XmlElementList containing the definitions of the columns in the Grid. The column definitions are the XML serialization of the nitobi.components.grid.Column objects.
  * @private
  * @type XMLNodeList
  */
-nitobi.grid.TreeGrid.prototype.getColumnDefinitions= function()
+nitobi.treegrid.TreeGrid.prototype.getColumnDefinitions= function()
 {
 	var columnsElement = this.getRootColumnsElement();
 	if (columnsElement)
 		return columnsElement.childNodes;
 	//return this.model.selectNodes("//ntb:columns/*");
 	//return this.scroller.surface.colunsNode.selectNodes("//ntb:column").length;
-	//return this.model.selectNodes("state/nitobi.grid.Columns/*");
+	//return this.model.selectNodes("state/nitobi.treegrid.Columns/*");
 }
 
 /**
@@ -5029,16 +5029,16 @@ nitobi.grid.TreeGrid.prototype.getColumnDefinitions= function()
  * @private
  * @type XMLNodeList
  */
-nitobi.grid.TreeGrid.prototype.getVisibleColumnDefinitions= function()
+nitobi.treegrid.TreeGrid.prototype.getVisibleColumnDefinitions= function()
 {
-	return this.model.selectNodes("state/nitobi.grid.Columns/*[@Visible='1']");
+	return this.model.selectNodes("state/nitobi.treegrid.Columns/*[@Visible='1']");
 }
 
 /**
  * Initializes the Model from the values in the API XML.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeModelFromDeclaration = function()
+nitobi.treegrid.TreeGrid.prototype.initializeModelFromDeclaration = function()
 {
 	// Iterate over the attributes on the declaration and call each attributes setter
 	var attributes = this.Declaration.grid.documentElement.attributes;
@@ -5059,15 +5059,15 @@ nitobi.grid.TreeGrid.prototype.initializeModelFromDeclaration = function()
  * Initializes the model (i.e. the declaration) from the default values in modelXml
  * @private
  */
-nitobi.grid.TreeGrid.prototype.initializeModelDefaults = function()
+nitobi.treegrid.TreeGrid.prototype.initializeModelDefaults = function()
 {
 	/**
 	 * We use this.defaultModel in the code generated by declarationFromModelXslProc
 	 * @private
 	 */
-	/*this.defaultModel = nitobi.xml.createXmlDoc(nitobi.xml.serialize(nitobi.grid.modelDoc));
-	var gridModel = this.defaultModel.selectSingleNode("//nitobi.grid.Grid");
-	this.declarationFromModelXslProc = nitobi.xml.createXslProcessor(nitobi.grid.declarationFromModelXslProc.stylesheet);
+	/*this.defaultModel = nitobi.xml.createXmlDoc(nitobi.xml.serialize(nitobi.treegrid.modelDoc));
+	var gridModel = this.defaultModel.selectSingleNode("//nitobi.treegrid.Grid");
+	this.declarationFromModelXslProc = nitobi.xml.createXslProcessor(nitobi.treegrid.declarationFromModelXslProc.stylesheet);
 	eval(nitobi.xml.transformToString(this.Interface, this.declarationFromModelXslProc));
 	
 	this.defaultColumnDef = this.defaultModel.selectSingleNode("//Defaults/ntb:textcolumn");*/
@@ -5086,7 +5086,7 @@ nitobi.grid.TreeGrid.prototype.initializeModelDefaults = function()
  * Sets the default values for a column declaration in the model.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.setModelValues = function(xModelNode, xDeclarationNode)
+nitobi.treegrid.TreeGrid.prototype.setModelValues = function(xModelNode, xDeclarationNode)
 {
 	// For the declaration node iterate over the attributes and try to find corresponding 
 	// attributes in the xColumnProps hash for the column, the specific column type, and the editor.
@@ -5131,7 +5131,7 @@ nitobi.grid.TreeGrid.prototype.setModelValues = function(xModelNode, xDeclaratio
  * @private
  * @type String
  */
-nitobi.grid.TreeGrid.prototype.getNewRecordKey= function()
+nitobi.treegrid.TreeGrid.prototype.getNewRecordKey= function()
 {
 	var today;
 	var key;
@@ -5150,12 +5150,12 @@ nitobi.grid.TreeGrid.prototype.getNewRecordKey= function()
 /**
  * Inserts a blank row into the Grid after the row to which the active cell belongs.
  */
-nitobi.grid.TreeGrid.prototype.insertAfterCurrentRow= function()
+nitobi.treegrid.TreeGrid.prototype.insertAfterCurrentRow= function()
 {
 	if (this.activeCell)
 	{
-		var rowNumber = nitobi.grid.Cell.getRowNumber(this.activeCell);
-		this.insertRow(rowNumber+1, nitobi.grid.Cell.getSurfacePath(this.activeCell));
+		var rowNumber = nitobi.treegrid.Cell.getRowNumber(this.activeCell);
+		this.insertRow(rowNumber+1, nitobi.treegrid.Cell.getSurfacePath(this.activeCell));
 	}
 	else
 	{
@@ -5175,7 +5175,7 @@ nitobi.grid.TreeGrid.prototype.insertAfterCurrentRow= function()
  * </P>
  * @param {Number} rowIndex A row will be inserted after the row at this index
  */
-nitobi.grid.TreeGrid.prototype.insertRow= function(rowIndex, surfacePath) 
+nitobi.treegrid.TreeGrid.prototype.insertRow= function(rowIndex, surfacePath) 
 {
 	var surface = this.Scroller.getSurface(surfacePath);
 	// In case no cell object is selected, set the current surface to the root surface.
@@ -5190,7 +5190,7 @@ nitobi.grid.TreeGrid.prototype.insertRow= function(rowIndex, surfacePath)
 		xi--;
 	}
 
-	var eventArgs = new nitobi.grid.OnBeforeRowInsertEventArgs(this,this.getRowObject(xi));
+	var eventArgs = new nitobi.treegrid.OnBeforeRowInsertEventArgs(this,this.getRowObject(xi));
 	if(!this.isRowInsertEnabled() || !this.fire("BeforeRowInsert", eventArgs))
 	{
 		return;
@@ -5210,20 +5210,20 @@ nitobi.grid.TreeGrid.prototype.insertRow= function(rowIndex, surfacePath)
  * @param {Number} xi The index of the inserted row.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleAfterRowInsert = function(xi)
+nitobi.treegrid.TreeGrid.prototype.handleAfterRowInsert = function(xi)
 {
-	this.fire("AfterRowInsert", new nitobi.grid.OnAfterRowInsertEventArgs(this, this.getRowObject(xi)));
+	this.fire("AfterRowInsert", new nitobi.treegrid.OnAfterRowInsertEventArgs(this, this.getRowObject(xi)));
 	this.setActiveCell(this.getCellElement(xi, 0));
 }
 /**
  * Deletes the row to which the currently active cell belongs.
  * @see #deleteRow
  */
-nitobi.grid.TreeGrid.prototype.deleteCurrentRow= function()
+nitobi.treegrid.TreeGrid.prototype.deleteCurrentRow= function()
 {
 	if (this.activeCell)
 	{
-		this.deleteRow(nitobi.grid.Cell.getRowNumber(this.activeCell), nitobi.grid.Cell.getSurfacePath(this.activeCell));
+		this.deleteRow(nitobi.treegrid.Cell.getRowNumber(this.activeCell), nitobi.treegrid.Cell.getSurfacePath(this.activeCell));
 	}
 	else
 	{
@@ -5252,13 +5252,13 @@ nitobi.grid.TreeGrid.prototype.deleteCurrentRow= function()
  * @see #OnBeforeDeleteEvent
  * @see #OnAfterDeleteEvent
  */
-nitobi.grid.TreeGrid.prototype.deleteRow= function(index, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.deleteRow= function(index, surfacePath)
 {
 	// do something for when onbeforedelete is not defined
 	//HACK fix this somehow
 	ntbAssert(index>=0,"Must specify a row to delete.");
 
-	var eventArgs = new nitobi.grid.OnBeforeRowDeleteEventArgs(this,this.getRowObject(index));
+	var eventArgs = new nitobi.treegrid.OnBeforeRowDeleteEventArgs(this,this.getRowObject(index));
 	if (!this.isRowDeleteEnabled() || !this.fire("BeforeRowDelete",eventArgs)) 
 	{
 		return;
@@ -5294,18 +5294,18 @@ nitobi.grid.TreeGrid.prototype.deleteRow= function(index, surfacePath)
  * @param {Number} xi The index of the deleted row.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleAfterRowDelete = function(xi, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.handleAfterRowDelete = function(xi, surfacePath)
 {
 	
 	surfacePath = surfacePath || "0";
-	this.fire("AfterRowDelete", new nitobi.grid.OnBeforeRowDeleteEventArgs(this,this.getRowObject(xi)));
+	this.fire("AfterRowDelete", new nitobi.treegrid.OnBeforeRowDeleteEventArgs(this,this.getRowObject(xi)));
 	this.setActiveCell(this.getCellElement(xi, 0, surfacePath));
 }
 
 /**
  * @private
  */
-nitobi.grid.TreeGrid.prototype.page= function(dir)
+nitobi.treegrid.TreeGrid.prototype.page= function(dir)
 {
 }
 
@@ -5325,7 +5325,7 @@ nitobi.grid.TreeGrid.prototype.page= function(dir)
  * @param {Number} h The number of cells to move the active cell by in the horizontal direction.
  * @param {Number} v The number of cells to move the active cell by in the vertical direction.
  */
-nitobi.grid.TreeGrid.prototype.move = function(h,v)
+nitobi.treegrid.TreeGrid.prototype.move = function(h,v)
 {
 	if (this.activeCell != null) {
 		// Get reference to cellObject
@@ -5339,8 +5339,8 @@ nitobi.grid.TreeGrid.prototype.move = function(h,v)
 		// Get the activeCell object
 		// add the h and v to the coords.
 		// select the new cell.
-		var surfacePath = nitobi.grid.Cell.getSurfacePath(this.activeCell);
-		var cell = nitobi.grid.Cell
+		var surfacePath = nitobi.treegrid.Cell.getSurfacePath(this.activeCell);
+		var cell = nitobi.treegrid.Cell
 		var colNumber = cell.getColumnNumber(this.activeCell);
 		var rowNumber = cell.getRowNumber(this.activeCell);
 		
@@ -5409,7 +5409,7 @@ nitobi.grid.TreeGrid.prototype.move = function(h,v)
 		this.selectCellByCoords(targetRow, targetCol, targetSurface);
 		
 		// Check if we have hit the start or end of the row.
-		var evtArgs = new nitobi.grid.CellEventArgs(this, this.activeCell);
+		var evtArgs = new nitobi.treegrid.CellEventArgs(this, this.activeCell);
 		if (colNumber + 1 == this.getVisibleColumnDefinitions().length && h == 1) {
 			this.fire("HitRowEnd", evtArgs);
 		} else if (colNumber == 0 && h == -1) {
@@ -5423,7 +5423,7 @@ nitobi.grid.TreeGrid.prototype.move = function(h,v)
  * Called from the selection mouseup event handler. This gets fired when the user clicks on a grid cell and
  * the selection is moved under the mouse before the mouseup event fires - which occurs on the selection.
  */
-nitobi.grid.TreeGrid.prototype.handleSelectionMouseUp = function(evt)
+nitobi.treegrid.TreeGrid.prototype.handleSelectionMouseUp = function(evt)
 {
 	// If the mouseup was fired during a grid cell click event then ensure the cell is in view
 	if (this.isCellClicked())
@@ -5441,7 +5441,7 @@ nitobi.grid.TreeGrid.prototype.handleSelectionMouseUp = function(evt)
  * Loads the next page of data.  Only available if the Grid is in standard
  * paging mode.
  */
-nitobi.grid.TreeGrid.prototype.loadNextDataPage= function()
+nitobi.treegrid.TreeGrid.prototype.loadNextDataPage= function()
 {
 	// TODO: refactor this into the proper grid class
 	//	TODO: scroll back to the top of the grid if we are in standard paging mode
@@ -5452,7 +5452,7 @@ nitobi.grid.TreeGrid.prototype.loadNextDataPage= function()
  * Loads the previous page of data.  Only available if the Grid is in standard
  * paging mode.
  */
-nitobi.grid.TreeGrid.prototype.loadPreviousDataPage= function()
+nitobi.treegrid.TreeGrid.prototype.loadPreviousDataPage= function()
 {
 	this.loadDataPage(this.getCurrentPageIndex()-1);
 }
@@ -5461,7 +5461,7 @@ nitobi.grid.TreeGrid.prototype.loadPreviousDataPage= function()
  * @deprecated
  * @private
  */
-nitobi.grid.TreeGrid.prototype.GetPage= function(functionReplacedByLowercasegetPage)
+nitobi.treegrid.TreeGrid.prototype.GetPage= function(functionReplacedByLowercasegetPage)
 {
 	ebaErrorReport("GetPage is deprecated please use loadDataPage instead","",EBA_DEBUG);
 	this.loadDataPage(functionReplacedByLowercasegetPage);
@@ -5488,19 +5488,19 @@ nitobi.grid.TreeGrid.prototype.GetPage= function(functionReplacedByLowercasegetP
  * </div>
  * @param {Number} pageNumber The index of the data page to load.  (Zero indexed)
  */
-nitobi.grid.TreeGrid.prototype.loadDataPage= function(newPageNumber) {}
+nitobi.treegrid.TreeGrid.prototype.loadDataPage= function(newPageNumber) {}
 
 /**
  * Returns the index of the currently selected row or the row to which the active cell currently belongs.
  * @param {Boolean} rel Specifies whether to compensate for frozen columns.
  * @type Number
  */
-nitobi.grid.TreeGrid.prototype.getSelectedRow= function(rel) {
+nitobi.treegrid.TreeGrid.prototype.getSelectedRow= function(rel) {
 	try {
 		var nRow=-1;
 		var AC = this.activeCell;
 		if (AC != null) {
-			nRow = nitobi.grid.Cell.getRowNumber(AC);
+			nRow = nitobi.treegrid.Cell.getRowNumber(AC);
 
 			if (rel) {
 				nRow -= this.getfreezetop();
@@ -5518,7 +5518,7 @@ nitobi.grid.TreeGrid.prototype.getSelectedRow= function(rel) {
  * Fires the <code>HandlerError</code> event
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHandlerError = function()
+nitobi.treegrid.TreeGrid.prototype.handleHandlerError = function()
 {
 	var error = this.getDataSource().getHandlerError();
 	if (error)
@@ -5544,16 +5544,16 @@ nitobi.grid.TreeGrid.prototype.handleHandlerError = function()
  * </div>
  * @param {Number} rowIdNum The row index.
  * @param {Number} paneNumber
- * @returns {nitobi.grid.Row}
+ * @returns {nitobi.treegrid.Row}
  */
-nitobi.grid.TreeGrid.prototype.getRowObject= function(paneNumber, rowIdNum)
+nitobi.treegrid.TreeGrid.prototype.getRowObject= function(paneNumber, rowIdNum)
 {
 	var rowIndex = rowIdNum;
 	if (rowIdNum == null && paneNumber != null)
 	{
 		rowIndex = paneNumber;
 	}
-	return new nitobi.grid.Row(this, rowIndex);
+	return new nitobi.treegrid.Row(this, rowIndex);
 }
 
 /**
@@ -5564,7 +5564,7 @@ nitobi.grid.TreeGrid.prototype.getRowObject= function(paneNumber, rowIdNum)
  * @param {Boolean} rel Specifies whether to compensate for frozen columns.
  * @returns {Number} Column index of the active cell.
  */
-nitobi.grid.TreeGrid.prototype.getSelectedColumn= function(rel) {
+nitobi.treegrid.TreeGrid.prototype.getSelectedColumn= function(rel) {
 	try {
 		var nCol=-1;
 		var AC = this.activeCell;
@@ -5586,7 +5586,7 @@ nitobi.grid.TreeGrid.prototype.getSelectedColumn= function(rel) {
  * Returns the Column name as defined in fieldMap
  * @type {String}
  */
-nitobi.grid.TreeGrid.prototype.getSelectedColumnName = function() {
+nitobi.treegrid.TreeGrid.prototype.getSelectedColumnName = function() {
     var field = this.getSelectedColumnObject();
     return field.getColumnName();
 }
@@ -5594,9 +5594,9 @@ nitobi.grid.TreeGrid.prototype.getSelectedColumnName = function() {
 
 /**
  * Returns the Column object for the column that contains the currently selected cell.
- * @type nitobi.grid.Column
+ * @type nitobi.treegrid.Column
  */
-nitobi.grid.TreeGrid.prototype.getSelectedColumnObject= function() {
+nitobi.treegrid.TreeGrid.prototype.getSelectedColumnObject= function() {
 	var ac = this.activeCell;
 	return this.getColumnObject(this.getSelectedColumn(), (ac?ac.getAttribute("path"):"0"));
 }
@@ -5605,7 +5605,7 @@ nitobi.grid.TreeGrid.prototype.getSelectedColumnObject= function() {
  * Returns the number of columns in the Grid.
  * @type {Number}
  */
-nitobi.grid.TreeGrid.prototype.columnCount= function() 
+nitobi.treegrid.TreeGrid.prototype.columnCount= function() 
 {
 	try {
 		var dataItems = this.getColumnDefinitions();
@@ -5633,10 +5633,10 @@ nitobi.grid.TreeGrid.prototype.columnCount= function()
  * </div>
  * @param {Number} row The index of the Row to which the Cell belongs.
  * @param {Number|String} col The Column to which the Cell belongs. This value can be either the column index or the column name.
- * @type nitobi.grid.Cell
- * @see nitobi.grid.Cell#setValue
+ * @type nitobi.treegrid.Cell
+ * @see nitobi.treegrid.Cell#setValue
  */
-nitobi.grid.TreeGrid.prototype.getCellObject= function(row,col, surfacePath) 
+nitobi.treegrid.TreeGrid.prototype.getCellObject= function(row,col, surfacePath) 
 {
 	surfacePath = surfacePath || "0"
 	var surface = this.scroller.getSurface(surfacePath);
@@ -5676,7 +5676,7 @@ nitobi.grid.TreeGrid.prototype.getCellObject= function(row,col, surfacePath)
  * @type String
  * @see #getCellObject
  */
-nitobi.grid.TreeGrid.prototype.getCellText = function(row,col,surfacePath)
+nitobi.treegrid.TreeGrid.prototype.getCellText = function(row,col,surfacePath)
 {
 	var cell = this.getCellObject(row,col,surfacePath);
 	if (cell)
@@ -5708,7 +5708,7 @@ nitobi.grid.TreeGrid.prototype.getCellText = function(row,col,surfacePath)
  * @param {Number} col The index of the Column to which the Cell belongs.
  * @see #getCellObject
  */
-nitobi.grid.TreeGrid.prototype.getCellValue = function(row,col,surfacePath)
+nitobi.treegrid.TreeGrid.prototype.getCellValue = function(row,col,surfacePath)
 {
 	var cell = this.getCellObject(row, col, surfacePath);
 	if (cell)
@@ -5742,7 +5742,7 @@ nitobi.grid.TreeGrid.prototype.getCellValue = function(row,col,surfacePath)
  * @type HTMLElement
  * @see #ensureCellInView
  */
-nitobi.grid.TreeGrid.prototype.getCellElement= function(row, column, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.getCellElement= function(row, column, surfacePath)
 {
 	surfacePath = surfacePath || "0";
 	// TODO: this should use the getCellElement static method on the cell class
@@ -5752,13 +5752,13 @@ nitobi.grid.TreeGrid.prototype.getCellElement= function(row, column, surfacePath
 /**
  * Returns the Row object of the currently selected row or the row to which the active cell currently belongs.
  * @param {Number} xi The index of the Row to retrieve.
- * @type nitobi.grid.Row
+ * @type nitobi.treegrid.Row
  */
-nitobi.grid.TreeGrid.prototype.getSelectedRowObject= function(xi) 
+nitobi.treegrid.TreeGrid.prototype.getSelectedRowObject= function(xi) 
 {
 	var obj = null;
-	var r = nitobi.grid.Cell.getRowNumber(this.activeCell);
-	obj = new nitobi.grid.Row(this, r);
+	var r = nitobi.treegrid.Cell.getRowNumber(this.activeCell);
+	obj = new nitobi.treegrid.Row(this, r);
 	return obj;
 }
 
@@ -5782,9 +5782,9 @@ nitobi.grid.TreeGrid.prototype.getSelectedRowObject= function(xi)
  * </code></pre>
  * </div>
  * @param {Number} index The zero based index of the Column to return the object of.
- * @type nitobi.grid.Column
+ * @type nitobi.treegrid.Column
  */
-nitobi.grid.TreeGrid.prototype.getColumnObject= function(index, surfacePath) 
+nitobi.treegrid.TreeGrid.prototype.getColumnObject= function(index, surfacePath) 
 {
 	ntbAssert(index >= 0,"Invalid column accessed.");
 	surfacePath = surfacePath || "0";
@@ -5811,9 +5811,9 @@ nitobi.grid.TreeGrid.prototype.getColumnObject= function(index, surfacePath)
  * }
  * </code></pre>
  * </div>
- * @type nitobi.grid.Cell
+ * @type nitobi.treegrid.Cell
  */
-nitobi.grid.TreeGrid.prototype.getSelectedCellObject= function() {
+nitobi.treegrid.TreeGrid.prototype.getSelectedCellObject= function() {
 	var obj = this.activeCellObject;
 	if (obj == null)
 	{
@@ -5821,9 +5821,9 @@ nitobi.grid.TreeGrid.prototype.getSelectedCellObject= function() {
 		obj = this.activeCell; //this.Scroller.activeView.activeCell;
 		if (obj != null)		
 		{
-			var Cell = nitobi.grid.Cell;
+			var Cell = nitobi.treegrid.Cell;
 			var r = Cell.getRowNumber(obj)
-			var surfacePath = nitobi.grid.Cell.getSurfacePath(obj);
+			var surfacePath = nitobi.treegrid.Cell.getSurfacePath(obj);
 			var c = Cell.getColumnNumber(obj)
 			obj = this.getCellObject(r, c, surfacePath);
 		}
@@ -5836,7 +5836,7 @@ nitobi.grid.TreeGrid.prototype.getSelectedCellObject= function() {
  * Automatically adds a new row to the end of the Grid if the autoAdd is true, the current cell isn't empty.
  * This method is similar to the insertRow method.
  */
-nitobi.grid.TreeGrid.prototype.autoAddRow= function()
+nitobi.treegrid.TreeGrid.prototype.autoAddRow= function()
 {
 	if (this.activeCell.innerText.replace(/\s/g,"") != "" && this.autoAdd ) {
 		this.deactivateCell();
@@ -5856,7 +5856,7 @@ nitobi.grid.TreeGrid.prototype.autoAddRow= function()
  * @param {Number} newVal The number of rows currently displayed in the Grid.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.setDisplayedRowCount= function(newVal) 
+nitobi.treegrid.TreeGrid.prototype.setDisplayedRowCount= function(newVal) 
 {
 	ntbAssert(!isNaN(newVal),"displayed row was set to nan");
 	if (this.Scroller)
@@ -5871,39 +5871,39 @@ nitobi.grid.TreeGrid.prototype.setDisplayedRowCount= function(newVal)
  * Returns the number of currently rows displayed in the Grid.
  * @type Number
  */
-nitobi.grid.TreeGrid.prototype.getDisplayedRowCount = function()
+nitobi.treegrid.TreeGrid.prototype.getDisplayedRowCount = function()
 {
 	ntbAssert(!isNaN(this.displayedRowCount),"displayed row count return nan");
 	return this.displayedRowCount;
 }
 
-nitobi.grid.TreeGrid.prototype.getToolsContainer = function() 
+nitobi.treegrid.TreeGrid.prototype.getToolsContainer = function() 
 {
 	this.toolsContainer = this.toolsContainer || document.getElementById("ntb-treegrid-toolscontainer"+this.uid);
 	return this.toolsContainer;
 }
 
-nitobi.grid.TreeGrid.prototype.getHeaderContainer = function()
+nitobi.treegrid.TreeGrid.prototype.getHeaderContainer = function()
 {
 	return document.getElementById("ntb-treegrid-header"+this.uid+"_" + this.scroller.surface.key);
 }
 
-nitobi.grid.TreeGrid.prototype.getSubHeaderContainer = function()
+nitobi.treegrid.TreeGrid.prototype.getSubHeaderContainer = function()
 {
 	return document.getElementById("ntb-treegrid-subheader-container" + this.uid);
 }
 
-nitobi.grid.TreeGrid.prototype.getDataContainer = function()
+nitobi.treegrid.TreeGrid.prototype.getDataContainer = function()
 {
 	return document.getElementById("ntb-treegrid-data"+this.uid);
 }
 
-nitobi.grid.TreeGrid.prototype.getScrollerContainer = function()
+nitobi.treegrid.TreeGrid.prototype.getScrollerContainer = function()
 {
 	return document.getElementById("ntb-treegrid-scroller"+this.uid)
 }
 
-nitobi.grid.TreeGrid.prototype.getGridContainer = function()
+nitobi.treegrid.TreeGrid.prototype.getGridContainer = function()
 {
 	return nitobi.html.getFirstChild(this.UiContainer);
 }
@@ -5929,14 +5929,14 @@ nitobi.grid.TreeGrid.prototype.getGridContainer = function()
  * @see #OnBeforeCopyEvent
  * @see #OnAfterCopyEvent
  */
-nitobi.grid.TreeGrid.prototype.copy = function()
+nitobi.treegrid.TreeGrid.prototype.copy = function()
 {
 	var coords = this.selection.getCoords();
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(this.activeCell);
+	var surfacePath = nitobi.treegrid.Cell.getSurfacePath(this.activeCell);
 	
 	var data = this.getTableForSelection(coords, surfacePath);
 	
-	var copyEventArgs = new nitobi.grid.OnCopyEventArgs(this, data, coords);
+	var copyEventArgs = new nitobi.treegrid.OnCopyEventArgs(this, data, coords);
 	if(!this.isCopyEnabled() || !this.fire("BeforeCopy", copyEventArgs)) return;
 
 	// Removed the conditional for using the windows clipboard in IE so we
@@ -5966,7 +5966,7 @@ nitobi.grid.TreeGrid.prototype.copy = function()
  * @param {Map} coords The coordinates of the data to retrieve. Eg. {"top":{"y":5},"bottom":{"y":10}} will select all the data from rows 5 to 10.
  * @type String
  */
-nitobi.grid.TreeGrid.prototype.getTableForSelection = function(coords, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.getTableForSelection = function(coords, surfacePath)
 {
 	var columns = this.getColumnMap(coords.top.x,coords.bottom.x, surfacePath);
 	surfacePath = surfacePath || "0";
@@ -5980,7 +5980,7 @@ nitobi.grid.TreeGrid.prototype.getTableForSelection = function(coords, surfacePa
  * @private
  * @type Array
  */
-nitobi.grid.TreeGrid.prototype.getColumnMap = function(firstColumn, lastColumn, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.getColumnMap = function(firstColumn, lastColumn, surfacePath)
 {
 	var surface = this.Scroller.getSurface(surfacePath || "0");
 	var columns = surface.columnsNode.childNodes;
@@ -6015,7 +6015,7 @@ nitobi.grid.TreeGrid.prototype.getColumnMap = function(firstColumn, lastColumn, 
  * </code></pre>
  * </div>
  */
-nitobi.grid.TreeGrid.prototype.paste = function()
+nitobi.treegrid.TreeGrid.prototype.paste = function()
 {
 	// Preconditions: Paste data is on the clipboard and in TSV or HTML TABLE format
 	if(!this.isPasteEnabled()) return;
@@ -6036,7 +6036,7 @@ nitobi.grid.TreeGrid.prototype.paste = function()
  * @param {Object} pasteClipBoard  The paste clibboard is actually an HTML textarea element.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
+nitobi.treegrid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
 {
 	pasteClipBoard.onkeyup = null;
 
@@ -6048,7 +6048,7 @@ nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
 	var endColumn = startColumn + nitobi.data.FormatConverter.getDataColumns(pasteClipBoard.value)-1;
 
 	var editable = true;
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(this.activeCell);
+	var surfacePath = nitobi.treegrid.Cell.getSurfacePath(this.activeCell);
 	
 	for (var i = startColumn; i <= endColumn; i++)
 	{
@@ -6082,7 +6082,7 @@ nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
 
 		this.getSelection().selectWithCoords(startRow,startColumn,endRow,startColumn+columnList.length-1, surfacePath);
 
-		var pasteEventArgs = new nitobi.grid.OnPasteEventArgs(this, pasteClipBoard.value, coords);
+		var pasteEventArgs = new nitobi.treegrid.OnPasteEventArgs(this, pasteClipBoard.value, coords);
 		if (!this.fire("BeforePaste", pasteEventArgs)) return;
 
 		var clipboardValue = pasteClipBoard.value;
@@ -6106,7 +6106,7 @@ nitobi.grid.TreeGrid.prototype.pasteDataReady = function(pasteClipBoard)
  * Completes the paste operation after the asynchronous get on the grid data.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.pasteComplete = function(preMergedEbaXml,startRow,endRow, pasteEventArgs, surface)
+nitobi.treegrid.TreeGrid.prototype.pasteComplete = function(preMergedEbaXml,startRow,endRow, pasteEventArgs, surface)
 {
 	surface.reRender(startRow, endRow);
 	this.subscribeOnce("HtmlReady", this.handleAfterPaste, this, [pasteEventArgs]);
@@ -6115,11 +6115,11 @@ nitobi.grid.TreeGrid.prototype.pasteComplete = function(preMergedEbaXml,startRow
 /**
  * Event handler that fires after data has been pasted into the Grid. 
  * Fires the <code>AfterPaste</code> event
- * @param {nitobi.grid.OnPasteEventArgs} eventArgs The paste operation event 
+ * @param {nitobi.treegrid.OnPasteEventArgs} eventArgs The paste operation event 
  * arguments.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleAfterPaste = function(eventArgs)
+nitobi.treegrid.TreeGrid.prototype.handleAfterPaste = function(eventArgs)
 {
 	this.fire("AfterPaste", eventArgs);
 }
@@ -6130,7 +6130,7 @@ nitobi.grid.TreeGrid.prototype.handleAfterPaste = function(eventArgs)
  * @private
  * @type Clipboard 
  */
-nitobi.grid.TreeGrid.prototype.getClipboard = function()
+nitobi.treegrid.TreeGrid.prototype.getClipboard = function()
 {
 	var clipboard = document.getElementById("ntb-clipboard"+this.uid);
 	clipboard.onkeyup = null;
@@ -6142,14 +6142,14 @@ nitobi.grid.TreeGrid.prototype.getClipboard = function()
  * Fires the <code>HtmlReady</code> event.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.handleHtmlReady = function(evtArgs)
+nitobi.treegrid.TreeGrid.prototype.handleHtmlReady = function(evtArgs)
 {
 	this.fire("HtmlReady", new nitobi.base.EventArgs(this));
 }
 
-nitobi.grid.TreeGrid.prototype.toggleSurface = function(cell)
+nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 {
-	var C = nitobi.grid.Cell;
+	var C = nitobi.treegrid.Cell;
 	var Css = nitobi.html.Css;
 	var targetKey = C.getSurfacePath(cell);
 	var targetRow = C.getRowNumber(cell);
@@ -6193,7 +6193,7 @@ nitobi.grid.TreeGrid.prototype.toggleSurface = function(cell)
 }
 
 
-nitobi.grid.TreeGrid.prototype.toggleDetailButton = function(colset)
+nitobi.treegrid.TreeGrid.prototype.toggleDetailButton = function(colset)
 {
 	// If the show/hide is in fact enabled
 	var showhide_detail = this.toolbars.standardToolbar.getUiElements()["showhide_detail" + this.toolbars.uid];
@@ -6210,7 +6210,7 @@ nitobi.grid.TreeGrid.prototype.toggleDetailButton = function(colset)
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.toggleExpanderIcon = function(cell, expand)
+nitobi.treegrid.TreeGrid.prototype.toggleExpanderIcon = function(cell, expand)
 {
 	var has = nitobi.html.Css.hasClass;
 	var swap = nitobi.html.Css.swapClass;
@@ -6234,7 +6234,7 @@ nitobi.grid.TreeGrid.prototype.toggleExpanderIcon = function(cell, expand)
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
+nitobi.treegrid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 {
 	var surface = eventArgs.source;
 	// Update Grid's row count;
@@ -6260,7 +6260,7 @@ nitobi.grid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 	this.vScrollbar.setRange(ratio);
 }
 
-nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 {
 	var surface = this.Scroller.getSurface(surfacePath);
 	surface.onBeforeExpand.notify();
@@ -6275,7 +6275,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	{
 		topBlock = surface.splitBlock(rowIndex).top;
 	}
-	var subSurface = new nitobi.grid.Surface(this.scroller, this, surfacePath + "_" + rowIndex, rowIndex);
+	var subSurface = new nitobi.treegrid.Surface(this.scroller, this, surfacePath + "_" + rowIndex, rowIndex);
 	// All events that apply to all surfaces should be hooked in - probably not here but in surface.js somewhere.
 	subSurface.onHtmlReady.subscribe(this.handleHtmlReady, this);
 	
@@ -6310,7 +6310,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	
 	subSurface.parentDataNode = surface.dataTable.getRecord(rowIndex);
 	
-	var dataTable = new nitobi.data.DataTable("caching", this.getPagingMode() == nitobi.grid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()},this.isAutoKeyEnabled());
+	var dataTable = new nitobi.data.DataTable("caching", this.getPagingMode() == nitobi.treegrid.PAGINGMODE_LIVESCROLLING,{GridId:this.getID()},{GridId:this.getID()},this.isAutoKeyEnabled());
 	dataTable.initialize(surfacePath + "_" + rowIndex, getHandler, saveHandler);
 	this.data.add(dataTable);
 	subSurface.createRenderers(this.data);
@@ -6329,7 +6329,7 @@ nitobi.grid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 	return surface;
 }
 
-nitobi.grid.TreeGrid.prototype.collapse = function(rowIndex, surfacePath)
+nitobi.treegrid.TreeGrid.prototype.collapse = function(rowIndex, surfacePath)
 {
 	var surface = this.scroller.getSurface(surfacePath + "_" + rowIndex);
 	if (surface)
@@ -6338,7 +6338,7 @@ nitobi.grid.TreeGrid.prototype.collapse = function(rowIndex, surfacePath)
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.getGroupComplete = function()
+nitobi.treegrid.TreeGrid.prototype.getGroupComplete = function()
 {
 	this.loadingScreen.hide();
 }
@@ -6347,7 +6347,7 @@ nitobi.grid.TreeGrid.prototype.getGroupComplete = function()
  * Returns the root columns declared on the Grid.
  * @type Element
  */
-nitobi.grid.TreeGrid.prototype.getRootColumnsElement = function()
+nitobi.treegrid.TreeGrid.prototype.getRootColumnsElement = function()
 {
 	var rootColumnsId = this.getRootColumns();
 	if (rootColumnsId)
@@ -6360,7 +6360,7 @@ nitobi.grid.TreeGrid.prototype.getRootColumnsElement = function()
 	}
 }
 
-nitobi.grid.TreeGrid.prototype.findChildColumnSet = function(columnSet)
+nitobi.treegrid.TreeGrid.prototype.findChildColumnSet = function(columnSet)
 {
 	var expandElement = this.model.selectSingleNode("//ntb:columns[@id='" + columnSet + "']/ntb:column[@type='EXPAND']");
 	if (expandElement)
@@ -6373,7 +6373,7 @@ nitobi.grid.TreeGrid.prototype.findChildColumnSet = function(columnSet)
  * Only used in standard paging mode.  When we page forward/back, we need to manually
  * remove any pinned subheaders (as opposed to them being removed due to scrolling).
  */
-nitobi.grid.TreeGrid.prototype.clearSubHeaders = function()
+nitobi.treegrid.TreeGrid.prototype.clearSubHeaders = function()
 {
 	var container = this.getSubHeaderContainer();
 	container.innerHTML = "";
@@ -6394,7 +6394,7 @@ nitobi.grid.TreeGrid.prototype.clearSubHeaders = function()
  * @param {String} evt The identifier for the evnt such as "HtmlReady".
  * @param {Object} args Any arguments to pass to the event handlers.
  */
-nitobi.grid.TreeGrid.prototype.fire=function(evt,args){
+nitobi.treegrid.TreeGrid.prototype.fire=function(evt,args){
 	return nitobi.event.notify(evt+this.uid,args);
 }
 
@@ -6423,10 +6423,10 @@ nitobi.grid.TreeGrid.prototype.fire=function(evt,args){
  * should be called in the context of. When writing object oriented 
  * JavaScript the reference to the Function must also have some context 
  * in which it is to be executed.
- * @see nitobi.grid.Grid#subscribeOnce
- * @see nitobi.grid.Grid#unsubscribe
+ * @see nitobi.treegrid.Grid#subscribeOnce
+ * @see nitobi.treegrid.Grid#unsubscribe
  */
-nitobi.grid.TreeGrid.prototype.subscribe=function(evt,func,context){
+nitobi.treegrid.TreeGrid.prototype.subscribe=function(evt,func,context){
 	if (this.subscribedEvents == null)
 		this.subscribedEvents = {};
 	if (typeof(context)=="undefined") context=this;
@@ -6462,7 +6462,7 @@ nitobi.grid.TreeGrid.prototype.subscribe=function(evt,func,context){
  * @param {Array} params Any parameters that should be passed to the handler function.
  * @see #subscribe
  */
-nitobi.grid.TreeGrid.prototype.subscribeOnce = function(evt, func, context, params)
+nitobi.treegrid.TreeGrid.prototype.subscribeOnce = function(evt, func, context, params)
 {
 	var guid = null;
 	var _this = this;
@@ -6480,7 +6480,7 @@ nitobi.grid.TreeGrid.prototype.subscribeOnce = function(evt, func, context, para
  * @param {Number} guid The unique ID of the event as returned by the subscribe method. 
  * If the event is defined through the declaration the unique ID can be accessed through the grid API such as grid.OnHtmlReadyEvent.
  */
-nitobi.grid.TreeGrid.prototype.unsubscribe=function(evt,guid)
+nitobi.treegrid.TreeGrid.prototype.unsubscribe=function(evt,guid)
 {
 	return nitobi.event.unsubscribe(evt+this.uid, guid);
 }
@@ -6490,7 +6490,7 @@ nitobi.grid.TreeGrid.prototype.unsubscribe=function(evt,guid)
  * there is no memory leak in Internet Explorer from circular DOM / JS references.
  * @private
  */
-nitobi.grid.TreeGrid.prototype.dispose = function()
+nitobi.treegrid.TreeGrid.prototype.dispose = function()
 {
 	try {
 		//	Remove the DOM node to JS object circular reference.
@@ -6538,4 +6538,6 @@ nitobi.grid.TreeGrid.prototype.dispose = function()
 /**
  * @private
  */
-nitobi.Grid = nitobi.grid.Grid;
+nitobi.treegrid = nitobi.treegrid.Grid;
+
+debugger;

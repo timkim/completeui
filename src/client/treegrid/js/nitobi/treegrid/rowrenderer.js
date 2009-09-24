@@ -8,7 +8,7 @@
 /**
  * @private
  */
-nitobi.grid.RowRenderer = function(xmlDataSource, columnDefinitions, firstColumn, uniqueId, surfaceKey, showHeaders, rowHeight, rowHover)
+nitobi.treegrid.RowRenderer = function(xmlDataSource, columnDefinitions, firstColumn, uniqueId, surfaceKey, showHeaders, rowHeight, rowHover)
 {
 	this.rowHeight = rowHeight;
 	this.xmlDataSource = xmlDataSource;
@@ -34,14 +34,14 @@ nitobi.grid.RowRenderer = function(xmlDataSource, columnDefinitions, firstColumn
 /**
  * @private
  */
-nitobi.grid.RowRenderer.prototype.render = function(firstRow,rows, activeColumn, activeRow, sortColumn, sortDir)
+nitobi.treegrid.RowRenderer.prototype.render = function(firstRow,rows, activeColumn, activeRow, sortColumn, sortDir)
 {
 //	if (this.xslTemplate == null)
 //		return "";
 	var firstRow = Number(firstRow) || 0;
 	var rows = Number(rows) || 0;
 
-	var xt = nitobi.grid.rowXslProc;
+	var xt = nitobi.treegrid.rowXslProc;
 	xt.addParameter("start", firstRow, "");
 	xt.addParameter("end", firstRow + rows, "");
 	xt.addParameter('sortColumn', sortColumn, '');
@@ -76,7 +76,7 @@ nitobi.grid.RowRenderer.prototype.render = function(firstRow,rows, activeColumn,
 	return s2;
 }
 
-nitobi.grid.RowRenderer.prototype.setColumnDefinitions = function(definitions)
+nitobi.treegrid.RowRenderer.prototype.setColumnDefinitions = function(definitions)
 {
 	this.definitions = definitions;
 	if (this.definitions)
@@ -86,7 +86,7 @@ nitobi.grid.RowRenderer.prototype.setColumnDefinitions = function(definitions)
 /**
  * @private
  */
-nitobi.grid.RowRenderer.prototype.generateXslTemplate = function(definitions,generator,firstColumn,columns,showHeaders,showRowIndicators,rowHover, id)
+nitobi.treegrid.RowRenderer.prototype.generateXslTemplate = function(definitions,generator,firstColumn,columns,showHeaders,showRowIndicators,rowHover, id)
 {
 	//this.definitions = definitions;
 	this.showIndicators = showRowIndicators;
@@ -112,7 +112,7 @@ nitobi.grid.RowRenderer.prototype.generateXslTemplate = function(definitions,gen
 /**
  * @private
  */
-nitobi.grid.RowRenderer.prototype.dispose = function()
+nitobi.treegrid.RowRenderer.prototype.dispose = function()
 {
 	this.xslTemplate = null;
 //	this.xmlDataSource.dispose();

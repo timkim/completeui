@@ -12,9 +12,9 @@
  * cells.
  * @constructor
  */
-nitobi.grid.Selection = function(owner, dragFillEnabled)
+nitobi.treegrid	.Selection = function(owner, dragFillEnabled)
 {
-	nitobi.grid.Selection.baseConstructor.call(this,owner);
+	nitobi.treegrid	.Selection.baseConstructor.call(this,owner);
 	
 	/**
 	 * @private
@@ -86,7 +86,7 @@ nitobi.grid.Selection = function(owner, dragFillEnabled)
 	this.dragFillEnabled = dragFillEnabled || false;
 };
 
-nitobi.lang.extend(nitobi.grid.Selection, nitobi.collections.CellSet);
+nitobi.lang.extend(nitobi.treegrid	.Selection, nitobi.collections.CellSet);
 
 /**
  * Sets the endpoints of the set of cells on the grid to which the selection refers.
@@ -95,9 +95,9 @@ nitobi.lang.extend(nitobi.grid.Selection, nitobi.collections.CellSet);
  * @param endRow {int} The row index of the end cell of the set.
  * @param endColumn {int} The column index of the end cell of the set.
  */
-nitobi.grid.Selection.prototype.setRange = function(startRow, startColumn, endRow, endColumn, surfacePath)
+nitobi.treegrid	.Selection.prototype.setRange = function(startRow, startColumn, endRow, endColumn, surfacePath)
 {
-	nitobi.grid.Selection.base.setRange.call(this, startRow, startColumn, endRow, endColumn);
+	nitobi.treegrid	.Selection.base.setRange.call(this, startRow, startColumn, endRow, endColumn);
 	this.startCell = this.owner.getCellElement(startRow, startColumn, surfacePath);
 	this.endCell = this.owner.getCellElement(endRow, endColumn, surfacePath);
 };
@@ -108,15 +108,15 @@ nitobi.grid.Selection.prototype.setRange = function(startRow, startColumn, endRo
  * @param startCell {DOMElement} The DOM node representing the start cell of the selection
  * @param endCell {DOMElement} The DOM node representing the end cell of the selection
  */
-nitobi.grid.Selection.prototype.setRangeWithDomNodes = function(startCell, endCell, surfacePath)
+nitobi.treegrid	.Selection.prototype.setRangeWithDomNodes = function(startCell, endCell, surfacePath)
 {
-	this.setRange(nitobi.grid.Cell.getRowNumber(startCell), nitobi.grid.Cell.getColumnNumber(startCell), nitobi.grid.Cell.getRowNumber(endCell), nitobi.grid.Cell.getColumnNumber(endCell), surfacePath);
+	this.setRange(nitobi.treegrid	.Cell.getRowNumber(startCell), nitobi.treegrid	.Cell.getColumnNumber(startCell), nitobi.treegrid	.Cell.getRowNumber(endCell), nitobi.treegrid	.Cell.getColumnNumber(endCell), surfacePath);
 };
 
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.createBoxes = function ()
+nitobi.treegrid	.Selection.prototype.createBoxes = function ()
 {
 	if (!this.created) {
 
@@ -158,7 +158,7 @@ nitobi.grid.Selection.prototype.createBoxes = function ()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.createBox = function (id)
+nitobi.treegrid	.Selection.prototype.createBox = function (id)
 {
 	// boxBorder is the outer container for the selections
 	var boxBorder;
@@ -182,7 +182,7 @@ nitobi.grid.Selection.prototype.createBox = function (id)
  * This will detach any events and remove the boxes from the DOM whenever actions
  * such as insert, delete, refresh, sort, or paging are performed.
  */
-nitobi.grid.Selection.prototype.clearBoxes = function()
+nitobi.treegrid	.Selection.prototype.clearBoxes = function()
 {
 	if (this.box != null)
 		this.clearBox(this.box);
@@ -200,7 +200,7 @@ nitobi.grid.Selection.prototype.clearBoxes = function()
  * Clears the specified selection box by detaching events and then removing 
  * from the DOM.
  */
-nitobi.grid.Selection.prototype.clearBox = function(box)
+nitobi.treegrid	.Selection.prototype.clearBox = function(box)
 {
 	nitobi.html.detachEvents(box, this.events);
 	
@@ -214,7 +214,7 @@ nitobi.grid.Selection.prototype.clearBox = function(box)
 /**
  * Handles the mousedown event on the expand selection grabby.
  */
-nitobi.grid.Selection.prototype.handleGrabbyMouseDown = function(evt)
+nitobi.treegrid	.Selection.prototype.handleGrabbyMouseDown = function(evt)
 {
 	this.selecting = true;
 	this.setExpanding(true, "vert");
@@ -236,7 +236,7 @@ nitobi.grid.Selection.prototype.handleGrabbyMouseDown = function(evt)
 	this.expandStartLeftColumn = topLeft.getColumn();
 	this.expandStartRightColumn = btmRight.getColumn();
 
-	var Cell = nitobi.grid.Cell;
+	var Cell = nitobi.treegrid	.Cell;
 	// When we start expanding the top left needs to be made into the start cell
 	if (Cell.getRowNumber(this.startCell) > Cell.getRowNumber(this.endCell))
 	{
@@ -255,21 +255,21 @@ nitobi.grid.Selection.prototype.handleGrabbyMouseDown = function(evt)
 /**
  * Handles the mouseup event on the expand selection grabby.
  */
-nitobi.grid.Selection.prototype.handleGrabbyMouseUp = function(evt)
+nitobi.treegrid	.Selection.prototype.handleGrabbyMouseUp = function(evt)
 {
 	if (this.expanding)
 	{
 		// This event will bubble up to the selection mouseUp event where it will stop the selecting
 		this.selecting = false;
 		this.setExpanding(false);
-		this.onAfterExpand.notify({source:this, surfacePath:nitobi.grid.Cell.getSurfacePath(this.startCell)});
+		this.onAfterExpand.notify({source:this, surfacePath:nitobi.treegrid	.Cell.getSurfacePath(this.startCell)});
 	}
 }
 
 /**
  * Handles the click event on the selection expansion grabby.
  */
-nitobi.grid.Selection.prototype.handleGrabbyClick = function(evt)
+nitobi.treegrid	.Selection.prototype.handleGrabbyClick = function(evt)
 {
 	// This is commented out for Safari
 	//nitobi.html.cancelEvent(evt);
@@ -279,10 +279,10 @@ nitobi.grid.Selection.prototype.handleGrabbyClick = function(evt)
  * Expands the area of the selection to the location of the mouse. This could be limited to either vertical or horizontal expansion like Excel.
  * @private 
  */
-nitobi.grid.Selection.prototype.expand = function(cell, dir) {
+nitobi.treegrid	.Selection.prototype.expand = function(cell, dir) {
 	this.setExpanding(true, dir);
 
-	var Cell = nitobi.grid.Cell;
+	var Cell = nitobi.treegrid	.Cell;
 	var endCell;
 
 	// Theses are the variables that keep track of the original coords of the selection when expansion started
@@ -341,7 +341,7 @@ nitobi.grid.Selection.prototype.expand = function(cell, dir) {
  * Shrinks the area of the selection down to the location of the mouse.
  * @private
  */
-nitobi.grid.Selection.prototype.shrink = function(evt)
+nitobi.treegrid	.Selection.prototype.shrink = function(evt)
 {
 	// This is for Firefox where the selection expand border is a bit bigger than the selection so it can cause 
 	// shrink to be called instead of expand because the expand border is 1px over the next cell where expand should be fired
@@ -353,7 +353,7 @@ nitobi.grid.Selection.prototype.shrink = function(evt)
 	{
 		var scrollSurface = this.owner.getScrollSurface();
 
-		var Cell = nitobi.grid.Cell;
+		var Cell = nitobi.treegrid	.Cell;
 		//	Get the end column and row numbers
 		var endRow = Cell.getRowNumber(this.endCell), endColumn = Cell.getColumnNumber(this.endCell);
 		//	Get the start column and row numbers
@@ -436,7 +436,7 @@ nitobi.grid.Selection.prototype.shrink = function(evt)
 			}
 		}
 
-		var surfacePath = nitobi.grid.Cell.getSurfacePath(this.endCell);
+		var surfacePath = nitobi.treegrid	.Cell.getSurfacePath(this.endCell);
 		var newEndCell = this.owner.getCellElement(endRow, endColumn, surfacePath);
 		var newStartCell = this.owner.getCellElement(startRow, startColumn, surfacePath);
 
@@ -456,7 +456,7 @@ nitobi.grid.Selection.prototype.shrink = function(evt)
  * Returns the pixel height of the selection.
  * @private
  */
-nitobi.grid.Selection.prototype.getHeight = function()
+nitobi.treegrid	.Selection.prototype.getHeight = function()
 {
 	// TODO: this is only if the mid-center viewport box is showing ... 
 	var rect = nitobi.html.getBoundingClientRect(this.box);
@@ -467,7 +467,7 @@ nitobi.grid.Selection.prototype.getHeight = function()
  * Collapses the selection down to one cell 
  * @param cell {HtmlDomNode} (Optional) The HTML DOM node of the cell to collapse to.  If omitted, the initial start cell of the selection is used.
  */
-nitobi.grid.Selection.prototype.collapse = function(cell)
+nitobi.treegrid	.Selection.prototype.collapse = function(cell)
 {
  	if (!cell)
  	{
@@ -478,7 +478,7 @@ nitobi.grid.Selection.prototype.collapse = function(cell)
  		return;
  	}
 
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(cell);
+	var surfacePath = nitobi.treegrid	.Cell.getSurfacePath(cell);
 	this.setRangeWithDomNodes(cell, cell, surfacePath);
 
 	// TODO: this needs to be cleaned up ...
@@ -496,7 +496,7 @@ nitobi.grid.Selection.prototype.collapse = function(cell)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.startSelecting = function (startCell, endCell)
+nitobi.treegrid	.Selection.prototype.startSelecting = function (startCell, endCell)
 {
  	this.selecting = true;
  	this.setRangeWithDomNodes(startCell,endCell);
@@ -509,16 +509,16 @@ nitobi.grid.Selection.prototype.startSelecting = function (startCell, endCell)
  * (DEPRECATED - use Selection.collapse(cell))
  * @private
  */
-nitobi.grid.Selection.prototype.clearSelection = function(cell)
+nitobi.treegrid	.Selection.prototype.clearSelection = function(cell)
 {
 	this.collapse(cell);
 };
 
 /**
  * Resize the current selection to the new specified end cell.
- * @param {nitobi.grid.Cell} cell The cell to be the new end cell.
+ * @param {nitobi.treegrid	.Cell} cell The cell to be the new end cell.
  */
-nitobi.grid.Selection.prototype.resizeSelection = function(cell)
+nitobi.treegrid	.Selection.prototype.resizeSelection = function(cell)
 {
  	this.endCell = cell;
  	this.shrink();
@@ -529,7 +529,7 @@ nitobi.grid.Selection.prototype.resizeSelection = function(cell)
  * (DEPRECATED - use Selection.collapse(cell))
  * @private
  */
-nitobi.grid.Selection.prototype.moveSelection = function(cell)
+nitobi.treegrid	.Selection.prototype.moveSelection = function(cell)
 {
  	this.collapse(cell);
 };
@@ -537,7 +537,7 @@ nitobi.grid.Selection.prototype.moveSelection = function(cell)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.alignBoxes = function()
+nitobi.treegrid	.Selection.prototype.alignBoxes = function()
 {
  	var endCell = this.endCell || this.startCell;
  	var sc = this.getCoords();
@@ -602,7 +602,7 @@ nitobi.grid.Selection.prototype.alignBoxes = function()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.redraw = function(cell)
+nitobi.treegrid	.Selection.prototype.redraw = function(cell)
 {
 	if (!this.selecting)
 		this.setRangeWithDomNodes(cell,cell);
@@ -615,27 +615,27 @@ nitobi.grid.Selection.prototype.redraw = function(cell)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.changeStartCellWithDomNode = function(cell)
+nitobi.treegrid	.Selection.prototype.changeStartCellWithDomNode = function(cell)
 {
 	this.startCell = cell;
-	var Cell = nitobi.grid.Cell;
+	var Cell = nitobi.treegrid	.Cell;
 	this.changeStartCell(Cell.getRowNumber(cell), Cell.getColumnNumber(cell)); 
 };
 
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.changeEndCellWithDomNode = function(cell)
+nitobi.treegrid	.Selection.prototype.changeEndCellWithDomNode = function(cell)
 {
 	this.endCell = cell;
-	var Cell = nitobi.grid.Cell;
+	var Cell = nitobi.treegrid	.Cell;
 	this.changeEndCell(Cell.getRowNumber(cell), Cell.getColumnNumber(cell));
 };
 
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.init = function(cell)
+nitobi.treegrid	.Selection.prototype.init = function(cell)
 {
 	this.createBoxes();
     var t = new Date();
@@ -648,7 +648,7 @@ nitobi.grid.Selection.prototype.init = function(cell)
 /**
  * Clears the current selection.
  */
-nitobi.grid.Selection.prototype.clear = function()
+nitobi.treegrid	.Selection.prototype.clear = function()
 {
 	// Clear Block
 	if (!this.box) 
@@ -679,7 +679,7 @@ nitobi.grid.Selection.prototype.clear = function()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.handleSelectionClick = function(evt)
+nitobi.treegrid	.Selection.prototype.handleSelectionClick = function(evt)
 {
 	if (!this.selected())
 	{
@@ -701,7 +701,7 @@ nitobi.grid.Selection.prototype.handleSelectionClick = function(evt)
  * Handles double click mouse events on the selection.
  * @param {Event} evt The browser event object.
  */
-nitobi.grid.Selection.prototype.handleDblClick = function(evt) {
+nitobi.treegrid	.Selection.prototype.handleDblClick = function(evt) {
 	if (!this.selected())
 	{
 		window.clearTimeout(NTB_SINGLECLICK);
@@ -717,7 +717,7 @@ nitobi.grid.Selection.prototype.handleDblClick = function(evt) {
  * Clears the single click flag and calls edit on the Grid.
  * @param {Event} evt The browser event object.
  */
-nitobi.grid.Selection.prototype.edit = function(evt)
+nitobi.treegrid	.Selection.prototype.edit = function(evt)
 {
 	NTB_SINGLECLICK = null;
 	// If an expander cell is selected, we should expand instead of editing.
@@ -729,10 +729,10 @@ nitobi.grid.Selection.prototype.edit = function(evt)
 
 /**
  * Sets the endpoints of the set of cells in the grid's selection based on the params and displays the selection
- * @param startCell {nitobi.grid.Cell} the start cell of the set
- * @param endCell {nitobi.grid.Cell} the end cell of the set
+ * @param startCell {nitobi.treegrid	.Cell} the start cell of the set
+ * @param endCell {nitobi.treegrid	.Cell} the end cell of the set
  */
-nitobi.grid.Selection.prototype.select = function(startCell,endCell)
+nitobi.treegrid	.Selection.prototype.select = function(startCell,endCell)
 {
 	this.selectWithCoords(startCell.getRowNumber(), startCell.getColumnNumber(), endCell.getRowNumber(), endCell.getColumnNumber());
 };
@@ -744,7 +744,7 @@ nitobi.grid.Selection.prototype.select = function(startCell,endCell)
  * @param endRow {int} The row index of the end cell of the set.
  * @param endColumn {int} The column index of the end cell of the set.
  */
-nitobi.grid.Selection.prototype.selectWithCoords	 = function(startRow, startColumn, endRow, endColumn, surfacePath)
+nitobi.treegrid	.Selection.prototype.selectWithCoords	 = function(startRow, startColumn, endRow, endColumn, surfacePath)
 {
 	this.setRange(startRow, startColumn, endRow, endColumn, surfacePath);
 	this.createBoxes();	
@@ -755,7 +755,7 @@ nitobi.grid.Selection.prototype.selectWithCoords	 = function(startRow, startColu
  * called by mouseup event to stop the selection
  * @private
  */
-nitobi.grid.Selection.prototype.handleSelectionMouseUp = function(evt)
+nitobi.treegrid	.Selection.prototype.handleSelectionMouseUp = function(evt)
 {
 	// This event will fire either directly or as the mouseup event bubbles up from the selection expansion grabby
 	// When it is direct we may need to also cause the selection expansion to stop expanding
@@ -770,14 +770,14 @@ nitobi.grid.Selection.prototype.handleSelectionMouseUp = function(evt)
 
 
 // TODO: this should start it into selection mode ...
-nitobi.grid.Selection.prototype.handleSelectionMouseDown = function(evt) {
+nitobi.treegrid	.Selection.prototype.handleSelectionMouseDown = function(evt) {
 	// TODO: we cancel here to prevent from bubbling to the grid - this may be bad but was causing a weird data movement problem
 	// This is commented out for Safari
 	//nitobi.html.cancelEvent(evt);
 	//this.selecting = true;
 }
 
-nitobi.grid.Selection.prototype.stopSelecting = function()
+nitobi.treegrid	.Selection.prototype.stopSelecting = function()
 {
 	this.selecting = true;
 	if (!this.selected())
@@ -788,9 +788,9 @@ nitobi.grid.Selection.prototype.stopSelecting = function()
 /**
  * Returns the Cell on which the selection started - this may not be equal to the top left cell of the selection in 
  * the case that the selection was created from bottom right to top left.
- * @type {nitobi.grid.Cell}
+ * @type {nitobi.treegrid	.Cell}
  */
-nitobi.grid.Selection.prototype.getStartCell = function()
+nitobi.treegrid	.Selection.prototype.getStartCell = function()
 {
 	return this.startCell;
 }
@@ -798,41 +798,41 @@ nitobi.grid.Selection.prototype.getStartCell = function()
 /**
  * Returns the Cell on which the selection ended - this may not be equal to the bottom right 
  * cell of the selection in the case that the selection was created from top left to bottom right.
- * @type {nitobi.grid.Cell}
+ * @type {nitobi.treegrid	.Cell}
  */
-nitobi.grid.Selection.prototype.getEndCell = function()
+nitobi.treegrid	.Selection.prototype.getEndCell = function()
 {
 	return this.endCell;
 }
 
 /**
  * Returns the top left Cell of the selection.
- * @type {nitobi.grid.Cell}
+ * @type {nitobi.treegrid	.Cell}
  */
-nitobi.grid.Selection.prototype.getTopLeftCell = function()
+nitobi.treegrid	.Selection.prototype.getTopLeftCell = function()
 {
 	var coords = this.getCoords();
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(this.startCell);
+	var surfacePath = nitobi.treegrid	.Cell.getSurfacePath(this.startCell);
 	var surface = this.owner.scroller.getSurface(surfacePath);
-	return new nitobi.grid.Cell(this.owner, coords.top.y, coords.top.x, surface);
+	return new nitobi.treegrid	.Cell(this.owner, coords.top.y, coords.top.x, surface);
 }
 
 /**
  * Returns the bottom right Cell of the selection.
- * @type {nitobi.grid.Cell}
+ * @type {nitobi.treegrid	.Cell}
  */
-nitobi.grid.Selection.prototype.getBottomRightCell = function()
+nitobi.treegrid	.Selection.prototype.getBottomRightCell = function()
 {
 	var coords = this.getCoords();
-	var surfacePath = nitobi.grid.Cell.getSurfacePath(this.startCell);
+	var surfacePath = nitobi.treegrid	.Cell.getSurfacePath(this.startCell);
 	var surface = this.owner.scroller.getSurface(surfacePath);
-	return new nitobi.grid.Cell(this.owner, coords.bottom.y, coords.bottom.x, surface);
+	return new nitobi.treegrid	.Cell(this.owner, coords.bottom.y, coords.bottom.x, surface);
 }
 
 /**
  * Returns the number of rows high that the selection is.
  */
-nitobi.grid.Selection.prototype.getHeight = function()
+nitobi.treegrid	.Selection.prototype.getHeight = function()
 {
 	var coords = this.getCoords();
 	return coords.bottom.y - coords.top.y + 1;
@@ -841,7 +841,7 @@ nitobi.grid.Selection.prototype.getHeight = function()
 /**
  * Returns the number of columns wide that the selection is.
  */
-nitobi.grid.Selection.prototype.getWidth = function()
+nitobi.treegrid	.Selection.prototype.getWidth = function()
 {
 	var coords = this.getCoords();
 	return coords.bottom.x - coords.top.x + 1;
@@ -850,7 +850,7 @@ nitobi.grid.Selection.prototype.getWidth = function()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.getRowByCoords = function(oCell) 
+nitobi.treegrid	.Selection.prototype.getRowByCoords = function(oCell) 
 {
 	return(oCell.parentNode.offsetTop/oCell.parentNode.offsetHeight);
 };
@@ -858,7 +858,7 @@ nitobi.grid.Selection.prototype.getRowByCoords = function(oCell)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.getColumnByCoords = function (oCell) 
+nitobi.treegrid	.Selection.prototype.getColumnByCoords = function (oCell) 
 {
 	var nOffset=(this.indicator?-2:0);
 	if(oCell.parentNode.parentNode.getAttribute('id').substr(0,6)!="freeze") {
@@ -872,7 +872,7 @@ nitobi.grid.Selection.prototype.getColumnByCoords = function (oCell)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.selected = function()
+nitobi.treegrid	.Selection.prototype.selected = function()
 {
 	return (this.endCell == this.startCell)?false:true;
 }
@@ -880,7 +880,7 @@ nitobi.grid.Selection.prototype.selected = function()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.setRowHeight = function(rowHeight)
+nitobi.treegrid	.Selection.prototype.setRowHeight = function(rowHeight)
 {
 	this.rowHeight = rowHeight;
 }
@@ -888,7 +888,7 @@ nitobi.grid.Selection.prototype.setRowHeight = function(rowHeight)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.getRowHeight = function()
+nitobi.treegrid	.Selection.prototype.getRowHeight = function()
 {
 	return this.rowHeight;
 }
@@ -896,7 +896,7 @@ nitobi.grid.Selection.prototype.getRowHeight = function()
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.setExpanding = function(val, dir)
+nitobi.treegrid	.Selection.prototype.setExpanding = function(val, dir)
 {
 	if (val && this.expanding) return;
 
@@ -918,14 +918,14 @@ nitobi.grid.Selection.prototype.setExpanding = function(val, dir)
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.dispose = function()
+nitobi.treegrid	.Selection.prototype.dispose = function()
 {
 }
 
 /**
  * @private
  */
-nitobi.grid.Selection.prototype.align = function(source,target1,target2,AlignBit_HWTBLRCM,oh,ow,oy,ox,show) {
+nitobi.treegrid	.Selection.prototype.align = function(source,target1,target2,AlignBit_HWTBLRCM,oh,ow,oy,ox,show) {
 //try {
 	oh=oh || 0;
 	ow=ow || 0;

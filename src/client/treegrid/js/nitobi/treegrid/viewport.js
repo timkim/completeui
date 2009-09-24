@@ -15,7 +15,7 @@ var NTB_SINGLECLICK = null;
  * @class
  * @private
  */
-nitobi.grid.Viewport = function(grid, region, surface)
+nitobi.treegrid.Viewport = function(grid, region, surface)
 {
   	//	This array is used to hold closures that remove any memory leaks
 	this.disposal = [];
@@ -41,7 +41,7 @@ nitobi.grid.Viewport = function(grid, region, surface)
 	this.startColumn = 0;
 	this.columns = 0;
 
-	//	nitobi.grid.RowRenderer is responsible for rendering the rows ...
+	//	nitobi.treegrid.RowRenderer is responsible for rendering the rows ...
 	this.rowRenderer = null;
 	
 	this.onHtmlReady = new nitobi.base.Event();
@@ -50,7 +50,7 @@ nitobi.grid.Viewport = function(grid, region, surface)
 /**
  * 
  */
-nitobi.grid.Viewport.prototype.mapToHtml = function(element,surface) {
+nitobi.treegrid.Viewport.prototype.mapToHtml = function(element,surface) {
 	// TODO: CHANGED FOR GROUPING GRID
 	this.surface=surface;
 	this.element=element;
@@ -64,7 +64,7 @@ nitobi.grid.Viewport.prototype.mapToHtml = function(element,surface) {
  * @param {Number} high The high range of the block
  * @private
  */
-nitobi.grid.Viewport.prototype.makeLastBlock = function(low,high) {
+nitobi.treegrid.Viewport.prototype.makeLastBlock = function(low,high) {
 	if (this.lastEmptyBlock == null && this.grid && this.region>2 && this.region<5 && this.container) {
 		if (this.container.lastChild) {
 //			alert(low+":"+high)
@@ -77,7 +77,7 @@ nitobi.grid.Viewport.prototype.makeLastBlock = function(low,high) {
 /**
  * 
  */
-nitobi.grid.Viewport.prototype.setCellRanges = function(startRow,rows,startColumn,columns)
+nitobi.treegrid.Viewport.prototype.setCellRanges = function(startRow,rows,startColumn,columns)
 {
 	this.startRow=startRow;
 	this.rows=rows;
@@ -105,7 +105,7 @@ nitobi.grid.Viewport.prototype.setCellRanges = function(startRow,rows,startColum
 /**
  *
  */
-nitobi.grid.Viewport.prototype.clear = function(Surface,Placeholder,Center,Viewport, rows)
+nitobi.treegrid.Viewport.prototype.clear = function(Surface,Placeholder,Center,Viewport, rows)
 {
 	var uid = this.grid.uid;
 	if (this.surface && Surface)
@@ -131,13 +131,13 @@ nitobi.grid.Viewport.prototype.clear = function(Surface,Placeholder,Center,Viewp
  * This will try to render data from rows "top" to "bottom".
  * The data should already be in the datasource.
  */
-nitobi.grid.Viewport.prototype.setSort = function(column,direction)
+nitobi.treegrid.Viewport.prototype.setSort = function(column,direction)
 {
 	this.sortColumn = column;
 	this.sortDir = direction;
 }
 
-nitobi.grid.Viewport.prototype.renderGap = function(top, bottom)
+nitobi.treegrid.Viewport.prototype.renderGap = function(top, bottom)
 {
 	//	This gets the currently active row and column for possible style changes during rendering
 	var activeColumn = activeRow = null;
@@ -146,8 +146,8 @@ nitobi.grid.Viewport.prototype.renderGap = function(top, bottom)
 	var activeColumn = 0, activeRow = 0;
 	if (activeCell != null)
 	{
-		activeColumn = nitobi.grid.Cell.getColumnNumber(activeCell);
-		activeRow = nitobi.grid.Cell.getRowNumber(activeCell);
+		activeColumn = nitobi.treegrid.Cell.getColumnNumber(activeCell);
+		activeRow = nitobi.treegrid.Cell.getRowNumber(activeCell);
 	}
 	*/
 
@@ -170,7 +170,7 @@ nitobi.grid.Viewport.prototype.renderGap = function(top, bottom)
  *
  */
  // OPTIMIMIZE THIS!!!!
-nitobi.grid.Viewport.prototype.findBlock=function(row) {
+nitobi.treegrid.Viewport.prototype.findBlock=function(row) {
 	var blk=this.container.childNodes;
 	for (var i=0;i<blk.length;i++) {
 		if (row>=blk[i].top && row<=blk[i].bottom) {
@@ -182,7 +182,7 @@ nitobi.grid.Viewport.prototype.findBlock=function(row) {
 /**
  *
  */
-nitobi.grid.Viewport.prototype.findBlockAtCoord=function(top) {
+nitobi.treegrid.Viewport.prototype.findBlockAtCoord=function(top) {
 	var blk = this.container.childNodes;
 	for (var i=0;i<blk.length;i++) {
 		var rt = blk[i].offsetTop;
@@ -196,7 +196,7 @@ nitobi.grid.Viewport.prototype.findBlockAtCoord=function(top) {
 /**
  *
  */
-nitobi.grid.Viewport.prototype.getBlocks = function(startRow, endRow)
+nitobi.treegrid.Viewport.prototype.getBlocks = function(startRow, endRow)
 {
 	var blocks = [];
 	var startBlock = this.findBlock(startRow);
@@ -217,7 +217,7 @@ nitobi.grid.Viewport.prototype.getBlocks = function(startRow, endRow)
 /**
  *
  */
-nitobi.grid.Viewport.prototype.clearBlocks = function(startRow, endRow)
+nitobi.treegrid.Viewport.prototype.clearBlocks = function(startRow, endRow)
 {
 	// TODO: should split up the first and last block rather than destroy it entirely.
 	var blocks = this.getBlocks(startRow, endRow);
@@ -240,7 +240,7 @@ nitobi.grid.Viewport.prototype.clearBlocks = function(startRow, endRow)
  * @type Array
  * @private
  */
-nitobi.grid.Viewport.prototype.splitBlock = function(row)
+nitobi.treegrid.Viewport.prototype.splitBlock = function(row)
 {
 	row = parseInt(row);
 	var block = this.getBlocks(row, row)[0];
@@ -302,7 +302,7 @@ nitobi.grid.Viewport.prototype.splitBlock = function(row)
 /**
  * Renders a range of rows inside an empty block.  
  */
-nitobi.grid.Viewport.prototype.renderInsideEmptyBlock=function(top, bottom, Empty) {
+nitobi.treegrid.Viewport.prototype.renderInsideEmptyBlock=function(top, bottom, Empty) {
 	if (Empty==null) {
 		return this.renderBlock(top,bottom);
 	}
@@ -352,7 +352,7 @@ nitobi.grid.Viewport.prototype.renderInsideEmptyBlock=function(top, bottom, Empt
 /**
  *
  */
-nitobi.grid.Viewport.prototype.renderEmptyBlock = function(mtop, bottom, nextSibling) 
+nitobi.treegrid.Viewport.prototype.renderEmptyBlock = function(mtop, bottom, nextSibling) 
 {
 	var o = this.renderBlock(mtop,bottom,nextSibling);
 	o.setAttribute('id','eba_grid_emptyblock_'+this.region+'_'+mtop+'_'+bottom+'_'+this.uid);
@@ -365,7 +365,7 @@ nitobi.grid.Viewport.prototype.renderEmptyBlock = function(mtop, bottom, nextSib
 /**
  *
  */
-nitobi.grid.Viewport.prototype.renderBlock=function(top, bottom,nextSibling) {
+nitobi.treegrid.Viewport.prototype.renderBlock=function(top, bottom,nextSibling) {
 //	if (bottom<top) return null;
 	var o = document.createElement("div");
 	// This will be reset by the calling function if called from renderEmptyBlock
@@ -390,7 +390,7 @@ nitobi.grid.Viewport.prototype.renderBlock=function(top, bottom,nextSibling) {
 /**
  * Updates the properties on an existing block like the id and top, bottom, etc expandos
  */
-nitobi.grid.Viewport.prototype.updateBlock = function(block, top, bottom) 
+nitobi.treegrid.Viewport.prototype.updateBlock = function(block, top, bottom) 
 {
 	block.setAttribute('id','eba_grid_block_'+this.region+'_'+top+'_'+bottom+'_'+this.uid);
 	block.top=top;
@@ -402,17 +402,17 @@ nitobi.grid.Viewport.prototype.updateBlock = function(block, top, bottom)
 	block.columns = this.columns;
 }
 
-nitobi.grid.Viewport.prototype.setHeaderHeight = function(headerHeight)
+nitobi.treegrid.Viewport.prototype.setHeaderHeight = function(headerHeight)
 {
 	this.headerHeight = headerHeight;
 }
 
-nitobi.grid.Viewport.prototype.setRowHeight = function(rowHeight)
+nitobi.treegrid.Viewport.prototype.setRowHeight = function(rowHeight)
 {
 	this.rowHeight = rowHeight;
 }
 
-nitobi.grid.Viewport.prototype.dispose = function()
+nitobi.treegrid.Viewport.prototype.dispose = function()
 {
 	this.element = null;
 	this.container = null;
@@ -421,13 +421,13 @@ nitobi.grid.Viewport.prototype.dispose = function()
 	return;
 }
 
-nitobi.grid.Viewport.prototype.fire= function(evt,args)  {
+nitobi.treegrid.Viewport.prototype.fire= function(evt,args)  {
 	return nitobi.event.notify(evt+this.uid,args);
   }
-nitobi.grid.Viewport.prototype.subscribe= function(evt,func,context)  {
+nitobi.treegrid.Viewport.prototype.subscribe= function(evt,func,context)  {
 	if (typeof(context)=="undefined") context=this;
 	return nitobi.event.subscribe(evt+this.uid,nitobi.lang.close(context, func));
 }
-nitobi.grid.Viewport.prototype.attach= function(evt,func,element)  {
+nitobi.treegrid.Viewport.prototype.attach= function(evt,func,element)  {
 	return nitobi.html.attachEvent(element,evt,nitobi.lang.close(this,func));
 }

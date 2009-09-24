@@ -9,10 +9,10 @@
  * Creates a new Column object.
  * @class 
  * @constructor
- * @param {nitobi.grid.Grid} grid The grid object this column belongs to
+ * @param {nitobi.treegrid.Grid} grid The grid object this column belongs to
  * @param {Number} index The index of the column (zero based)
  */
-nitobi.grid.Column = function(grid, index, surface)
+nitobi.treegrid.Column = function(grid, index, surface)
 {
 	/**
 	 * @private
@@ -40,7 +40,7 @@ nitobi.grid.Column = function(grid, index, surface)
 	this.modelNodes = {};
 }
 
-nitobi.grid.Column.prototype = {
+nitobi.treegrid.Column.prototype = {
 
 	setAlign:function(){this.xSET("Align",arguments);},
 	getAlign:function(){return this.xGET("Align",arguments);},
@@ -146,14 +146,14 @@ nitobi.grid.Column.prototype = {
  * Returns the XML node that represents the Column state.
  * @type {XMLElement}
  */
-nitobi.grid.Column.prototype.getModel = function() {
+nitobi.treegrid.Column.prototype.getModel = function() {
 	if (this.ModelNode == null) {
 		this.ModelNode = this.surface.columnsNode.childNodes[this.column];
 		// TODO: This should not be required. 
 //		if (nitobi.browser.MOZ)
-//			this.ModelNode=this.grid.model.selectSingleNode("//state/nitobi.grid.Columns/nitobi.grid.Column["+(parseInt(this.column)+1)+"]");
+//			this.ModelNode=this.grid.model.selectSingleNode("//state/nitobi.treegrid.Columns/nitobi.treegrid.Column["+(parseInt(this.column)+1)+"]");
 //		else
-//			this.ModelNode=this.grid.model.selectSingleNode("//state/nitobi.grid.Columns/nitobi.grid.Column["+(this.column)+"]");
+//			this.ModelNode=this.grid.model.selectSingleNode("//state/nitobi.treegrid.Columns/nitobi.treegrid.Column["+(this.column)+"]");
 	}
 	return this.ModelNode;
 }
@@ -162,19 +162,19 @@ nitobi.grid.Column.prototype.getModel = function() {
  * Returns the HTML element of the column header.
  * @type {HTMLElement}
  */
-nitobi.grid.Column.prototype.getHeaderElement = function()
+nitobi.treegrid.Column.prototype.getHeaderElement = function()
 {
-	return nitobi.grid.Column.getColumnHeaderElement(this.grid.uid, this.column, this.surface.key);
+	return nitobi.treegrid.Column.getColumnHeaderElement(this.grid.uid, this.column, this.surface.key);
 }
 
 /**
  * Returns the html element for a surface's header if that header has been pinned to the root
  * header (i.e. if the surface's header is no longer in view).
- * This is used primarily in {@link nitobi.grid.Surface#clearColumnHeaderSortOrder} and 
- * {@link nitobi.grid.Surface#setColumnHeaderSortOrder}.
+ * This is used primarily in {@link nitobi.treegrid.Surface#clearColumnHeaderSortOrder} and 
+ * {@link nitobi.treegrid.Surface#setColumnHeaderSortOrder}.
  * @private
  */
-nitobi.grid.Column.prototype.getHeaderCopy = function()
+nitobi.treegrid.Column.prototype.getHeaderCopy = function()
 {
 	return $ntb('columnheader_'+this.column+'_'+this.grid.uid+ "_" + this.surface.key+ "copy");
 }
@@ -182,7 +182,7 @@ nitobi.grid.Column.prototype.getHeaderCopy = function()
 /**
  * @private
  */
-nitobi.grid.Column.prototype.getEditor = function()
+nitobi.treegrid.Column.prototype.getEditor = function()
 {
 	
 }
@@ -190,7 +190,7 @@ nitobi.grid.Column.prototype.getEditor = function()
  * Returns a native browser style object that can be used to get and set styles for the entire Column including
  * both the header and the data cells.
  */
-nitobi.grid.Column.prototype.getStyle = function()
+nitobi.treegrid.Column.prototype.getStyle = function()
 {
 	var className = this.getClassName();
 	return nitobi.html.getClass(className);
@@ -198,7 +198,7 @@ nitobi.grid.Column.prototype.getStyle = function()
 /**
  * Returns a native browser style object that can be used to get and set styles for the Column header.
  */
-nitobi.grid.Column.prototype.getHeaderStyle = function()
+nitobi.treegrid.Column.prototype.getHeaderStyle = function()
 {
 	var className = "acolumnheader"+this.grid.uid+"_"+this.column;
 	return nitobi.html.getClass(className);
@@ -206,7 +206,7 @@ nitobi.grid.Column.prototype.getHeaderStyle = function()
 /**
  * Returns a native browser style object that can be used to get and set styles for the Column data cells.
  */
-nitobi.grid.Column.prototype.getDataStyle = function()
+nitobi.treegrid.Column.prototype.getDataStyle = function()
 {
 	var className = "ntb-column-data"+this.grid.uid+"_"+this.column;
 	return nitobi.html.getClass(className);
@@ -215,7 +215,7 @@ nitobi.grid.Column.prototype.getDataStyle = function()
 /**
  * Returns a reference to the editor object for the Column.
  */
-nitobi.grid.Column.prototype.getEditor = function()
+nitobi.treegrid.Column.prototype.getEditor = function()
 {
 	return nitobi.form.ControlFactory.instance.getEditor(this.grid, this);
 }
@@ -224,7 +224,7 @@ nitobi.grid.Column.prototype.getEditor = function()
 /**
  * Hides the column
  */ 
-nitobi.grid.Column.prototype.hide = function()
+nitobi.treegrid.Column.prototype.hide = function()
 {
   var colSetId = this.surface.columnSetId;
   var width = this.getWidth();
@@ -234,7 +234,7 @@ nitobi.grid.Column.prototype.hide = function()
   this.grid.adjustHorizontalScrollBars();
  }
 
-nitobi.grid.Column.prototype.show = function()
+nitobi.treegrid.Column.prototype.show = function()
 {
   var colSetId = this.surface.columnSetId;
   var width = this.getWidth();
@@ -243,7 +243,7 @@ nitobi.grid.Column.prototype.show = function()
   classDef.display = "";
 }
 
-nitobi.grid.Column.prototype.toggleVis = function()
+nitobi.treegrid.Column.prototype.toggleVis = function()
 {
   var colSetId = this.surface.columnSetId;
   var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
@@ -257,7 +257,7 @@ nitobi.grid.Column.prototype.toggleVis = function()
 /**
  * @private
  */
-nitobi.grid.Column.prototype.xGET = function()
+nitobi.treegrid.Column.prototype.xGET = function()
 {
 	var node = null, xpath = "@"+arguments[0], val = "";
 	var cachedNode = this.modelNodes[xpath];
@@ -274,7 +274,7 @@ nitobi.grid.Column.prototype.xGET = function()
 /**
  * @private
  */
-nitobi.grid.Column.prototype.xSET = function()
+nitobi.treegrid.Column.prototype.xSET = function()
 {
 	var node = this.getModel();
 	if (node!=null) {
@@ -284,7 +284,7 @@ nitobi.grid.Column.prototype.xSET = function()
 /**
  * @private
  */
-nitobi.grid.Column.prototype.xbSETMODEL = function()
+nitobi.treegrid.Column.prototype.xbSETMODEL = function()
 {
 	var node = this.getModel();
 	if (node!=null) {
@@ -294,7 +294,7 @@ nitobi.grid.Column.prototype.xbSETMODEL = function()
 /**
  * @private
  */
-nitobi.grid.Column.prototype.eSET = function(name, arguments)
+nitobi.treegrid.Column.prototype.eSET = function(name, arguments)
 {
 	var oFunction = arguments[0];
 	var funcRef = oFunction;
@@ -321,7 +321,7 @@ nitobi.grid.Column.prototype.eSET = function(name, arguments)
 /**
  * @private
  */
-nitobi.grid.Column.prototype.jSET = function(name, val)
+nitobi.treegrid.Column.prototype.jSET = function(name, val)
 {
 	this[name] = val[0];
 }
@@ -329,7 +329,7 @@ nitobi.grid.Column.prototype.jSET = function(name, val)
 /**
  * @private
  */
-nitobi.grid.Column.prototype.fire = function(evt,args)
+nitobi.treegrid.Column.prototype.fire = function(evt,args)
 {
 	return nitobi.event.notify(evt+this.uid,args);
 }
@@ -337,7 +337,7 @@ nitobi.grid.Column.prototype.fire = function(evt,args)
 /**
  * @private
  */
-nitobi.grid.Column.prototype.subscribe = function(evt,func,context)
+nitobi.treegrid.Column.prototype.subscribe = function(evt,func,context)
 {
 	if (typeof(context)=="undefined") context=this;
 	return nitobi.event.subscribe(evt+this.uid, nitobi.lang.close(context, func));
@@ -346,7 +346,7 @@ nitobi.grid.Column.prototype.subscribe = function(evt,func,context)
 /**
  * @private
  */
-nitobi.grid.Column.prototype.unsubscribe = function(evt,func)
+nitobi.treegrid.Column.prototype.unsubscribe = function(evt,func)
 {
 	return nitobi.event.unsubscribe(evt+this.uid, func);
 }
@@ -354,16 +354,16 @@ nitobi.grid.Column.prototype.unsubscribe = function(evt,func)
 /**
  * Returns the column header element for a given Grid and column index.
  * @private
- * @param {nitobi.grid} grid
+ * @param {nitobi.treegrid} grid
  * @param {Number} column
  * @returns {HtmlElement}
  */
-nitobi.grid.Column.getColumnHeaderElement = function(gridId, column, surface)
+nitobi.treegrid.Column.getColumnHeaderElement = function(gridId, column, surface)
 {
 	return $ntb('columnheader_'+column+'_'+gridId + "_" + surface);
 }
 
-nitobi.grid.Column.prototype.inRange = function(x)
+nitobi.treegrid.Column.prototype.inRange = function(x)
 {
   var left = this.getHeaderElement().offsetLeft;
   var right = left + this.getWidth();

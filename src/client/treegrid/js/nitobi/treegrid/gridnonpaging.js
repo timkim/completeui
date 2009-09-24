@@ -31,22 +31,22 @@
  * @constructor
  * @param {String} uid The unique ID of the Grid.
  */
-nitobi.grid.GridNonpaging = function(uid) {
-	nitobi.grid.GridNonpaging.baseConstructor.call(this);
+nitobi.treegrid.GridNonpaging = function(uid) {
+	nitobi.treegrid.GridNonpaging.baseConstructor.call(this);
 	this.mode = "nonpaging";
 }
-nitobi.lang.extend(nitobi.grid.GridNonpaging, nitobi.grid.TreeGrid);
+nitobi.lang.extend(nitobi.treegrid.GridNonpaging, nitobi.treegrid.TreeGrid);
 
-nitobi.grid.GridNonpaging.prototype.createChildren=function() {
+nitobi.treegrid.GridNonpaging.prototype.createChildren=function() {
 	var args = arguments;
-	nitobi.grid.GridNonpaging.base.createChildren.call(this,args);
-	nitobi.grid.GridNonpaging.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD);	
+	nitobi.treegrid.GridNonpaging.base.createChildren.call(this,args);
+	nitobi.treegrid.GridNonpaging.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD);	
 }
 
 //get all data if getHandler specified (no paging stuff)
-nitobi.grid.GridNonpaging.prototype.bind=function() 
+nitobi.treegrid.GridNonpaging.prototype.bind=function() 
 {
-	nitobi.grid.GridStandard.base.bind.call(this);
+	nitobi.treegrid.GridStandard.base.bind.call(this);
 	
 	if (this.getGetHandler()!='') 
 	{
@@ -61,9 +61,9 @@ nitobi.grid.GridNonpaging.prototype.bind=function()
 		this.bindComplete();
 	}
 }
-nitobi.grid.GridNonpaging.prototype.getComplete=function(evtArgs)
+nitobi.treegrid.GridNonpaging.prototype.getComplete=function(evtArgs)
 {
-  	nitobi.grid.GridNonpaging.base.getComplete.call(this, evtArgs);
+  	nitobi.treegrid.GridNonpaging.base.getComplete.call(this, evtArgs);
 
 	// TODO: This is not needed since the connected datatable will fire all the
 	// right events on the Grid when it gets the data back.
@@ -76,16 +76,16 @@ nitobi.grid.GridNonpaging.prototype.getComplete=function(evtArgs)
   	this.bindComplete();
 }
 
-nitobi.grid.GridNonpaging.prototype.renderMiddle= function()
+nitobi.treegrid.GridNonpaging.prototype.renderMiddle= function()
 {
-	nitobi.grid.GridNonpaging.base.renderMiddle.call(this,arguments);
+	nitobi.treegrid.GridNonpaging.base.renderMiddle.call(this,arguments);
 	var startRow = this.getfreezetop();
 	endRow = this.getRowCount();
 	this.Scroller.view.midcenter.renderGap(startRow, endRow, false);
 }
 
 /*
-nitobi.grid.GridNonpaging.prototype.handleKey = function()
+nitobi.treegrid.GridNonpaging.prototype.handleKey = function()
 {
 }
 */

@@ -31,23 +31,23 @@
  * @constructor
  * @param {String} uid The unique ID of the Grid.
  */
-nitobi.grid.GridLiveScrolling = function(uid) {
-	nitobi.grid.GridLiveScrolling.baseConstructor.call(this, uid);
+nitobi.treegrid.GridLiveScrolling = function(uid) {
+	nitobi.treegrid.GridLiveScrolling.baseConstructor.call(this, uid);
 	this.mode = "livescrolling";
 }
-nitobi.lang.extend(nitobi.grid.GridLiveScrolling, nitobi.grid.TreeGrid);
+nitobi.lang.extend(nitobi.treegrid.GridLiveScrolling, nitobi.treegrid.TreeGrid);
 
-nitobi.grid.GridLiveScrolling.prototype.createChildren=function() {
+nitobi.treegrid.GridLiveScrolling.prototype.createChildren=function() {
 	var args = arguments;
 
-	nitobi.grid.GridLiveScrolling.base.createChildren.call(this,args);
+	nitobi.treegrid.GridLiveScrolling.base.createChildren.call(this,args);
 
-	nitobi.grid.GridLiveScrolling.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD);	
+	nitobi.treegrid.GridLiveScrolling.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD);	
 }
 
-nitobi.grid.GridLiveScrolling.prototype.bind=function() 
+nitobi.treegrid.GridLiveScrolling.prototype.bind=function() 
 {
-	nitobi.grid.GridStandard.base.bind.call(this);
+	nitobi.treegrid.GridStandard.base.bind.call(this);
 
 	if (this.getGetHandler()!='') {
 		this.ensureConnected();
@@ -67,9 +67,9 @@ nitobi.grid.GridLiveScrolling.prototype.bind=function()
 //PageUp-PageDown Keys
 
 
-nitobi.grid.GridLiveScrolling.prototype.getComplete=function(evtArgs)
+nitobi.treegrid.GridLiveScrolling.prototype.getComplete=function(evtArgs)
 {
-	nitobi.grid.GridLiveScrolling.base.getComplete.call(this, evtArgs);
+	nitobi.treegrid.GridLiveScrolling.base.getComplete.call(this, evtArgs);
 
 	// No need to set the row count here since dataTable events take care of it.
 
@@ -83,13 +83,13 @@ nitobi.grid.GridLiveScrolling.prototype.getComplete=function(evtArgs)
 	this.bindComplete();
 }
 
-nitobi.grid.GridLiveScrolling.prototype.pageSelect= function(dir)
+nitobi.treegrid.GridLiveScrolling.prototype.pageSelect= function(dir)
 {
 	var rowRange = this.Scroller.getUnrenderedBlocks();
 	var rows = rowRange.last - rowRange.first;
 	this.reselect(0, rows * dir);
 }
-nitobi.grid.GridLiveScrolling.prototype.page= function(dir)
+nitobi.treegrid.GridLiveScrolling.prototype.page= function(dir)
 {
 	//	page needs to retrieve and render the next page of data 
 	//	and then set the active cell and the selection box to the 
