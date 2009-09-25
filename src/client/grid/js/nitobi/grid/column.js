@@ -102,6 +102,8 @@ nitobi.grid.Column.prototype = {
 	 * @type String
 	 */
 	getInitial:function(){return this.xGET("Initial",arguments);},
+	getHidden:function(){return this.xGET("Hidden", arguments);},
+	setHidden:function(){return this.xSET("Hidden", arguments);},
 	/**
 	 * Sets the label to render for the column.
 	 * @param {String} label The label to use.
