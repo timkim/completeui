@@ -339,6 +339,7 @@ nitobi.grid.Grid.prototype.xColumnProperties = {
 		xdatafld:{n:"xdatafld",t:"s",d:""},
 		value:{n:"Value",t:"s",d:""},
 		wrap:{n:"Wrap",t:"b",d:false},
+		hidden:{n:"Hidden",t:"b",d:false},
 		xi:{n:"xi",t:"i",d:100},
 		oncellclickevent:{n:"OnCellClickEvent"},
 		onbeforecellclickevent:{n:"OnBeforeCellClickEvent"},
