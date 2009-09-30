@@ -1786,6 +1786,10 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 			var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
 			list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
 			list.appendChild(list_item);
+			if(!hdr.isVisible())
+			{
+				list_item.children[0].checked = true;
+			}
 			nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
 			$ntb(id).style.width = "20px";
 		}

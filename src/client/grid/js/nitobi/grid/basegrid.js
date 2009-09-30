@@ -1683,6 +1683,10 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
       		var id = "ntb-hidecol_" + i + "_" + uid;
       		list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
       		list.appendChild(list_item);
+			if(!hdr.isVisible())
+			{
+				list_item.children[0].checked = true;
+			}
       		//Attach event here
       		nitobi.html.attachEvent($ntb("ntb-hidecol_"+ i + "_" + this.uid), "mouseup", hdr.toggleVis, hdr); 
 	}
