@@ -433,10 +433,22 @@ nitobi.ui.Toolbars.prototype.resetCounter = function()
 	if (start_page)
 	{		
 		start_page.value = String(1);
+	}
+	
+	if(total_items)
+	{
 		total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
+	}
+	
+	if(disp_start)
+	{
 		disp_start.innerHTML = "&nbsp;1";
+	}
+	
+	if(disp_end)
+	{
 		disp_end.innerHTML = "&nbsp;" + rows_per_page;
-	}	
+	}
 }
 
 nitobi.ui.Toolbars.prototype.maxCounter = function()
@@ -459,11 +471,19 @@ nitobi.ui.Toolbars.prototype.incrementCounter = function()
 	{		
 		var val = parseInt(start_page.value);
 		start_page.value = String(++val);
-		var start_disp = val*rows_per_page;
-		var end_disp = start_disp+rows_per_page;
-		disp_start.innerHTML = "&nbsp;" + start_disp;
-		disp_end.innerHTML = "&nbsp;" + end_disp;
 	}	
+	
+	if(disp_start)
+	{
+		var start_disp = val*rows_per_page;
+		disp_start.innerHTML = "&nbsp;" + start_disp;
+	}
+	
+	if(disp_end)
+	{
+		var end_disp = start_disp+rows_per_page;
+		disp_end.innerHTML = "&nbsp;" + end_disp;
+	}
 }
 
 nitobi.ui.Toolbars.prototype.decrementCounter = function()
@@ -476,11 +496,19 @@ nitobi.ui.Toolbars.prototype.decrementCounter = function()
 	{		
 		var val = parseInt(start_page.value);
 		start_page.value = String(--val);
-		var start_disp = val*rows_per_page;
-		var end_disp = val+rows_per_page;
-		disp_start.innerHTML = "&nbsp;" + start_disp;
-		disp_end.innerHTML = "&nbsp;" + end_disp;	
 	}	
+	
+	if(disp_start)
+	{
+		var start_disp = val*rows_per_page;
+		disp_start.innerHTML = "&nbsp;" + start_disp;
+	}
+	
+	if(disp_end)
+	{
+		var end_disp = val+rows_per_page;
+		disp_end.innerHTML = "&nbsp;" + end_disp;			
+	}
 }
 
 nitobi.ui.Toolbars.prototype.inputCounter = function()
@@ -503,18 +531,17 @@ nitobi.ui.Toolbars.prototype.inputCounter = function()
 }
 nitobi.ui.Toolbars.prototype.calculateRange = function()
 {
-	var startPage = 1;
 	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
 	var total_items = $ntb('endRow' + this.uid);
 	var last_page =  $ntb('endPage' + this.uid);
-	if(total_items != null || last_page != null)
+	if(total_items)
 	{
 		total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
+	}
 	
-		if(last_page)
-		{
-			last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
-		}
+	if(last_page)
+	{
+		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
 	}
 }
 

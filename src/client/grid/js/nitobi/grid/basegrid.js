@@ -1993,9 +1993,13 @@ nitobi.grid.Grid.prototype.resize= function(width, height)
 	this.setWidth(width);
 	this.setHeight(height);
 	var gridDeclaration = this.Declaration.grid.selectSingleNode('ntb:grid');
-	if(width != undefined || height != undefined)
+	if(width != undefined)
 	{	
 		gridDeclaration.setAttribute('width', width);
+	}
+	
+	if(height != undefined)
+	{
 		gridDeclaration.setAttribute('height', height);
 	}
 	
