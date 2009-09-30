@@ -16,14 +16,15 @@
  * representation
  * </p>
  * @constructor
- * @param {nitobi.grid.Grid} grid
+ * @param {nitobi.treegrid.Grid} grid
  * @param {Object} row This argument can either be a row index or a HtmlElement. 
  * If the row index is used the third argument is also required.
  * @param {Number} column Index of the column of the Cell. This is optional, however, it is 
  * required if the row argument is specified as a row index and not a Cell HTML element.
- * @see nitobi.grid.Grid#getCellObject
+ * @see nitobi.treegrid.Grid#getCellObject
  */
-nitobi.grid.Cell = function(grid, row, column, surface)
+
+nitobi.treegrid.Cell = function(grid, row, column, surface)
 {
 	// Row should not be null
 	if (row == null || grid == null)
@@ -49,7 +50,7 @@ nitobi.grid.Cell = function(grid, row, column, surface)
 		row = Number(cell.getAttribute('xi'));
 		column = cell.getAttribute('col');
 		DomNode = cell;
-		var surfacePath = nitobi.grid.Cell.getSurfacePath(cell);
+		var surfacePath = nitobi.treegrid.Cell.getSurfacePath(cell);
 		this.surface = this.grid.Scroller.getSurface(surfacePath);
 	}
 	else
@@ -106,7 +107,7 @@ nitobi.grid.Cell = function(grid, row, column, surface)
  * Returns the XML node from the DataTable that contains the Cell data.
  * @type {XMLElement}
  */
-nitobi.grid.Cell.prototype.getData = function() {
+nitobi.treegrid.Cell.prototype.getData = function() {
 	// TODO: We should not need the column object to get the attribute mapping
 	// TODO: We may have problems after sorting for example
 	if (this.DataNode == null)
@@ -118,7 +119,7 @@ nitobi.grid.Cell.prototype.getData = function() {
  * Returns the XML node that represents the Cell state.
  * @type {XMLElement}
  */
-nitobi.grid.Cell.prototype.getModel = function() {
+nitobi.treegrid.Cell.prototype.getModel = function() {
 	if (this.ModelNode == null)
 		this.ModelNode = this.grid.model.selectSingleNode("//ntb:columns/*[@xi='"+this.column+"']");
 	return this.ModelNode;
@@ -127,49 +128,49 @@ nitobi.grid.Cell.prototype.getModel = function() {
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.setRow = function() {
+nitobi.treegrid.Cell.prototype.setRow = function() {
 	this.jSET("Row",arguments);
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.getRow = function() {
+nitobi.treegrid.Cell.prototype.getRow = function() {
 	return this.Row;
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.setColumn = function() {
+nitobi.treegrid.Cell.prototype.setColumn = function() {
 	this.jSET("Column",arguments);
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.getColumn = function() {
+nitobi.treegrid.Cell.prototype.getColumn = function() {
 	return this.Column;
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.setDomNode = function() {	
+nitobi.treegrid.Cell.prototype.setDomNode = function() {	
 	this.jSET("DomNode",arguments);	
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.getDomNode = function() {
+nitobi.treegrid.Cell.prototype.getDomNode = function() {
 	return this.DomNode;
 };
 
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.setDataNode = function() {
+nitobi.treegrid.Cell.prototype.setDataNode = function() {
 	this.jSET("DataNode",arguments);	
 };
 
@@ -195,7 +196,7 @@ nitobi.grid.Cell.prototype.setDataNode = function() {
  * @param {String} display The value which will be displayed in the Grid. 
  * This is optional.
  */
-nitobi.grid.Cell.prototype.setValue = function(value, display) 
+nitobi.treegrid.Cell.prototype.setValue = function(value, display) 
 {
 	if (value == this.getValue())
 		return;
@@ -349,7 +350,7 @@ nitobi.grid.Cell.prototype.setValue = function(value, display)
  * Gets the value of the cell from its xml node.  
  * @return {String}
  */
-nitobi.grid.Cell.prototype.getValue = function()
+nitobi.treegrid.Cell.prototype.getValue = function()
 {
 	// TODO: Need to return the correct JS type
 	var colObj = this.getColumnObject();
@@ -374,7 +375,7 @@ nitobi.grid.Cell.prototype.getValue = function()
  * @return {String}
  * @see #getValue
  */
-nitobi.grid.Cell.prototype.getHtml = function()
+nitobi.treegrid.Cell.prototype.getHtml = function()
 {
 	return nitobi.html.getFirstChild(this.DomNode).innerHTML;
 }
@@ -395,7 +396,7 @@ nitobi.grid.Cell.prototype.getHtml = function()
  * </code></pre>
  * </div>
  */
-nitobi.grid.Cell.prototype.edit = function()
+nitobi.treegrid.Cell.prototype.edit = function()
 {
 	this.grid.setActiveCell(this.DomNode);
 	this.grid.edit();
@@ -404,7 +405,7 @@ nitobi.grid.Cell.prototype.edit = function()
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.GETDATA = function()
+nitobi.treegrid.Cell.prototype.GETDATA = function()
 {
 	var node = this.getData();
 	if (node!=null) {
@@ -415,7 +416,7 @@ nitobi.grid.Cell.prototype.GETDATA = function()
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.xGETMETA = function()
+nitobi.treegrid.Cell.prototype.xGETMETA = function()
 {
 	if (this.MetaNode == null) return null;  
 	var node = this.MetaNode;
@@ -428,7 +429,7 @@ nitobi.grid.Cell.prototype.xGETMETA = function()
 /**
  * @private
  */
-nitobi.grid.Cell.prototype.xSETMETA = function()
+nitobi.treegrid.Cell.prototype.xSETMETA = function()
 {
 	var node = this.MetaNode;
 	if (node!=null) {
@@ -445,7 +446,7 @@ nitobi.grid.Cell.prototype.xSETMETA = function()
  * xSETCSS sets a value in the Grid CSS.
  * @private
  */
-nitobi.grid.Cell.prototype.xSETCSS = function()
+nitobi.treegrid.Cell.prototype.xSETCSS = function()
 {
 	var node = this.DomNode;
 	if (node!=null) {
@@ -459,7 +460,7 @@ nitobi.grid.Cell.prototype.xSETCSS = function()
  * xGET gets a value from the Grid model XML document.
  * @private
  */
-nitobi.grid.Cell.prototype.xGET = function()
+nitobi.treegrid.Cell.prototype.xGET = function()
 {
 	var node = this.getModel();
 	node = node.selectSingleNode(arguments[0]);
@@ -472,7 +473,7 @@ nitobi.grid.Cell.prototype.xGET = function()
  * xSET sets a value in the Grid model XML document.
  * @private
  */
-nitobi.grid.Cell.prototype.xSET = function()
+nitobi.treegrid.Cell.prototype.xSET = function()
 {
 	var node = this.getModel();
 	node = node.selectSingleNode(arguments[0]);
@@ -484,16 +485,16 @@ nitobi.grid.Cell.prototype.xSET = function()
 /**
  * Returns the native web browser Style object for the given cell.
  */
-nitobi.grid.Cell.prototype.getStyle = function()
+nitobi.treegrid.Cell.prototype.getStyle = function()
 {
 	return this.DomNode.style;
 }
 
 /**
  * Returns the Column object to which the given cell belongs.
- * @return {nitobi.grid.Column}
+ * @return {nitobi.treegrid.Column}
  */
-nitobi.grid.Cell.prototype.getColumnObject = function()
+nitobi.treegrid.Cell.prototype.getColumnObject = function()
 {
 	if (typeof(this.columnObject) == "undefined")
 	{
@@ -504,12 +505,12 @@ nitobi.grid.Cell.prototype.getColumnObject = function()
 
 /**
  * Returns the cell HTML element for the given Grid, row and column indices.
- * @param {nitobi.grid} grid The Grid to which the cell belongs.
+ * @param {nitobi.treegrid} grid The Grid to which the cell belongs.
  * @param {Number} row The row index of the Cell.
  * @param {Number} column The column index of the Cell.
- * @return {nitobi.grid.Cell}
+ * @return {nitobi.treegrid.Cell}
  */
-nitobi.grid.Cell.getCellElement = function(grid, row, column, surfacePath)
+nitobi.treegrid.Cell.getCellElement = function(grid, row, column, surfacePath)
 {
 	return $ntb("cell_"+row+"_"+column+"_"+grid.uid + "_" + (surfacePath?surfacePath:""));
 }
@@ -520,7 +521,7 @@ nitobi.grid.Cell.getCellElement = function(grid, row, column, surfacePath)
  * @param {HtmlElement} element The cell's html element.
  * @return {Number} The index of the row for the Cell.
  */
-nitobi.grid.Cell.getRowNumber = function(element)
+nitobi.treegrid.Cell.getRowNumber = function(element)
 {
 	return parseInt(element.getAttribute("xi"));
 }
@@ -532,12 +533,12 @@ nitobi.grid.Cell.getRowNumber = function(element)
  * @param {HtmlElement} element
  * @return {Number} The index of the column for the Cell (zero indexed).
  */
-nitobi.grid.Cell.getColumnNumber = function(element)
+nitobi.treegrid.Cell.getColumnNumber = function(element)
 {
 	return parseInt(element.getAttribute("col"));
 }
 
-nitobi.grid.Cell.getSurfacePath = function(element)
+nitobi.treegrid.Cell.getSurfacePath = function(element)
 {
 	return element.getAttribute("path");
 }

@@ -39,26 +39,26 @@
  * @constructor
  * @param {String} uid The unique ID of the Grid.
  */
-nitobi.grid.GridLocalPage = function(uid) {
-	nitobi.grid.GridLocalPage.baseConstructor.call(this, uid);
+nitobi.treegrid.GridLocalPage = function(uid) {
+	nitobi.treegrid.GridLocalPage.baseConstructor.call(this, uid);
 	this.mode="localpaging";
 //	this.PagingMode="standard";	//0 - None | 1 - Standard | 2 - LiveScrolling
-	this.setPagingMode(nitobi.grid.PAGINGMODE_STANDARD);
+	this.setPagingMode(nitobi.treegrid.PAGINGMODE_STANDARD);
 //	this.DataMode="local";		//0 - Local | 1 - Remote | 2 - Caching
 // TODO: ensure that properties with setters are using the setters
 	this.setDataMode('local');		//0 - Local | 1 - Remote | 2 - Caching
 }
-nitobi.lang.extend(nitobi.grid.GridLocalPage, nitobi.grid.TreeGrid);
+nitobi.lang.extend(nitobi.treegrid.GridLocalPage, nitobi.treegrid.TreeGrid);
 
-nitobi.grid.GridLocalPage.prototype.createChildren=function() {
+nitobi.treegrid.GridLocalPage.prototype.createChildren=function() {
 	var args = arguments;
 
-	nitobi.grid.GridLocalPage.base.createChildren.call(this,args);
+	nitobi.treegrid.GridLocalPage.base.createChildren.call(this,args);
 
 	// Enable paging toolbar
 	
 	// This should be done only if there is a toolbar
-	nitobi.grid.GridLiveScrolling.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
+	nitobi.treegrid.GridLiveScrolling.base.createToolbars.call(this,nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
 	// Attach events
 	this.toolbars.subscribe("NextPage",nitobi.lang.close(this,this.pageNext));
 	this.toolbars.subscribe("PreviousPage",nitobi.lang.close(this,this.pagePrevious));
@@ -68,18 +68,18 @@ nitobi.grid.GridLocalPage.prototype.createChildren=function() {
 	this.subscribe("NotEndOfData",function(pct){this.toolbars.pagingToolbar.getUiElements()["nextPage"+this.toolbars.uid].enable();}); 
 }
 
-nitobi.grid.GridLocalPage.prototype.pagePrevious=function() {
+nitobi.treegrid.GridLocalPage.prototype.pagePrevious=function() {
 	this.fire("BeforeLoadPreviousPage");
 	this.loadDataPage(Math.max(this.getCurrentPageIndex()-1,0));
 	this.fire("AfterLoadPreviousPage");
 }
 
-nitobi.grid.GridLocalPage.prototype.pageNext=function() {
+nitobi.treegrid.GridLocalPage.prototype.pageNext=function() {
 	this.fire("BeforeLoadNextPage");
 	this.loadDataPage(this.getCurrentPageIndex()+1);
 	this.fire("AfterLoadNextPage");
 }
-nitobi.grid.GridLocalPage.prototype.loadDataPage = function(newPageNumber) 
+nitobi.treegrid.GridLocalPage.prototype.loadDataPage = function(newPageNumber) 
 {
 	// Clear the selection if there is one.
 	this.fire('BeforeLoadDataPage');
@@ -120,25 +120,25 @@ nitobi.grid.GridLocalPage.prototype.loadDataPage = function(newPageNumber)
 }
 
 // PAGING MEMBERS
-nitobi.grid.GridLocalPage.prototype.setRowsPerPage=function(rows) {
+nitobi.treegrid.GridLocalPage.prototype.setRowsPerPage=function(rows) {
 	// 
 	this.setDisplayedRowCount(this.getRowsPerPage());
 	this.data.table.pageSize = this.getRowsPerPage();
 }
-nitobi.grid.GridLocalPage.prototype.pageStartIndexChanges=function() {
+nitobi.treegrid.GridLocalPage.prototype.pageStartIndexChanges=function() {
 	// Clear surfaces
 	// Get page of xml (based on current sort and filter criteria)
 	// Re-render data
 }	
-nitobi.grid.GridLocalPage.prototype.hitFirstPage=function() {
+nitobi.treegrid.GridLocalPage.prototype.hitFirstPage=function() {
 	this.fire("FirstPage");
 }	
-nitobi.grid.GridLocalPage.prototype.hitLastPage=function() {
+nitobi.treegrid.GridLocalPage.prototype.hitLastPage=function() {
 	this.fire("LastPage");
 }
-nitobi.grid.GridLocalPage.prototype.bind=function() 
+nitobi.treegrid.GridLocalPage.prototype.bind=function() 
 {
-	nitobi.grid.GridLocalPage.base.bind.call(this);
+	nitobi.treegrid.GridLocalPage.base.bind.call(this);
 
 	// TODO: if we have created the datasource and loaded it with data BEFORE connecting to it
 	// the rowcount changed events etc will not have propagated to the Grid and so we will
@@ -148,17 +148,17 @@ nitobi.grid.GridLocalPage.prototype.bind=function()
 }
 
 //PageUp-PageDown Keys
-nitobi.grid.GridLocalPage.prototype.pageUpKey=function() {
+nitobi.treegrid.GridLocalPage.prototype.pageUpKey=function() {
 	this.pagePrevious();
 }
-nitobi.grid.GridLocalPage.prototype.pageDownKey=function() {
+nitobi.treegrid.GridLocalPage.prototype.pageDownKey=function() {
 	this.pageNext();
 }
 
 
-    nitobi.grid.GridLocalPage.prototype.renderMiddle= function()
+    nitobi.treegrid.GridLocalPage.prototype.renderMiddle= function()
     {
-		nitobi.grid.GridLocalPage.base.renderMiddle.call(this,arguments);
+		nitobi.treegrid.GridLocalPage.base.renderMiddle.call(this,arguments);
 		var startRow = this.getfreezetop();
 		endRow = this.getRowsPerPage()-1;
 		this.Scroller.view.midcenter.renderGap(startRow, endRow, false);

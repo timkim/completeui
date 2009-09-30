@@ -339,6 +339,7 @@ nitobi.grid.Grid.prototype.xColumnProperties = {
 		xdatafld:{n:"xdatafld",t:"s",d:""},
 		value:{n:"Value",t:"s",d:""},
 		wrap:{n:"Wrap",t:"b",d:false},
+		hidden:{n:"Hidden",t:"b",d:false},
 		xi:{n:"xi",t:"i",d:100},
 		oncellclickevent:{n:"OnCellClickEvent"},
 		onbeforecellclickevent:{n:"OnBeforeCellClickEvent"},
@@ -1675,13 +1676,16 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
   for (var i = 0; i < count; ++i)
   {
       var hdr = this.getColumnObject(i);
-      var hdrTitle = hdr.getLabel();
-      var list_item = document.createElement("li");
-      var id = "ntb-hidecol_" + i + "_" + uid;
-      list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
-      list.appendChild(list_item);
-      //Attach event here
-      nitobi.html.attachEvent($ntb("ntb-hidecol_"+ i + "_" + this.uid), "mouseup", hdr.toggleVis, hdr); 
+      if (hdr.getHidden() == "0")
+	{
+      		var hdrTitle = hdr.getLabel();
+      		var list_item = document.createElement("li");
+      		var id = "ntb-hidecol_" + i + "_" + uid;
+      		list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+      		list.appendChild(list_item);
+      		//Attach event here
+      		nitobi.html.attachEvent($ntb("ntb-hidecol_"+ i + "_" + this.uid), "mouseup", hdr.toggleVis, hdr); 
+	}
   } 
 }
 

@@ -11,7 +11,7 @@
  * @class
  * @private
  */
-nitobi.grid.ColumnResizer = function(grid)
+nitobi.treegrid.ColumnResizer = function(grid)
 {
 	this.grid = grid;
 
@@ -66,7 +66,7 @@ nitobi.grid.ColumnResizer = function(grid)
 	this.onAfterResize = new nitobi.base.Event();
 }
 
-nitobi.grid.ColumnResizer.prototype.startResize = function(grid, column, columnHeaderElement, evt)
+nitobi.treegrid.ColumnResizer.prototype.startResize = function(grid, column, columnHeaderElement, evt)
 {
 	// TODO: This should be in the ctor but not avail from some objects.
 	this.grid = grid;
@@ -108,7 +108,7 @@ nitobi.grid.ColumnResizer.prototype.startResize = function(grid, column, columnH
 	nitobi.ui.startDragOperation(this.line, evt, false, true, this, this.endResize);
 }
 
-nitobi.grid.ColumnResizer.prototype.endResize = function(dragStopEventArgs)
+nitobi.treegrid.ColumnResizer.prototype.endResize = function(dragStopEventArgs)
 {
 	var x = dragStopEventArgs.x;
 	var Y = dragStopEventArgs.y;
@@ -129,7 +129,7 @@ nitobi.grid.ColumnResizer.prototype.endResize = function(dragStopEventArgs)
 	this.onAfterResize.notify(this);
 }
 
-nitobi.grid.ColumnResizer.prototype.dispose = function()
+nitobi.treegrid.ColumnResizer.prototype.dispose = function()
 {
 	this.grid = null;
 	this.line = null;

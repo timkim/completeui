@@ -7,16 +7,16 @@
  */
 /**
  * @constructor
- * @extends nitobi.grid.Column
+ * @extends nitobi.treegrid.Column
  */
-nitobi.grid.NumberColumn = function(grid, column, surface)
+nitobi.treegrid.NumberColumn = function(grid, column, surface)
 {
-	nitobi.grid.NumberColumn.baseConstructor.call(this, grid, column, surface);
+	nitobi.treegrid.NumberColumn.baseConstructor.call(this, grid, column, surface);
 }
 
-nitobi.lang.extend(nitobi.grid.NumberColumn, nitobi.grid.Column);
+nitobi.lang.extend(nitobi.treegrid.NumberColumn, nitobi.treegrid.Column);
 
-var ntb_numberp = nitobi.grid.NumberColumn.prototype;
+var ntb_numberp = nitobi.treegrid.NumberColumn.prototype;
 ntb_numberp.setAlign=function(){this.xSET("Align",arguments);}
 ntb_numberp.getAlign=function(){return this.xGET("Align",arguments);}
 ntb_numberp.setMask=function(){this.xSET("Mask",arguments);}

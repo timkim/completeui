@@ -5,46 +5,44 @@
  * 
  * http://www.nitobi.com/license
  */
-nitobi.lang.defineNs("nitobi.grid");
+nitobi.lang.defineNs("nitobi.treegrid");
 
 /**
  * @ignore
  */
-nitobi.grid.MODE_STANDARDPAGING = 'standard';
+nitobi.treegrid.MODE_STANDARDPAGING = 'standard';
 /**
  * @ignore
  */
-nitobi.grid.MODE_LOCALSTANDARDPAGING = 'localstandard';
+nitobi.treegrid.MODE_LOCALSTANDARDPAGING = 'localstandard';
 /**
  * @ignore
  */
-nitobi.grid.MODE_LIVESCROLLING = 'livescrolling';
+nitobi.treegrid.MODE_LIVESCROLLING = 'livescrolling';
 /**
  * @ignore
  */
-nitobi.grid.MODE_LOCALLIVESCROLLING = 'locallivescrolling';
+nitobi.treegrid.MODE_LOCALLIVESCROLLING = 'locallivescrolling';
 /**
  * @ignore
  */
-nitobi.grid.MODE_NONPAGING = 'nonpaging';
+nitobi.treegrid.MODE_NONPAGING = 'nonpaging';
 /**
  * @ignore
  */
-nitobi.grid.MODE_LOCALNONPAGING = 'localnonpaging';
+nitobi.treegrid.MODE_LOCALNONPAGING = 'localnonpaging';
 /**
  * @ignore
  */
-nitobi.grid.MODE_SMARTPAGING = 'smartpaging';
+nitobi.treegrid.MODE_SMARTPAGING = 'smartpaging';
 /**
  * @ignore
  */
-nitobi.grid.MODE_PAGEDLIVESCROLLING = 'pagedlivescrolling';
+nitobi.treegrid.MODE_PAGEDLIVESCROLLING = 'pagedlivescrolling';
 /**
  * @ignore
  */
-nitobi.grid.RENDERMODE_ONDEMAND = 'ondemand';
-
-
+nitobi.treegrid.RENDERMODE_ONDEMAND = 'ondemand';
 
 nitobi.lang.defineNs("nitobi.TreeGridFactory")
 
@@ -62,60 +60,60 @@ nitobi.TreeGridFactory.createGrid = function(sMode,dContainer,element)
 	// First check if w have either an element or a declaration to instantiate from.
 	if (element != null)
 	{
-		xDeclaration = nitobi.grid.Declaration.parse(element);
+		xDeclaration = nitobi.treegrid.Declaration.parse(element);
 		sMode = xDeclaration.grid.documentElement.getAttribute('mode');
 
 		var bGetHandler = nitobi.TreeGridFactory.isGetHandler(xDeclaration);
 		var bDatasourceId = nitobi.TreeGridFactory.isDatasourceId(xDeclaration);
 		var bHitOnce = false;
 
-		if (sMode == nitobi.grid.MODE_LOCALLIVESCROLLING)
+		if (sMode == nitobi.treegrid.MODE_LOCALLIVESCROLLING)
 		{
 			ntbAssert(bDatasourceId || bGetHandler,'To use local LiveScrolling mode a DatasourceId must also be specified.','',EBA_THROW);
 
-			sPagingMode = nitobi.grid.PAGINGMODE_LIVESCROLLING;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_LIVESCROLLING;
 			sDataMode = nitobi.data.DATAMODE_LOCAL;
 		}
-		else if (sMode == nitobi.grid.MODE_LIVESCROLLING)
+		else if (sMode == nitobi.treegrid.MODE_LIVESCROLLING)
 		{			
 			ntbAssert(bGetHandler,'To use LiveScrolling mode a GetHandler must also be specified.','',EBA_THROW);
 
-			sPagingMode = nitobi.grid.PAGINGMODE_LIVESCROLLING;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_LIVESCROLLING;
 			sDataMode = nitobi.data.DATAMODE_CACHING;
 		}
-		else if (sMode == nitobi.grid.MODE_NONPAGING)
+		else if (sMode == nitobi.treegrid.MODE_NONPAGING)
 		{
 			ntbAssert(bGetHandler,'To use NonPaging mode a GetHandler must also be specified.','',EBA_THROW);
 
 			bHitOnce = true;
 
-			sPagingMode = nitobi.grid.PAGINGMODE_NONE;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_NONE;
 			// Although we are using remote non-paging we set the datamode to be local.
 			// TODO: This mode needs to be looked at - we have an off-by-one problem with the last row.
 			sDataMode = nitobi.data.DATAMODE_LOCAL;
 		}
-		else if (sMode == nitobi.grid.MODE_LOCALNONPAGING)
+		else if (sMode == nitobi.treegrid.MODE_LOCALNONPAGING)
 		{
 			ntbAssert(bDatasourceId,'To use local LiveScrolling mode a DatasourceId must also be specified.','',EBA_THROW);
 
-			sPagingMode = nitobi.grid.PAGINGMODE_NONE;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_NONE;
 			sDataMode = nitobi.data.DATAMODE_LOCAL;
 		}
-		else if (sMode == nitobi.grid.MODE_LOCALSTANDARDPAGING)
+		else if (sMode == nitobi.treegrid.MODE_LOCALSTANDARDPAGING)
 		{
-			sPagingMode = nitobi.grid.PAGINGMODE_STANDARD;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_STANDARD;
 			sDataMode = nitobi.data.DATAMODE_LOCAL;
 		}
-		else if (sMode == nitobi.grid.MODE_STANDARDPAGING)
+		else if (sMode == nitobi.treegrid.MODE_STANDARDPAGING)
 		{
-			sPagingMode = nitobi.grid.PAGINGMODE_STANDARD;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_STANDARD;
 			sDataMode = nitobi.data.DATAMODE_PAGING;
 		}
-		else if (sMode == nitobi.grid.MODE_PAGEDLIVESCROLLING)
+		else if (sMode == nitobi.treegrid.MODE_PAGEDLIVESCROLLING)
 		{
-			sPagingMode = nitobi.grid.PAGINGMODE_STANDARD;
+			sPagingMode = nitobi.treegrid.PAGINGMODE_STANDARD;
 			sDataMode = nitobi.data.DATAMODE_PAGING;
-			sRenderMode = nitobi.grid.RENDERMODE_ONDEMAND;
+			sRenderMode = nitobi.treegrid.RENDERMODE_ONDEMAND;
 		}
 		else
 		{
@@ -125,22 +123,22 @@ nitobi.TreeGridFactory.createGrid = function(sMode,dContainer,element)
 
 	var id = element.getAttribute("id");
 
-	sMode = (sMode || nitobi.grid.MODE_STANDARDPAGING).toLowerCase();
+	sMode = (sMode || nitobi.treegrid.MODE_STANDARDPAGING).toLowerCase();
 	var grid = null;
-	if (sMode == nitobi.grid.MODE_LOCALSTANDARDPAGING) {
-		grid = new nitobi.grid.GridLocalPage(id);
+	if (sMode == nitobi.treegrid.MODE_LOCALSTANDARDPAGING) {
+		grid = new nitobi.treegrid.GridLocalPage(id);
 	}
-	else if (sMode == nitobi.grid.MODE_LIVESCROLLING) {
-		grid = new nitobi.grid.GridLiveScrolling(id);
+	else if (sMode == nitobi.treegrid.MODE_LIVESCROLLING) {
+		grid = new nitobi.treegrid.GridLiveScrolling(id);
 	}
-	else if (sMode == nitobi.grid.MODE_LOCALLIVESCROLLING) {
-		grid = new nitobi.grid.GridLiveScrolling(id);
+	else if (sMode == nitobi.treegrid.MODE_LOCALLIVESCROLLING) {
+		grid = new nitobi.treegrid.GridLiveScrolling(id);
 	}
-	else if (sMode == nitobi.grid.MODE_NONPAGING || sMode == nitobi.grid.MODE_LOCALNONPAGING) {
-		grid = new nitobi.grid.GridNonpaging(id);
+	else if (sMode == nitobi.treegrid.MODE_NONPAGING || sMode == nitobi.treegrid.MODE_LOCALNONPAGING) {
+		grid = new nitobi.treegrid.GridNonpaging(id);
 	}
-	else if (sMode == nitobi.grid.MODE_STANDARDPAGING || sMode == nitobi.grid.MODE_PAGEDLIVESCROLLING) {
-		grid = new nitobi.grid.GridStandard(id);
+	else if (sMode == nitobi.treegrid.MODE_STANDARDPAGING || sMode == nitobi.treegrid.MODE_PAGEDLIVESCROLLING) {
+		grid = new nitobi.treegrid.GridStandard(id);
 	}
 
 //nitobi.debug.PerfMon.registerAll(grid);
@@ -210,7 +208,7 @@ nitobi.TreeGridFactory.processDeclaration = function(grid, element, xDeclaration
 		// This causes the initalize method to be fired.
 		//grid.attachToParentDomElement(grid.Declaration.inlinehtml);
 	
-		nitobi.grid.Declaration.loadDataSources(xDeclaration, grid);
+		nitobi.treegrid.Declaration.loadDataSources(xDeclaration, grid);
 
 		grid.attachToParentDomElement(grid.Declaration.inlinehtml);
 
@@ -236,7 +234,7 @@ nitobi.TreeGridFactory.processDeclaration = function(grid, element, xDeclaration
 			grid.ensureConnected();
 			
 			// If this is livescrolling, and we have rows in the decl, put them in the datasource.
-			if (grid.mode.toLowerCase() == nitobi.grid.MODE_LIVESCROLLING && xDeclaration != null && xDeclaration.datasources != null)
+			if (grid.mode.toLowerCase() == nitobi.treegrid.MODE_LIVESCROLLING && xDeclaration != null && xDeclaration.datasources != null)
 			{
 				var numRows = xDeclaration.datasources.selectNodes("//ntb:datasource[@id='_default']/ntb:data/ntb:e").length;
 				if (numRows > 0)
@@ -306,13 +304,13 @@ nitobi.TreeGridFactory.isDatasourceId = function(xDeclaration)
  * @ignore
  * @private
  */
-nitobi.grid.hover = function(domNode,hover,rowHover)
+nitobi.treegrid.hover = function(domNode,hover,rowHover)
 {
 	if (!rowHover) 
 	{
 		return;
 	}
-	//	TODO: this should be using the global methods in nitobi.grid.Cell to determing row, column and uid from a cell domNode
+	//	TODO: this should be using the global methods in nitobi.treegrid.Cell to determing row, column and uid from a cell domNode
 	// Determine panel
 	var id = domNode.getAttribute("id");
 	var tmpid = id.replace(/__/g,"||");
@@ -333,7 +331,7 @@ nitobi.grid.hover = function(domNode,hover,rowHover)
 		midRowNode = midCell.parentNode;
 	}
 	if (hover) {
-		var rowHoverColor = nitobi.grid.RowHoverColor || 'white'
+		var rowHoverColor = nitobi.treegrid.RowHoverColor || 'white'
 		leftRowNode.style.backgroundColor = rowHoverColor;
 		if (midRowNode) {
 			midRowNode.style.backgroundColor = rowHoverColor;
@@ -345,14 +343,14 @@ nitobi.grid.hover = function(domNode,hover,rowHover)
 		}
 	}
 	if (hover) {
-		nitobi.html.addClass(domNode,'ntb-cell-hover');//.style.backgroundColor = nitobi.grid.CellHoverColor || 'white';
+		nitobi.html.addClass(domNode,'ntb-cell-hover');//.style.backgroundColor = nitobi.treegrid.CellHoverColor || 'white';
 	} else {
 		nitobi.html.removeClass(domNode,'ntb-cell-hover');//.style.backgroundColor = '';
 	}
 }
 
 /**
- * Initializes all Nitobi grids on the page. This should only be called after the page
+ * Initializes all nitobi.treegrids on the page. This should only be called after the page
  * has loaded fully, e.g., in body.onload. Returns an array of the initialized Grid objects.
  * @type {Array}
  */
@@ -371,7 +369,7 @@ nitobi.initTreeGrids = function()
 }
 
 /**
- * Initializes the Nitobi Grid on the page with the specified HTML element ID. This should only be called after the page
+ * Initializes the nitobi.treegrid on the page with the specified HTML element ID. This should only be called after the page
  * has loaded fully, e.g., in body.onload.
  * @param {String} id The ID of the DOM node that is the Grid declaration. It should look like &lt;ntb:grid id="myGrid" ... &gt;
  */
@@ -397,8 +395,8 @@ nitobi.initComponents = function()
 
 
 /**
- * Returns the JavaScript object for a Nitobi Grid component. For example, if you have a Grid declared on the page
- * with id=grid1, then calling nitobi.getGrid("grid1") would return the nitobi.grid.Grid object for that
+ * Returns the JavaScript object for a nitobi.treegrid component. For example, if you have a Grid declared on the page
+ * with id=grid1, then calling nitobi.getGrid("grid1") would return the nitobi.treegrid.Grid object for that
  * grid HTML declaration.
  * @param {String} componentId The id of the component as declared in its tag.
  * @return Object Returns the object of the same type as the component declaration.
@@ -409,6 +407,6 @@ nitobi.getGrid = function(sGridId)
 }
 
 nitobi.base.Registry.getInstance().register(
-//		new nitobi.base.Profile("nitobi.Grid",null,false,"ntb:grid")
+//		new nitobi.base.Profile("nitobi.treegrid",null,false,"ntb:grid")
 		new nitobi.base.Profile("nitobi.initTreeGrid",null,false,"ntb:treegrid")
 );

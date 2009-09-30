@@ -5,7 +5,7 @@
  * 
  * http://www.nitobi.com/license
  */
-nitobi.grid.Row = function(grid, row, key)
+nitobi.treegrid.Row = function(grid, row, key)
 {
 	this.key = key;
 	/**
@@ -24,13 +24,13 @@ nitobi.grid.Row = function(grid, row, key)
 	/**
 	 * @private
 	 */
-	this.DomNode = nitobi.grid.Row.getRowElement(grid, row);
+	this.DomNode = nitobi.treegrid.Row.getRowElement(grid, row);
 }
 /**
  * Returns the XML node from the DataTable that contains the Cell data.
  * @type {XMLElement}
  */
-nitobi.grid.Row.prototype.getData = function() {
+nitobi.treegrid.Row.prototype.getData = function() {
 	if (this.DataNode == null)
 		this.DataNode = this.grid.datatable.xmlDoc.selectSingleNode('//'+nitobi.xml.nsPrefix+'data/'+nitobi.xml.nsPrefix+'e[@xi='+this.Row+']');
 	return this.DataNode;
@@ -38,14 +38,14 @@ nitobi.grid.Row.prototype.getData = function() {
 /**
  * Returns the native web browser Style object for the given cell.
  */
-nitobi.grid.Row.prototype.getStyle = function()
+nitobi.treegrid.Row.prototype.getStyle = function()
 {
 	return this.DomNode.style;
 }
 /**
  * Gets a Cell in the Row either by index or name.
  */
-nitobi.grid.Row.prototype.getCell = function(index)
+nitobi.treegrid.Row.prototype.getCell = function(index)
 {
 	return this.grid.getCellObject(this.row, index);
 }
@@ -53,7 +53,7 @@ nitobi.grid.Row.prototype.getCell = function(index)
  * Gets key value for the Row.
  * @private
  */
-nitobi.grid.Row.prototype.getKey = function(index)
+nitobi.treegrid.Row.prototype.getKey = function(index)
 {
 	//var id = this.DomNode.id;
 	//var index = this.DomNode.getAttribute("xi");
@@ -66,7 +66,7 @@ nitobi.grid.Row.prototype.getKey = function(index)
 /**
  * 
  */
-nitobi.grid.Row.prototype.isExpanded = function()
+nitobi.treegrid.Row.prototype.isExpanded = function()
 {
 	if (this.rowElement.getAttribute("expanded") == "true")
 	{
@@ -83,7 +83,7 @@ nitobi.grid.Row.prototype.isExpanded = function()
  * if the row is the 1st row in the 4th group of the root surface, 0 will be returned
  * @type Number
  */
-nitobi.grid.Row.prototype.getIndex = function()
+nitobi.treegrid.Row.prototype.getIndex = function()
 {
 	return parseInt(this.rowElement.getAttribute("xi"));
 };
@@ -93,23 +93,23 @@ nitobi.grid.Row.prototype.getIndex = function()
  * belongs to.
  * @type String
  */
-nitobi.grid.Row.prototype.getPathToRow = function()
+nitobi.treegrid.Row.prototype.getPathToRow = function()
 {
 	var index = this.rowElement.getAttribute("xi");
 	return this.key.substr(0, this.key.length - (index.length + 1));
 };
 /**
  * Returns the row HTML element for the given Grid and row indices.
- * @param {nitobi.grid} grid The Grid to which the row belongs.
+ * @param {nitobi.treegrid} grid The Grid to which the row belongs.
  * @param {Number} row The row index.
- * @return {nitobi.grid.Row}
+ * @return {nitobi.treegrid.Row}
  */
-nitobi.grid.Row.getRowElement = function(grid, row)
+nitobi.treegrid.Row.getRowElement = function(grid, row)
 {
-	return nitobi.grid.Row.getRowElements(grid,row).mid;
+	return nitobi.treegrid.Row.getRowElements(grid,row).mid;
 };
 
-nitobi.grid.Row.findRowElement = function(path, grid)
+nitobi.treegrid.Row.findRowElement = function(path, grid)
 {
 	return $ntb("row_" + path + "_" + grid.uid);
 };
@@ -117,10 +117,10 @@ nitobi.grid.Row.findRowElement = function(path, grid)
 /**
  * @private
  */
-nitobi.grid.Row.getRowElements = function(grid, row, surfacePath)
+nitobi.treegrid.Row.getRowElements = function(grid, row, surfacePath)
 {
 	surfacePath = surfacePath || "";
-	var C = nitobi.grid.Cell;
+	var C = nitobi.treegrid.Cell;
 	// TODO: refactor this offset stuff into a method in grid.
 	
 	var midCol = grid.getFrozenLeftColumnCount();
@@ -140,14 +140,14 @@ nitobi.grid.Row.getRowElements = function(grid, row, surfacePath)
  * @param {HtmlElement} element 
  * @return {Number} The index of the row for the row.
  */
-nitobi.grid.Row.getRowNumber = function(element)
+nitobi.treegrid.Row.getRowNumber = function(element)
 {
 	return parseInt(element.getAttribute("xi"));
 }
 /**
  * @private
  */
-nitobi.grid.Row.prototype.xGETMETA = function()
+nitobi.treegrid.Row.prototype.xGETMETA = function()
 {
 	var node = this.MetaNode;
 	node = node.selectSingleNode("@"+arguments[0]);
@@ -158,7 +158,7 @@ nitobi.grid.Row.prototype.xGETMETA = function()
 /**
  * @private
  */
-nitobi.grid.Row.prototype.xSETMETA = function()
+nitobi.treegrid.Row.prototype.xSETMETA = function()
 {
 	var node = this.MetaNode;
 	if (null==node)

@@ -1,0 +1,47 @@
+/*
+ * Nitobi Complete UI 1.0
+ * Copyright(c) 2008, Nitobi
+ * support@nitobi.com
+ * 
+ * http://www.nitobi.com/license
+ */
+nitobi.lang.defineNs('nitobi.treegrid');
+
+/**
+ * Constructs a OnCellBlurEventArgs object.
+ * @class When you subscribe to Grid events through the declaration, you
+ * can optionally pass information about the event to the function
+ * registered to handle it.  You do this by using the eventArgs keyword.
+ * Cell blur is fired when a Cell loses focus by another Cell gaining focus.
+ * <p>
+ * <b>Example</b>
+ * </p>
+ * <div class="code">
+ * <pre><code class="html">
+ * &lt;ntb:grid id="grid1" mode="livescrolling" oncellblurevent="clickHandler(eventArgs)"&gt;&lt;/ntb:grid&gt;
+ * </pre></code>
+ * </div>
+ * <p>
+ * The handler function might look like this:
+ * </p>
+ * <div class="code">
+ * <pre><code class="javascript">
+ * &#102;unction clickHandler(event)
+ * {
+ * 	var cell = event.getCell();
+ * 	cell.getDomNode().style.backgroundColor = "red";
+ * }
+ * </code></pre>
+ * </div>
+ * @constructor
+ * @param {nitobi.treegrid.Grid} source The object which is firing the event.
+ * @param {nitobi.treegrid.Cell} cell The Cell object of the cell that received focus.
+ * @extends nitobi.treegrid.CellEventArgs
+ * @private
+ */
+nitobi.treegrid.OnCellBlurEventArgs = function(source, cell)
+{
+	nitobi.treegrid.OnCellBlurEventArgs.baseConstructor.call(this, source, cell);
+}
+
+nitobi.lang.extend(nitobi.treegrid.OnCellBlurEventArgs, nitobi.treegrid.CellEventArgs);

@@ -8,7 +8,7 @@
 /**
  * @private
  */
-nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
+nitobi.treegrid.Surface = function(scroller, grid, key, rowIndex)
 {
 	/**
 	 * @private
@@ -70,7 +70,7 @@ nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
 	this.displayedRowCount = 0;
 	/**
 	 * All subsurfaces sort on the server, but the root surface has
-	 * the option to sort locally.  This will be set in #nitobi.grid.Scroller
+	 * the option to sort locally.  This will be set in #nitobi.treegrid.Scroller
 	 * @private
 	 */
 	this.sortLocal = false;
@@ -166,7 +166,7 @@ nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
 	 */
 	this.cacheMap = new nitobi.collections.CacheMap();
 	
-	var VP = nitobi.grid.Viewport;
+	var VP = nitobi.treegrid.Viewport;
 	/**
 	 * Viewports are responsible for rendering
 	 * topleft -> frozen header
@@ -195,7 +195,7 @@ nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
 	 * Used in {@link #render}
 	 * @private
 	 */
-	this.surfaceXslProc = nitobi.xml.createXslProcessor(nitobi.grid.surfaceXslProc.stylesheet);
+	this.surfaceXslProc = nitobi.xml.createXslProcessor(nitobi.treegrid.surfaceXslProc.stylesheet);
 	
 	//this.view.midleft.onHtmlReady.subscribe(this.handleHtmlReady, this);
 	this.view.midcenter.onHtmlReady.subscribe(this.handleHtmlReady, this);
@@ -203,10 +203,10 @@ nitobi.grid.Surface = function(scroller, grid, key, rowIndex)
 
 /**
  * Notifies all objects subscribed to the surface's onHtmlReady event.
- * The Grid subscribes to the event in {@link nitobi.grid.Grid#createChildren}.
+ * The Grid subscribes to the event in {@link nitobi.treegrid.Grid#createChildren}.
  * @private
  */
-nitobi.grid.Surface.prototype.handleHtmlReady = function()
+nitobi.treegrid.Surface.prototype.handleHtmlReady = function()
 {
 	this.onHtmlReady.notify();
 }
@@ -218,13 +218,13 @@ nitobi.grid.Surface.prototype.handleHtmlReady = function()
  * by the index of the current page. 
  * @return {Pair} A struct range with first and last values which are the start and end of the row range.
  */
-nitobi.grid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMode, renderMode)
+nitobi.treegrid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMode, renderMode)
 {
 	// find the first row that is visible.
 	// find the last row that _might_ be visible
 	// check all the rows in between to find any open ones...
 	var pair = {first: 0, last: this.displayedRowCount - 1};
-	if (this.grid.getPagingMode().toLowerCase() == nitobi.grid.PAGINGMODE_NONE && this.key == "0")
+	if (this.grid.getPagingMode().toLowerCase() == nitobi.treegrid.PAGINGMODE_NONE && this.key == "0")
 		return pair;
 	var MC = this.view.midcenter;
 	//var b0 = MC.findBlockAtCoord(scrollTop);
@@ -272,12 +272,12 @@ nitobi.grid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMo
 
 	// We check if standard paging is being used, and if so apply an offset 
 	// of the page size * the current page to the first visible row.
-	if (this.grid.getPagingMode() == nitobi.grid.MODE_STANDARDPAGING && this.key == "0") 
+	if (this.grid.getPagingMode() == nitobi.treegrid.MODE_STANDARDPAGING && this.key == "0") 
 	{
 		var topOffset = 0;
 		//topOffset = this.getRowsPerPage() * this.getCurrentPageIndex();
 
-		if (renderMode == nitobi.grid.RENDERMODE_ONDEMAND)
+		if (renderMode == nitobi.treegrid.RENDERMODE_ONDEMAND)
 		{
 			// ** Live Scrolling + Standard Paging ...
 			// TODO: this will make standard paging look like livescrolling on the page level
@@ -313,7 +313,7 @@ nitobi.grid.Surface.prototype.getUnrenderedBlocks = function(scrollTop, pagingMo
  * @see #getUnrenderedBlocks
  * @private
  */
-nitobi.grid.Surface.prototype.calculateOffsetTop = function()
+nitobi.treegrid.Surface.prototype.calculateOffsetTop = function()
 {
 	var element = this.view.midcenter.element;
 	var rootElement = this.scroller.scrollSurface;
@@ -328,7 +328,7 @@ nitobi.grid.Surface.prototype.calculateOffsetTop = function()
  * Finds the block in this surface corresponding to some offset top value.
  * @private
  */
-nitobi.grid.Surface.prototype.findBlockAtCoord = function(top) 
+nitobi.treegrid.Surface.prototype.findBlockAtCoord = function(top) 
 {
 	var blocks = this.view.midcenter.container.childNodes;
 	for (var i = 0; i < blocks.length; i++) 
@@ -362,7 +362,7 @@ nitobi.grid.Surface.prototype.findBlockAtCoord = function(top)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.updateCellRanges = function(cols,frzL,frzT,frzR,frzB) 
+nitobi.treegrid.Surface.prototype.updateCellRanges = function(cols,frzL,frzT,frzR,frzB) 
 {
 	this.columns = cols;
 	this.freezetop = frzT;
@@ -372,7 +372,7 @@ nitobi.grid.Surface.prototype.updateCellRanges = function(cols,frzL,frzT,frzR,fr
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setCellRanges = function(pageSize) 
+nitobi.treegrid.Surface.prototype.setCellRanges = function(pageSize) 
 {
 	// TODO: What is this supposed to do?
 	/*debugger;
@@ -388,7 +388,7 @@ nitobi.grid.Surface.prototype.setCellRanges = function(pageSize)
  * Clears the rendered surface.
  * @private
  */
-nitobi.grid.Surface.prototype.clearData = function() 
+nitobi.treegrid.Surface.prototype.clearData = function() 
 {
 	//this.view.midleft.clear(true, true, false, false, this.rows);
 	this.view.midcenter.clear(false,false,true, null, this.rows);
@@ -398,7 +398,7 @@ nitobi.grid.Surface.prototype.clearData = function()
  * Clears the surface's rendered header.
  * @private
  */
-nitobi.grid.Surface.prototype.clearHeader = function() {
+nitobi.treegrid.Surface.prototype.clearHeader = function() {
 	//this.view.topleft.clear(true);
 	this.view.topcenter.clear(true);
 };
@@ -409,7 +409,7 @@ nitobi.grid.Surface.prototype.clearHeader = function() {
  * @param {String} uid The unique id of the Grid
  * @private
  */
-nitobi.grid.Surface.prototype.mapToHtml = function(uid) 
+nitobi.treegrid.Surface.prototype.mapToHtml = function(uid) 
 {
 	this.htmlNode = $ntb(this.key + "_surface" + uid);
 	for (var i = 0; i < 4; i++) {
@@ -421,7 +421,7 @@ nitobi.grid.Surface.prototype.mapToHtml = function(uid)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.initializeBlock = function(pageSize)
+nitobi.treegrid.Surface.prototype.initializeBlock = function(pageSize)
 {
 	for (var i = 0; i < 4; i++) 
 	{
@@ -432,11 +432,11 @@ nitobi.grid.Surface.prototype.initializeBlock = function(pageSize)
 /**
  * Renders the surface at a given scroll position.  It will render in a depth-first
  * manner; that is, it will try to render the deepest visible subsurface first.  Will
- * usually be called by {@link nitobi.grid.Scroller3x3#performRender}
+ * usually be called by {@link nitobi.treegrid.Scroller3x3#performRender}
  * @param {Number} scrollTop The vertical scrolling position from the top of the Scroller surface.
  * @private
  */
-nitobi.grid.Surface.prototype.renderAtScrollPosition = function(scrollTop)
+nitobi.treegrid.Surface.prototype.renderAtScrollPosition = function(scrollTop)
 {
 	var blocksInView = this.getBlocksInView(scrollTop);
 	if (blocksInView == null)
@@ -472,7 +472,7 @@ nitobi.grid.Surface.prototype.renderAtScrollPosition = function(scrollTop)
 		var surfaceBox = nitobi.html.getFirstChild(this.htmlNode).getBoundingClientRect();
 		var scrollBottom = scrollTop + this.scroller.scrollSurface.offsetHeight;
 		var hasBlocksInView;
-		if ((Math.abs(surfaceBox.top) <= scrollTop && Math.abs(surfaceBox.bottom) >= scrollBottom) || (this.grid.getPagingMode() == nitobi.grid.MODE_STANDARDPAGING))
+		if ((Math.abs(surfaceBox.top) <= scrollTop && Math.abs(surfaceBox.bottom) >= scrollBottom) || (this.grid.getPagingMode() == nitobi.treegrid.MODE_STANDARDPAGING))
 		{
 			hasBlocksInView =  false;
 		}
@@ -491,7 +491,7 @@ nitobi.grid.Surface.prototype.renderAtScrollPosition = function(scrollTop)
  * what has been cached from the previous request to the server, a get is issued.
  * @private
  */
-nitobi.grid.Surface.prototype.performRender = function(visibleRows) 
+nitobi.treegrid.Surface.prototype.performRender = function(visibleRows) 
 {
 	var mc = this.view.midcenter;
 	var ml = this.view.midleft;
@@ -556,7 +556,7 @@ nitobi.grid.Surface.prototype.performRender = function(visibleRows)
  * @param {Number} scrollTop The vertical scrolling position from the top of the Scroller surface.
  * @private
  */
-nitobi.grid.Surface.prototype.getBlocksInView = function(scrollTop)
+nitobi.treegrid.Surface.prototype.getBlocksInView = function(scrollTop)
 {
 	var midcenter = this.view.midcenter;
 	var firstBlock = this.findBlockAtCoord(scrollTop);
@@ -588,7 +588,7 @@ nitobi.grid.Surface.prototype.getBlocksInView = function(scrollTop)
  * @param {Number} high The upper end of the range to be rendered.
  * @private
  */
-nitobi.grid.Surface.prototype.renderGap = function(low, high) {
+nitobi.treegrid.Surface.prototype.renderGap = function(low, high) {
 
 	var gaps = this.cacheMap.gaps(low,high);
 	var mc = this.view.midcenter;
@@ -609,7 +609,7 @@ nitobi.grid.Surface.prototype.renderGap = function(low, high) {
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.reRender = function(start, end) 
+nitobi.treegrid.Surface.prototype.reRender = function(start, end) 
 {
 	var range = this.view.midleft.clearBlocks(start, end);
 	this.view.midcenter.clearBlocks(start, end);
@@ -622,7 +622,7 @@ nitobi.grid.Surface.prototype.reRender = function(start, end)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setSort = function(col, dir) 
+nitobi.treegrid.Surface.prototype.setSort = function(col, dir) 
 {
 	this.view.topleft.setSort(col, dir);
 	this.view.topcenter.setSort(col, dir);
@@ -633,7 +633,7 @@ nitobi.grid.Surface.prototype.setSort = function(col, dir)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setViewportProperty = function(property, value) 
+nitobi.treegrid.Surface.prototype.setViewportProperty = function(property, value) 
 {
 	
 	var sv = this.view;
@@ -644,26 +644,26 @@ nitobi.grid.Surface.prototype.setViewportProperty = function(property, value)
 };
 
 /**
- * Creates and initializes the {@link nitobi.grid.RowRenderer} members used to render
- * rows to the surface.  Called during Grid initialization in {@link nitobi.grid.Grid#createChildren}
- * via {@link nitobi.grid.Scroller3x3#createRenderers}
+ * Creates and initializes the {@link nitobi.treegrid.RowRenderer} members used to render
+ * rows to the surface.  Called during Grid initialization in {@link nitobi.treegrid.Grid#createChildren}
+ * via {@link nitobi.treegrid.Scroller3x3#createRenderers}
  * @private
  */
-nitobi.grid.Surface.prototype.createRenderers = function(data) 
+nitobi.treegrid.Surface.prototype.createRenderers = function(data) 
 {
 	var ci = this.grid.isColumnIndicatorsEnabled();
 	var rh = this.grid.isRowHighlightEnabled();
 	var rowh = this.grid.getRowHeight();
-	this.view.topleft.rowRenderer = new nitobi.grid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, ci, rh, rowh);
-	this.view.topcenter.rowRenderer = new nitobi.grid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, ci, rh, rowh);
-	this.view.midleft.rowRenderer = new nitobi.grid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, 0, rh, rowh);
-	this.view.midcenter.rowRenderer = new nitobi.grid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, 0 , rh, rowh);
+	this.view.topleft.rowRenderer = new nitobi.treegrid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, ci, rh, rowh);
+	this.view.topcenter.rowRenderer = new nitobi.treegrid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, ci, rh, rowh);
+	this.view.midleft.rowRenderer = new nitobi.treegrid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, 0, rh, rowh);
+	this.view.midcenter.rowRenderer = new nitobi.treegrid.RowRenderer(data, this.columnsNode, 0, this.grid.uid, this.key, 0 , rh, rowh);
 };
 
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setDataTable = function(oDataTable) 
+nitobi.treegrid.Surface.prototype.setDataTable = function(oDataTable) 
 {
 	this.dataTable = oDataTable;
 	// TODO: This is a hack to get around that datatable descriptor business
@@ -678,7 +678,7 @@ nitobi.grid.Surface.prototype.setDataTable = function(oDataTable)
  * @param {Number} row The row index at which to perform the split.
  * @private
  */
-nitobi.grid.Surface.prototype.splitBlock = function(row)
+nitobi.treegrid.Surface.prototype.splitBlock = function(row)
 {
 	return this.view.midcenter.splitBlock(row);
 };
@@ -688,7 +688,7 @@ nitobi.grid.Surface.prototype.splitBlock = function(row)
  * @type String
  * @private
  */
-nitobi.grid.Surface.prototype.renderContainer = function(uid, isSubgroup)
+nitobi.treegrid.Surface.prototype.renderContainer = function(uid, isSubgroup)
 {
 	isSubgroup = isSubgroup || false;
 	this.surfaceXslProc.addParameter("uniqueId", uid, "");
@@ -704,7 +704,7 @@ nitobi.grid.Surface.prototype.renderContainer = function(uid, isSubgroup)
  * Renders the header for the Surface.
  * @private
  */
-nitobi.grid.Surface.prototype.renderHeader = function()
+nitobi.treegrid.Surface.prototype.renderHeader = function()
 {
 	var tc = this.view.topcenter;
 	tc.top = 23;
@@ -718,7 +718,7 @@ nitobi.grid.Surface.prototype.renderHeader = function()
  * @see #handleDataReady
  * @param {nitobi.data.DataTable} dataTable The DataTable to connect to the Surface.
  */
-nitobi.grid.Surface.prototype.connectToTable = function(dataTable)
+nitobi.treegrid.Surface.prototype.connectToTable = function(dataTable)
 {
 	this.dataTable = dataTable;
 	this.view.midleft.rowRenderer.dataTableId = this.dataTable.id;
@@ -735,7 +735,7 @@ nitobi.grid.Surface.prototype.connectToTable = function(dataTable)
  * returned data.
  * @private
  */
-nitobi.grid.Surface.prototype.initialize = function(eventArgs)
+nitobi.treegrid.Surface.prototype.initialize = function(eventArgs)
 {
 	this.bindColumns();
 	this.rows = this.dataTable.getTotalRowCount();
@@ -755,7 +755,7 @@ nitobi.grid.Surface.prototype.initialize = function(eventArgs)
 	nitobi.event.unsubscribe("DataReady" + this.dataTable.uid, this.tempGuid);
 }
 
-nitobi.grid.Surface.prototype.handleOnBeforeToggle = function(e)
+nitobi.treegrid.Surface.prototype.handleOnBeforeToggle = function(e)
 {
 	this.isVisible = e;
 	if (e == true)
@@ -765,7 +765,7 @@ nitobi.grid.Surface.prototype.handleOnBeforeToggle = function(e)
 	}
 }
 
-nitobi.grid.Surface.prototype.handleOnAfterToggle = function(visible)
+nitobi.treegrid.Surface.prototype.handleOnAfterToggle = function(visible)
 {
 	this.isVisible = visible;
 	if (e == false)
@@ -786,7 +786,7 @@ nitobi.grid.Surface.prototype.handleOnAfterToggle = function(visible)
  * in {@link #initialize}
  * @private
  */
-nitobi.grid.Surface.prototype.handleDataReady = function(eventArgs)
+nitobi.treegrid.Surface.prototype.handleDataReady = function(eventArgs)
 {
 	this.performRender({first:eventArgs.firstRow, last:(eventArgs.lastRow > this.rows?this.rows:eventArgs.lastRow)});
 }
@@ -795,7 +795,7 @@ nitobi.grid.Surface.prototype.handleDataReady = function(eventArgs)
  * Defines on the column nodes of the surface their corresponding xdatafld.
  * @private
  */
-nitobi.grid.Surface.prototype.bindColumns = function()
+nitobi.treegrid.Surface.prototype.bindColumns = function()
 {
 	var columns = this.columnsNode.childNodes;
 	for (var i = 0; i < columns.length; i++)
@@ -813,7 +813,7 @@ nitobi.grid.Surface.prototype.bindColumns = function()
  * Returns a column object of the surface for a given index.
  * @param {Number} index The index of the column to be retrieved.
  */
-nitobi.grid.Surface.prototype.getColumnObject = function(index)
+nitobi.treegrid.Surface.prototype.getColumnObject = function(index)
 {
 	var column = null;
 	if (index > this.columnsNode.childNodes.length - 1)
@@ -827,13 +827,13 @@ nitobi.grid.Surface.prototype.getColumnObject = function(index)
 			switch (dataType)
 			{
 				case "number": 
-					column = new nitobi.grid.NumberColumn(this.grid, index, this);
+					column = new nitobi.treegrid.NumberColumn(this.grid, index, this);
 					break;
 				case "date":
-					column = new nitobi.grid.DateColumn(this.grid, index, this);
+					column = new nitobi.treegrid.DateColumn(this.grid, index, this);
 					break;
 				default:
-					column = new nitobi.grid.TextColumn(this.grid, index, this);
+					column = new nitobi.treegrid.TextColumn(this.grid, index, this);
 					break;
 			}
 			this.cachedColumns[index] = column;
@@ -850,7 +850,7 @@ nitobi.grid.Surface.prototype.getColumnObject = function(index)
 	}
 }
 
-nitobi.grid.Surface.prototype.getCellObject = function(row, col)
+nitobi.treegrid.Surface.prototype.getCellObject = function(row, col)
 {
 	// col could be either string or number so we need to keep both the string and number versions in the cache ...
 	var origCol = col;
@@ -861,13 +861,13 @@ nitobi.grid.Surface.prototype.getCellObject = function(row, col)
 	{
 		if (typeof(col) == "string")
 		{
-			//var node = this.model.selectSingleNode("state/nitobi.grid.Columns/nitobi.grid.Column[@xdatafld_orig='"+col+"']");
+			//var node = this.model.selectSingleNode("state/nitobi.treegrid.Columns/nitobi.treegrid.Column[@xdatafld_orig='"+col+"']");
 			var node = this.columnsNode.selectSingleNode("//ntb:column[@xdatafld_org='" + col + "']");
 			if (node != null)
 				col = parseInt(node.getAttribute('xi'));
 		}
 		if (typeof(col) == "number")
-			cell = new nitobi.grid.Cell(this.grid, row, col, this);
+			cell = new nitobi.treegrid.Cell(this.grid, row, col, this);
 		else
 			cell = null;
 		this.cachedCells[row+"_"+col] = this.cachedCells[row+"_"+origCol] = cell || "";
@@ -882,7 +882,7 @@ nitobi.grid.Surface.prototype.getCellObject = function(row, col)
  * is collapsed, it will not be counted.
  * @private
  */
-nitobi.grid.Surface.prototype.recalculateRowCount = function()
+nitobi.treegrid.Surface.prototype.recalculateRowCount = function()
 {
 	//var totalRows = this.rows;
 	var totalRows = this.displayedRowCount;
@@ -902,7 +902,7 @@ nitobi.grid.Surface.prototype.recalculateRowCount = function()
  * @param {Number} colIndex The index of the column to sort on, starting at 0.
  * @param {String} sortDir The direction to sort the column by. Values are "Asc" and "Desc".
  */
-nitobi.grid.Surface.prototype.sort = function(colIndex, sortDir)
+nitobi.treegrid.Surface.prototype.sort = function(colIndex, sortDir)
 {
 	var headerColumn = this.getColumnObject(colIndex);
 	this.setSortStyle(colIndex, sortDir);
@@ -925,7 +925,7 @@ nitobi.grid.Surface.prototype.sort = function(colIndex, sortDir)
  * Sets the sort style on the sorted column or clears the currently sorted column style.
  * @private
  */
-nitobi.grid.Surface.prototype.setSortStyle = function(sortCol, sortDir)
+nitobi.treegrid.Surface.prototype.setSortStyle = function(sortCol, sortDir)
 {
 	var headerColumn = this.getColumnObject(sortCol);
 	//	Set the sort direction on the header and assign the current sorted column properties of the Grid
@@ -942,7 +942,7 @@ nitobi.grid.Surface.prototype.setSortStyle = function(sortCol, sortDir)
  * @param {String} sortDir
  * @private
  */
-nitobi.grid.Surface.prototype.setColumnSortOrder = function(sortCol, sortDir)
+nitobi.treegrid.Surface.prototype.setColumnSortOrder = function(sortCol, sortDir)
 {
 	this.clearColumnHeaderSortOrder();
 	//	This does not need to be called in the case of sorting on the server
@@ -992,7 +992,7 @@ nitobi.grid.Surface.prototype.setColumnSortOrder = function(sortCol, sortDir)
  * Clears the sort CSS styling of the currently sorted column in the Grid.
  * @private
  */
-nitobi.grid.Surface.prototype.clearColumnHeaderSortOrder = function()
+nitobi.treegrid.Surface.prototype.clearColumnHeaderSortOrder = function()
 {
 	if (this.sortColumn) 
 	{
@@ -1022,7 +1022,7 @@ nitobi.grid.Surface.prototype.clearColumnHeaderSortOrder = function()
  * </P>
  * @param {Number} index A row will be inserted after the row at this index
  */
-nitobi.grid.Surface.prototype.insertRow = function(index)
+nitobi.treegrid.Surface.prototype.insertRow = function(index)
 {
 	var defaultRow = this.dataTable.getTemplateNode();
 	for (var i = 0; i < this.columnsNode.childNodes.length; i++)
@@ -1073,7 +1073,7 @@ nitobi.grid.Surface.prototype.insertRow = function(index)
 	this.dataTable.createRecord(defaultRow, index);
 }
 
-nitobi.grid.Surface.prototype.clear = function()
+nitobi.treegrid.Surface.prototype.clear = function()
 {
 	this.clearData();
 	this.cacheMap.flush();
@@ -1089,7 +1089,7 @@ nitobi.grid.Surface.prototype.clear = function()
  * corresponding record from the database.</P><P>Rows may also be deleted by pressing 
  * the Delete key or by clicking on the toolbar Delete icon.</P>
  */
-nitobi.grid.Surface.prototype.deleteRow = function(index)
+nitobi.treegrid.Surface.prototype.deleteRow = function(index)
 {
 	// 1) Update row count
 	// 2) Clear surface
@@ -1100,7 +1100,7 @@ nitobi.grid.Surface.prototype.deleteRow = function(index)
 	this.dataTable.deleteRecord(index);
 }
 
-nitobi.grid.Surface.prototype.handleAfterDeleteRow = function(xi)
+nitobi.treegrid.Surface.prototype.handleAfterDeleteRow = function(xi)
 {
 	this.grid.setActiveCell(this.grid.getCellElement(xi, 0, this.key));
 }
@@ -1108,7 +1108,7 @@ nitobi.grid.Surface.prototype.handleAfterDeleteRow = function(xi)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.syncWithData = function()
+nitobi.treegrid.Surface.prototype.syncWithData = function()
 {
 	// TODO: This is called when a row in the surface is inserted or deleted
 	// ...Should be a better way to do this...
@@ -1121,7 +1121,7 @@ nitobi.grid.Surface.prototype.syncWithData = function()
  * Empties the cache of child surfaces.
  * @private
  */
-nitobi.grid.Surface.prototype.purgeSurfaces = function()
+nitobi.treegrid.Surface.prototype.purgeSurfaces = function()
 {
 	for (var key in this.surfaces)
 	{
@@ -1134,7 +1134,7 @@ nitobi.grid.Surface.prototype.purgeSurfaces = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setRowCount = function(rows)
+nitobi.treegrid.Surface.prototype.setRowCount = function(rows)
 {
 	this.rows = rows;
 	this.displayedRowCount = this.rows;
@@ -1143,7 +1143,7 @@ nitobi.grid.Surface.prototype.setRowCount = function(rows)
 /**
  * Saves changes from the surface and all its child surfaces.
  */
-nitobi.grid.Surface.prototype.save = function()
+nitobi.treegrid.Surface.prototype.save = function()
 {
 	for (var key in this.surfaces)
 	{
@@ -1171,7 +1171,7 @@ nitobi.grid.Surface.prototype.save = function()
 	}
 };
 
-nitobi.grid.Surface.prototype.handleAfterSave = function(eventArgs)
+nitobi.treegrid.Surface.prototype.handleAfterSave = function(eventArgs)
 {
 	// Sync it
 	this.rows = this.displayedRowCount;
@@ -1206,7 +1206,7 @@ nitobi.grid.Surface.prototype.handleAfterSave = function(eventArgs)
  * Calculates the width of the surface based on the visible columns.
  * @private
  */
-nitobi.grid.Surface.prototype.calculateWidth = function()
+nitobi.treegrid.Surface.prototype.calculateWidth = function()
 {
 	var colDefs = this.columnsNode.childNodes;
 	var cols = colDefs.length;
@@ -1227,7 +1227,7 @@ nitobi.grid.Surface.prototype.calculateWidth = function()
  * Subscribes events specified via the declaration.
  * @private
  */
-nitobi.grid.Surface.prototype.subscribeColumnEvents = function()
+nitobi.treegrid.Surface.prototype.subscribeColumnEvents = function()
 {
 	if (this.columnsNode == null)
 		return;
@@ -1248,7 +1248,7 @@ nitobi.grid.Surface.prototype.subscribeColumnEvents = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.getDepth = function()
+nitobi.treegrid.Surface.prototype.getDepth = function()
 {
 	if (this.depth)
 		return this.depth;
@@ -1259,7 +1259,7 @@ nitobi.grid.Surface.prototype.getDepth = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.checkHeaders = function()
+nitobi.treegrid.Surface.prototype.checkHeaders = function()
 {
 	var s = this.surfaces;
 	var containerHeight = this.grid.getSubHeaderContainer().offsetHeight;
@@ -1287,7 +1287,7 @@ nitobi.grid.Surface.prototype.checkHeaders = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.attachTopHeader = function()
+nitobi.treegrid.Surface.prototype.attachTopHeader = function()
 {
 	// TODO: Clean up!!!
 	var subHeader = this.header = this.view.topcenter.element.cloneNode(true);
@@ -1314,7 +1314,7 @@ nitobi.grid.Surface.prototype.attachTopHeader = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.clearTopHeader = function()
+nitobi.treegrid.Surface.prototype.clearTopHeader = function()
 {
 	if (this.header)
 	{
@@ -1331,7 +1331,7 @@ nitobi.grid.Surface.prototype.clearTopHeader = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.setVisible = function(visible)
+nitobi.treegrid.Surface.prototype.setVisible = function(visible)
 {
 	if (this.grid.isEffectsEnabled())
 	{
@@ -1364,7 +1364,7 @@ nitobi.grid.Surface.prototype.setVisible = function(visible)
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.expand = function()
+nitobi.treegrid.Surface.prototype.expand = function()
 {
 	this.parent.onBeforeExpand.notify();
 	this.setVisible(true);
@@ -1373,7 +1373,7 @@ nitobi.grid.Surface.prototype.expand = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.collapse = function()
+nitobi.treegrid.Surface.prototype.collapse = function()
 {
 	this.parent.onBeforeCollapse.notify();
 	this.setVisible(false);
@@ -1382,14 +1382,14 @@ nitobi.grid.Surface.prototype.collapse = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.isCellInSurface = function(cell)
+nitobi.treegrid.Surface.prototype.isCellInSurface = function(cell)
 {
 	if (!cell)
 		return false;
-	return nitobi.grid.Cell.getSurfacePath(cell).indexOf(this.key) == 0;
+	return nitobi.treegrid.Cell.getSurfacePath(cell).indexOf(this.key) == 0;
 }
 
-nitobi.grid.Surface.prototype.getColumnCount = function()
+nitobi.treegrid.Surface.prototype.getColumnCount = function()
 {
 	return this.columnsNode.childNodes.length;
 }
@@ -1397,7 +1397,7 @@ nitobi.grid.Surface.prototype.getColumnCount = function()
 /**
  * @private
  */
-nitobi.grid.Surface.prototype.dispose = function()
+nitobi.treegrid.Surface.prototype.dispose = function()
 {
 	this.htmlNode = null;
 	this.surfaces = null;

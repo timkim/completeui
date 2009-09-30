@@ -5,9 +5,9 @@
  * 
  * http://www.nitobi.com/license
  */
-nitobi.lang.defineNs("nitobi.grid.Declaration");
+nitobi.lang.defineNs("nitobi.treegrid.Declaration");
 
-nitobi.grid.Declaration.parse = function(element)
+nitobi.treegrid.Declaration.parse = function(element)
 {
 	// We require that the object expando property on the DOM node refers to the JS object.
 //	element.jsObject=this;
@@ -94,7 +94,7 @@ nitobi.grid.Declaration.parse = function(element)
 }
 
 
-nitobi.grid.Declaration.loadDataSources = function(xDeclaration, grid)
+nitobi.treegrid.Declaration.loadDataSources = function(xDeclaration, grid)
 {
 	var declarationDatasources = new Array();
 	if (xDeclaration["datasources"])
@@ -111,13 +111,13 @@ nitobi.grid.Declaration.loadDataSources = function(xDeclaration, grid)
 				var sData = declarationDatasources[i].xml.replace(/fieldnames=/g,"FieldNames=").replace(/keys=/g,"Keys=");
 	
 				sData = '<ntb:treegrid xmlns:ntb="http://www.nitobi.com"><ntb:datasources>'+sData+'</ntb:datasources></ntb:treegrid>'
-				var newDataTable = new nitobi.data.DataTable('local',grid.getPagingMode() != nitobi.grid.PAGINGMODE_NONE,{GridId:grid.getID()},{GridId:grid.getID()},grid.isAutoKeyEnabled());
+				var newDataTable = new nitobi.data.DataTable('local',grid.getPagingMode() != nitobi.treegrid.PAGINGMODE_NONE,{GridId:grid.getID()},{GridId:grid.getID()},grid.isAutoKeyEnabled());
 				newDataTable.initialize(id, sData);
 				newDataTable.initializeXml(sData);
 				grid.data.add(newDataTable);
 				
 				// The datasource we have loaded could be that of the Grid as well ...
-				var columns = grid.model.selectNodes("//nitobi.grid.Column[@DatasourceId='"+id+"']");
+				var columns = grid.model.selectNodes("//nitobi.treegrid.Column[@DatasourceId='"+id+"']");
 				for (var j = 0; j < columns.length; j++)
 				{
 					//	Now that we have created the datasource we need to set the ValueField and DisplayFields etc
