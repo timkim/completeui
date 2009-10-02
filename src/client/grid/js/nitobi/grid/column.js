@@ -328,14 +328,14 @@ nitobi.grid.Column.prototype.toggleVis = function()
   var classDef = nitobi.html.getClass(className, true);
   if (classDef.display == "none")
   {
-    columnXml.setAttribute('visible','1');
-	gridxml.setAttribute('visible','1');
+    columnXml.setAttribute('visible','true');
+	gridxml.setAttribute('visible','true');
   	this.show();
   }
   else
   { 
-    columnXml.setAttribute('visible','0');
-	gridxml.setAttribute('visible','0');
+    columnXml.setAttribute('visible','false');
+	gridxml.setAttribute('visible','false');
 	this.hide();
   }
 }

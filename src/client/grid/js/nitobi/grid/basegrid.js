@@ -1952,7 +1952,7 @@ nitobi.grid.Grid.prototype.measureColumns= function() {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
 	for (var i=0; i<cols;i++) {
-		if (colDefs[i].getAttribute("Visible") == "1" || colDefs[i].getAttribute("visible") == "1")
+		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true)
 		{
 			var w = Number(colDefs[i].getAttribute("Width"));
 			wT+=w;
@@ -3443,7 +3443,7 @@ nitobi.grid.Grid.prototype.calculateWidth= function(start, end)
 	end = (end != null)?Math.min(end,cols):cols;
 	var wT = 0;
 	for (var i=start; i<end;i++) {
-		if (colDefs[i].getAttribute("Visible") == "1" || colDefs[i].getAttribute("visible") == "1") {
+		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true) {
 			wT+=Number(colDefs[i].getAttribute("Width"));
 		}
 	}
@@ -4885,7 +4885,7 @@ nitobi.grid.Grid.prototype.getColumnDefinitions= function()
  */
 nitobi.grid.Grid.prototype.getVisibleColumnDefinitions= function()
 {
-	return this.model.selectNodes("state/nitobi.grid.Columns/*[@Visible='1']");
+	return this.model.selectNodes("state/nitobi.grid.Columns/*[@Visible='true']");
 }
 
 /**
