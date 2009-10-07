@@ -137,7 +137,13 @@ nitobi.grid.GridStandard.prototype.disableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
-		t.getUiElements()[button+this.toolbars.uid].disable();
+	{	
+		if(t.getUiElements()[button+this.toolbars.uid])
+		{
+			t.getUiElements()[button+this.toolbars.uid].disable();
+		}
+	}
+		
 }
 /**
  * Enables the page next button in the Grid toolbar.
@@ -160,7 +166,12 @@ nitobi.grid.GridStandard.prototype.enableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
-		t.getUiElements()[button+this.toolbars.uid].enable();
+	{
+		if(t.getUiElements()[button+this.toolbars.uid])
+		{
+			t.getUiElements()[button+this.toolbars.uid].enable();
+		}
+	}
 }
 
 /**
