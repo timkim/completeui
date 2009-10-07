@@ -1778,6 +1778,7 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	listDiv.appendChild(menuDiv);
 	for (var i = 0; i < columns.length; ++i)
 	{
+		var hdr = this.getColumnObject(i);
 		var hdrTitle = columns[i].getAttribute('label');
 		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
 		if (hdrTitle != null)
@@ -6154,6 +6155,7 @@ nitobi.treegrid.TreeGrid.prototype.handleHtmlReady = function(evtArgs)
 
 nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 {
+	debugger;
 	var C = nitobi.treegrid.Cell;
 	var Css = nitobi.html.Css;
 	var targetKey = C.getSurfacePath(cell);
@@ -6267,6 +6269,7 @@ nitobi.treegrid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 
 nitobi.treegrid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 {
+
 	var surface = this.Scroller.getSurface(surfacePath);
 	surface.onBeforeExpand.notify();
 	this.loadingScreen.show();

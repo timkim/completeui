@@ -151,7 +151,7 @@
     </ntb:treegrid>
 
     <Defaults>
-    	<nitobi.grid.Grid></nitobi.grid.Grid>
+    	<nitobi.treegrid.Grid></nitobi.treegrid.Grid>
 		<ntb:column
 			Width="100"
 			type="TEXT"
@@ -193,8 +193,8 @@
 		<ntb:column Align="left" ClassName="" CssStyle="" ColumnName="" DataType="expand" Editable="1" Initial="" Label="" GetHandler="" DataSource="" Template="" TemplateUrl="" MaxLength="255" SortDirection="Desc" SortEnabled="1" Width="100" Visible="1" xdatafld="" Value="" xi="100" type="EXPAND" editor="EXPAND"/>
 
 
-		<nitobi.grid.Row></nitobi.grid.Row>
-		<nitobi.grid.Cell></nitobi.grid.Cell>
+		<nitobi.treegrid.Row></nitobi.treegrid.Row>
+		<nitobi.treegrid.Cell></nitobi.treegrid.Cell>
 		<ntb:e />
     </Defaults>    
 
