@@ -315,7 +315,10 @@ nitobi.form.Control.prototype.afterDeactivate = function(text, value) {
 	// Accept either one or two params, if one param then text and value are assumed the same.
 	value = value || text;
 	if (this.editCompleteHandler != null) {
-		var eventArgs = new nitobi.grid.EditCompleteEventArgs(this, text, value, this.cell);
+		if (nitobi.grid)
+			var eventArgs = new nitobi.grid.EditCompleteEventArgs(this, text, value, this.cell);
+		else
+			var eventArgs = new nitobi.treegrid.EditCompleteEventArgs(this, text, value, this.cell);
 		var result =  this.editCompleteHandler.call(this.owner, eventArgs);
 		if(!result){
 			this.ignoreBlur = false;
