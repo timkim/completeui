@@ -300,6 +300,22 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  }
 					};
 			break;
+			case "firstPage"+this.uid:
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						_this.fire("FirstPage");		
+						_this.resetCounter();
+					};
+			break;
+			case "lastPage"+this.uid:
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						_this.fire("LastPage");	
+						_this.maxCounter();		
+					};
+			break;
 			default:
 		}
 	}
