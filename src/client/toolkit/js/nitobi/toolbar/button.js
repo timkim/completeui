@@ -45,10 +45,10 @@ nitobi.ui.ButtonXsl=
 	         "<xsl:attribute name=\"style\">"+
 				"<xsl:choose>"+
 					"<xsl:when test=\"../../@height\">"+
-						"<xsl:value-of select=\"concat('float:left;width:',../../@height,'px;height:',../../@height - 1,'px')\" />"+
+						"<xsl:value-of select=\"concat('margin-top: 1px; float:left;width:',../../@height,'px;height:',../../@height - 1,'px')\" />"+
 					"</xsl:when>"+
 						"<xsl:otherwise>"+
-							"<xsl:value-of select=\"concat('float:left;width:',@width,'px;height:',@height,'px')\" />"+
+							"<xsl:value-of select=\"concat('margin-top: 1px; float:left;width:',@width,'px;height:',@height,'px')\" />"+
 						"</xsl:otherwise>"+
 					"</xsl:choose>" + 
 	         "</xsl:attribute>"+

@@ -32,7 +32,7 @@ nitobi.ui.InputXsl =
             "<xsl:value-of select=\"@id\" />"+
          "</xsl:attribute>"+
 		 "<xsl:attribute name=\"style\">"+
-			"<xsl:value-of select=\"concat('margin-top:3','px; margin-bottom:0','px;','width:',@width,'px;height:',@height,'px; float:',@float,';')\" />"+
+			"<xsl:value-of select=\"concat('margin-top:6','px; margin-bottom:0','px;','width:',@width,'px;height:',@height,'px; float:',@float,';')\" />"+
 	 "</xsl:attribute>"+
 	"</input>"+
    "</xsl:template>";

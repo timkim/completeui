@@ -25,7 +25,7 @@ nitobi.ui.DropDownXsl =
         "<xsl:attribute name=\"style\">"+
 				"<xsl:choose>"+
 					"<xsl:when test=\"../../@height\">"+
-						"<xsl:value-of select=\"concat('float:left;width:50px;height:',../../@height - 1,'px')\" />"+
+						"<xsl:value-of select=\"concat('float:left; margin-top: 4','px;','margin-bottom: 0; width:50px;height:17','px; margin-left: 5','px;')\" />"+
 					"</xsl:when>"+
 						"<xsl:otherwise>"+
 							"<xsl:value-of select=\"concat('float:left;width:',@width,'px;height:',@height,'px')\" />"+
