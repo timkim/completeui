@@ -7,7 +7,7 @@
 <xsl:param name="group" select="','" />
 <xsl:param name="decimal" select="'.'" />
 
-<!--nitobi.grid.numberFormatTemplatesXslProc-->
+<!--nitobi.treegrid.numberFormatTemplatesXslProc-->
 
 <xsl:template match="/">
 	<xsl:call-template name="n:format">

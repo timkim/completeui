@@ -6155,7 +6155,6 @@ nitobi.treegrid.TreeGrid.prototype.handleHtmlReady = function(evtArgs)
 
 nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 {
-	debugger;
 	var C = nitobi.treegrid.Cell;
 	var Css = nitobi.html.Css;
 	var targetKey = C.getSurfacePath(cell);

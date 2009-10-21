@@ -38,10 +38,10 @@
 -->
 
 <!--This is an incude for the date fromatting XSLT that gets replaced at compile time-->
-<!--nitobi.grid.dateFormatTemplatesXslProc-->
+<!--nitobi.treegrid.dateFormatTemplatesXslProc-->
 
 <!--This is an incude for the number fromatting XSLT that gets replaced at compile time-->
-<!--nitobi.grid.numberFormatTemplatesXslProc-->
+<!--nitobi.treegrid.numberFormatTemplatesXslProc-->
 
 <xsl:template match = "/">
 

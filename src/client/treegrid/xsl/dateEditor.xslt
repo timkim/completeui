@@ -2,7 +2,7 @@
     
 <xsl:output method="text" version="4.0" omit-xml-declaration="yes" />
 
-<!--nitobi.grid.dateFormatTemplatesXslProc-->    
+<!--nitobi.treegrid.dateFormatTemplatesXslProc-->    
 
 <xsl:template match="/">
 	<xsl:call-template name="d:format-date">
