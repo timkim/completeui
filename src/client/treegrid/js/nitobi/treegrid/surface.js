@@ -1214,7 +1214,7 @@ nitobi.treegrid.Surface.prototype.calculateWidth = function()
 	end = cols;
 	var wT = 0;
 	for (var i = start; i < end; i++) {
-		if (colDefs[i].getAttribute("Visible") == "1" || colDefs[i].getAttribute("visible") == "1") {
+		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true) {
 			wT+=Number(colDefs[i].getAttribute("Width"));
 		}
 	}

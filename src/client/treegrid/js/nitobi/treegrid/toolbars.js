@@ -259,7 +259,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 					{
 						  grid = _this.grid;
 						  element = _this.show_hide_btn;
-						  var menu = $ntb('ntb-grid-showhide' + grid.uid);
+						  var menu = $ntb('ntb-treegrid-showhide' + grid.uid);
   						  nitobi.ui.Toolbars.showMenu(menu, element);
 					};
 			break;

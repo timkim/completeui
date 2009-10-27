@@ -255,10 +255,15 @@ nitobi.treegrid.Viewport.prototype.splitBlock = function(row)
 	// the bottom block
 	var group;
 	// TODO: Need a reliable way to get a block's group
+
 	var i = block.childNodes.length - 1;
-	while (i > 0 && block.childNodes[i].nodeType == 3 && block.childNodes[i].tagName.toLowerCase() != "table")
+	
+	while (i > 0 && block.childNodes[i].nodeType == 3 && block.childNodes[i].tagName)
 	{
-		i--;
+		if(block.childNodes[i].tagName.toLowerCase() != "table")
+		{
+			i--;
+		}
 	}
 	if (i > 0)
 	{

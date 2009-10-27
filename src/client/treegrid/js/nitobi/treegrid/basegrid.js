@@ -1778,21 +1778,27 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	listDiv.appendChild(menuDiv);
 	for (var i = 0; i < columns.length; ++i)
 	{
-		var hdr = this.getColumnObject(i);
+		//var hdr = this.getColumnObject(i);
+		var hdr = columns[i];
+		
 		var hdrTitle = columns[i].getAttribute('label');
 		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
 		if (hdrTitle != null)
 		{
-			var list_item = document.createElement('li');
-			var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
-			list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
-			list.appendChild(list_item);
-			if(!hdr.isVisible())
+			if(hdr != null)
 			{
-				list_item.children[0].checked = true;
+				var list_item = document.createElement('li');
+				var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
+				list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
+				
+				list.appendChild(list_item);
+				if(hdr.getAttribute("Visible") == "false" || hdr.getAttribute("visible") == "false")
+				{
+					list_item.children[0].checked = true;
+				}
+				nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
+				$ntb(id).style.width = "20px";
 			}
-			nitobi.html.attachEvent($ntb(id), "mouseup", this.toggleVis, this);
-			$ntb(id).style.width = "20px";
 		}
 	}
 	// This is stupid, but is required for IE
@@ -2094,7 +2100,7 @@ nitobi.treegrid.TreeGrid.prototype.measureColumns= function() {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
 	for (var i=0; i<cols;i++) {
-		if (colDefs[i].getAttribute("Visible") == "1" || colDefs[i].getAttribute("visible") == "1")
+		if (colDefs[i].getAttribute("Visible") == "true" || colDefs[i].getAttribute("visible") == "true")
 		{
 			var w = Number(colDefs[i].getAttribute("Width"));
 			wT+=w;
@@ -2135,7 +2141,16 @@ nitobi.treegrid.TreeGrid.prototype.resize= function(width, height)
 {
 	this.setWidth(width);
 	this.setHeight(height);
-
+	var gridDeclaration = this.Declaration.grid.selectSingleNode('ntb:treegrid');
+	if(width != undefined)
+	{	
+		gridDeclaration.setAttribute('width', width);
+	}
+	
+	if(height != undefined)
+	{
+		gridDeclaration.setAttribute('height', height);
+	}
 	// Just generate the CSS
 	this.generateCss();
 
@@ -2212,7 +2227,11 @@ nitobi.treegrid.TreeGrid.prototype.columnResize= function(column, width)
 	column = (typeof column == "object"?column:this.getColumnObject(column));
 	var prevWidth = column.getWidth();
 	column.setWidth(width);
-
+	
+	var surfaceKeyPos = Math.floor(column.surface.key/2);
+	var columnIndex = column.column;
+	this.Declaration.columns[surfaceKeyPos].firstChild.childNodes[columnIndex].setAttribute('width',width);
+	this.Declaration.grid.firstChild.childNodes[surfaceKeyPos].childNodes[columnIndex].setAttribute('width',width);
 	//	TODO: this is a hack to fix a problem with the fixed column header not resizing.
 	// This was causing some hacky code to be added in EBASelection.collapse 
 	// see the following - tix for details.
@@ -3622,7 +3641,7 @@ nitobi.treegrid.TreeGrid.prototype.calculateWidth= function(start, end)
 	end = (end != null)?Math.min(end,cols):cols;
 	var wT = 0;
 	for (var i=start; i<end;i++) {
-		if (colDefs[i].getAttribute("Visible") == "1" || colDefs[i].getAttribute("visible") == "1") {
+		if (colDefs[i].getAttribute("Visible") == "true" || colDefs[i].getAttribute("visible") == "true") {
 			wT+=Number(colDefs[i].getAttribute("Width"));
 		}
 	}
@@ -5037,7 +5056,7 @@ nitobi.treegrid.TreeGrid.prototype.getColumnDefinitions= function()
  */
 nitobi.treegrid.TreeGrid.prototype.getVisibleColumnDefinitions= function()
 {
-	return this.model.selectNodes("state/nitobi.treegrid.Columns/*[@Visible='1']");
+	return this.model.selectNodes("state/nitobi.treegrid.Columns/*[@Visible='true']");
 }
 
 /**

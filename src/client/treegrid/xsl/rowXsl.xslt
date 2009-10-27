@@ -53,7 +53,7 @@
 				<xsl:attribute name="class">ntb-header-row<xsl:value-of select="$uniqueId" /></xsl:attribute>
 
 				<xsl:for-each select="$columns">
-					<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+					<xsl:if test="@Hidden = '0' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 						<td ebatype="columnheader" xi="{position()-1}" col="{position()-1}">
 						<xsl:attribute name="id">columnheader_<xsl:value-of select="position()-1"/>_<xsl:value-of select="$uniqueId" />_<xsl:value-of select="$surfaceKey"/></xsl:attribute>
 						<xsl:attribute name="path"><xsl:value-of select="$surfaceKey"></xsl:value-of></xsl:attribute>
@@ -92,7 +92,7 @@
 <xsl:template name="colgroup">
 	<colgroup>
 		<xsl:for-each select="$columns">
-			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+			<xsl:if test="@Hidden = '0' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 				<col>
 				</col>
 			</xsl:if>
@@ -117,7 +117,7 @@
 
 		<xsl:for-each select="$columns">
 
-			<xsl:if test="@Visible = '1' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
+			<xsl:if test="@Hidden = '0' and (position() &gt; $firstColumn and position() &lt;= $lastColumn)">
 
 				<xsl:call-template name="render-cell">
 					<xsl:with-param name="row" select="$row"/>

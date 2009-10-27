@@ -245,23 +245,25 @@ nitobi.treegrid.Column.prototype.show = function()
 
 nitobi.treegrid.Column.prototype.toggleVis = function()
 {
-  var columnXml = this.grid.Declaration.columns.firstChild.childNodes[this.column];
-  var gridxml = this.grid.Declaration.grid.firstChild.firstChild.childNodes[this.column];
-  	
   var colSetId = this.surface.columnSetId;
   var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
   var classDef = nitobi.html.getClass(className, true);
   
+  var theIndex = Math.floor(this.surface.key.length/2);
+  var columnXml = this.grid.Declaration.columns[theIndex].firstChild.childNodes[this.column];
+  var gridxml = this.grid.Declaration.grid.firstChild.childNodes[theIndex].childNodes[this.column];
+
+
   if (classDef.display == "none")
   {
-    columnXml.setAttribute('visible','1');
-	gridxml.setAttribute('visible','1');
+    columnXml.setAttribute('visible','true');
+	gridxml.setAttribute('visible','true');
   	this.show();
   }
   else 
   {
-    columnXml.setAttribute('visible','0');
-	gridxml.setAttribute('visible','0');  	
+    columnXml.setAttribute('visible','false');
+	gridxml.setAttribute('visible','false');  	
 	this.hide();
   }
 }

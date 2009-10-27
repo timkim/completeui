@@ -203,7 +203,7 @@
 	<xsl:for-each select="*">
 		<xsl:variable name="p"><xsl:value-of select="position()"/></xsl:variable>
 		<xsl:variable name="w"><xsl:value-of select="@Width"/></xsl:variable>
-		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" /><xsl:if test="$id!=&quot;&quot;">_<xsl:value-of select="$id"/></xsl:if>_<xsl:number value="$p" /> {width:<xsl:value-of select="number($w)-number($g/@CellBorder)" />px; text-align:<xsl:value-of select="@Align" />;}
+		#grid<xsl:value-of select="$u" /> .ntb-column<xsl:value-of select="$u" /><xsl:if test="$id!=&quot;&quot;">_<xsl:value-of select="$id"/></xsl:if>_<xsl:number value="$p" /> {width:<xsl:value-of select="number($w)-number($g/@CellBorder)" />px; text-align:<xsl:value-of select="@Align" />;<xsl:if test="@Visible='0'">display:none;</xsl:if>}
 	</xsl:for-each>
 </xsl:template>
 
