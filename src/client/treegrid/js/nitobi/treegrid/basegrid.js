@@ -2228,7 +2228,7 @@ nitobi.treegrid.TreeGrid.prototype.columnResize= function(column, width)
 	var prevWidth = column.getWidth();
 	column.setWidth(width);
 	
-	var surfaceKeyPos = Math.floor(column.surface.key/2);
+	var surfaceKeyPos = Math.floor(column.surface.key.length/2);
 	var columnIndex = column.column;
 	this.Declaration.columns[surfaceKeyPos].firstChild.childNodes[columnIndex].setAttribute('width',width);
 	this.Declaration.grid.firstChild.childNodes[surfaceKeyPos].childNodes[columnIndex].setAttribute('width',width);
@@ -2614,6 +2614,9 @@ nitobi.treegrid.TreeGrid.prototype.bindComplete=function()
 	// TODO: But this is in conflict with grouping grid / block rendering mechanism so I am leaving it.  
 	this.setRowCount(this.datatable.remoteRowCount);
 
+	// TODO: This toolbar calc should not be here either
+	this.toolbars.calculateRange();
+	
 	// The bound property indicates that events from the datasource to which
 	// we are bound will now be able to cause re-renders of our interface
 	this.setBound(true);

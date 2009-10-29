@@ -446,6 +446,7 @@ nitobi.ui.Toolbars.prototype.resetCounter = function()
 	var disp_start = $ntb('startRow' + this.uid);
 	var disp_end = $ntb('numRows' + this.uid);
 	var rows_per_page = this.grid.getRowsPerPage();
+	
 	if (start_page)
 	{		
 		start_page.value = String(1);
@@ -487,19 +488,18 @@ nitobi.ui.Toolbars.prototype.incrementCounter = function()
 	{		
 		var val = parseInt(start_page.value);
 		start_page.value = String(++val);
+		if(disp_start)
+		{
+			var start_disp = val*rows_per_page;
+			disp_start.innerHTML = "&nbsp;" + start_disp;
+		}
+	
+		if(disp_end)
+		{
+			var end_disp = start_disp+rows_per_page;
+			disp_end.innerHTML = "&nbsp;" + end_disp;
+		}
 	}	
-	
-	if(disp_start)
-	{
-		var start_disp = val*rows_per_page;
-		disp_start.innerHTML = "&nbsp;" + start_disp;
-	}
-	
-	if(disp_end)
-	{
-		var end_disp = start_disp+rows_per_page;
-		disp_end.innerHTML = "&nbsp;" + end_disp;
-	}
 }
 
 nitobi.ui.Toolbars.prototype.decrementCounter = function()
