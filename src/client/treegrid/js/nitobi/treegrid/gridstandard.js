@@ -47,8 +47,11 @@ nitobi.treegrid.GridStandard.prototype.createChildren=function() {
 	nitobi.treegrid.GridStandard.base.createToolbars.call(this, nitobi.ui.Toolbars.VisibleToolbars.STANDARD | nitobi.ui.Toolbars.VisibleToolbars.PAGING);
 
 	// Attach events
+	this.toolbars.subscribe("FirstPage",nitobi.lang.close(this,this.pageFirst));
+	this.toolbars.subscribe("LastPage",nitobi.lang.close(this,this.pageLast));
 	this.toolbars.subscribe("NextPage",nitobi.lang.close(this,this.pageNext));
 	this.toolbars.subscribe("PreviousPage",nitobi.lang.close(this,this.pagePrevious));
+	this.toolbars.subscribe("InputTextPage",nitobi.lang.close(this,this.pageTextInput));
 	this.subscribe("EndOfData",this.disableNextPage); 
 	this.subscribe("TopOfData",this.disablePreviousPage);
 	this.subscribe("NotTopOfData",this.enablePreviousPage); 
@@ -123,6 +126,13 @@ nitobi.treegrid.GridStandard.prototype.enableButton = function(button)
 	if (t != null)
 		t.getUiElements()[button+this.toolbars.uid].enable();
 }
+
+nitobi.treegrid.GridStandard.prototype.pageFirst=function() {
+	this.fire("BeforeLoadPreviousPage");
+	this.loadDataPage(0);
+	this.fire("AfterLoadPreviousPage");
+}
+
 nitobi.treegrid.GridStandard.prototype.pagePrevious=function() {
 	this.fire("BeforeLoadPreviousPage");
 	this.loadDataPage(Math.max(this.getCurrentPageIndex()-1,0));
@@ -132,6 +142,24 @@ nitobi.treegrid.GridStandard.prototype.pagePrevious=function() {
 nitobi.treegrid.GridStandard.prototype.pageNext=function() {
 	this.fire("BeforeLoadNextPage");
 	this.loadDataPage(this.getCurrentPageIndex()+1);
+	this.fire("AfterLoadNextPage");
+}
+
+nitobi.treegrid.GridStandard.prototype.pageLast=function() {
+	this.fire("BeforeLoadNextPage");
+	var totalPages = Math.ceil(this.datatable.totalRowCount/this.getRowsPerPage());
+	this.loadDataPage(totalPages-1);
+	this.fire("AfterLoadNextPage");
+}
+
+nitobi.treegrid.GridStandard.prototype.pageTextInput=function() {
+	this.fire("BeforeLoadNextPage");
+	var input = $ntb('startPage' + this.toolbars.uid);
+	if(input)
+	{
+		var val = parseInt(input.value);
+		this.loadDataPage(val-1);
+	}
 	this.fire("AfterLoadNextPage");
 }
 nitobi.treegrid.GridStandard.prototype.loadDataPage = function(newPageNumber) 

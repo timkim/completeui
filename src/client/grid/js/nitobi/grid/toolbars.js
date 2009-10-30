@@ -471,10 +471,25 @@ nitobi.ui.Toolbars.prototype.resetCounter = function()
 nitobi.ui.Toolbars.prototype.maxCounter = function()
 {
 	var start_page = $ntb('startPage' + this.uid);
+	var disp_start = $ntb('startRow' + this.uid);
+	var disp_end = $ntb('numRows' + this.uid);
+	var rows_per_page = this.grid.getRowsPerPage();
 	var pages = this.grid.datatable.totalRowCount/this.grid.getRowsPerPage();
 	if (start_page)
 	{		
-		start_page.value = String(Math.ceil(pages));	
+		start_page.value = String(Math.ceil(pages));
+		var val = parseInt(start_page.value);
+		if(disp_start)
+		{
+			var start_disp = (val-1)*rows_per_page+1;
+			disp_start.innerHTML = "&nbsp;" + start_disp;
+		}
+		
+		if(disp_end)
+		{
+			var end_disp = start_disp+rows_per_page-1;
+			disp_end.innerHTML = "&nbsp;" + end_disp;
+		}	
 	}	
 }
 
@@ -490,13 +505,13 @@ nitobi.ui.Toolbars.prototype.incrementCounter = function()
 		start_page.value = String(++val);
 		if(disp_start)
 		{
-			var start_disp = val*rows_per_page;
+			var start_disp = (val-1)*rows_per_page+1;
 			disp_start.innerHTML = "&nbsp;" + start_disp;
 		}
-	
+		
 		if(disp_end)
 		{
-			var end_disp = start_disp+rows_per_page;
+			var end_disp = start_disp+rows_per_page-1;
 			disp_end.innerHTML = "&nbsp;" + end_disp;
 		}
 	}	
@@ -512,19 +527,18 @@ nitobi.ui.Toolbars.prototype.decrementCounter = function()
 	{		
 		var val = parseInt(start_page.value);
 		start_page.value = String(--val);
+		if(disp_start)
+		{
+			var start_disp = (val-1)*rows_per_page+1;
+			disp_start.innerHTML = "&nbsp;" + start_disp;
+		}
+		
+		if(disp_end)
+		{
+			var end_disp = start_disp+rows_per_page-1;
+			disp_end.innerHTML = "&nbsp;" + end_disp;			
+		}
 	}	
-	
-	if(disp_start)
-	{
-		var start_disp = val*rows_per_page;
-		disp_start.innerHTML = "&nbsp;" + start_disp;
-	}
-	
-	if(disp_end)
-	{
-		var end_disp = val+rows_per_page;
-		disp_end.innerHTML = "&nbsp;" + end_disp;			
-	}
 }
 
 nitobi.ui.Toolbars.prototype.inputCounter = function()
