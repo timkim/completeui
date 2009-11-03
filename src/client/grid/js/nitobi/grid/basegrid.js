@@ -319,6 +319,7 @@ nitobi.grid.Grid.prototype.properties = {
 nitobi.grid.Grid.prototype.xColumnProperties = {
 	column: {
 		align:{n:"Align",t:"s",d:"left"},
+		headeralign:{n:"HeaderAlign",t:"s",d:"left"},
 		classname:{n:"ClassName",t:"s",d:""},
 		cssstyle:{n:"CssStyle",t:"s",d:""},
 		columnname:{n:"ColumnName",t:"s",d:""},
@@ -365,6 +366,7 @@ nitobi.grid.Grid.prototype.xColumnProperties = {
 	},
 	numbercolumn: {
 		align:{n:"Align",t:"s",d:"right"},
+		headeralign:{n:"HeaderAlign",t:"s",d:"right"},
 		mask:{n:"Mask",t:"s",d:"#,###.00"},
 		negativemask:{n:"NegativeMask",t:"s",d:""},
 		groupingseparator:{n:"GroupingSeparator",t:"s",d:","},
@@ -2599,7 +2601,7 @@ nitobi.grid.Grid.prototype.layoutFrame= function(columns)
 			// 2. Width of scrollbar (sbW)
 		// Height dimenions
 			// 1. Header height (hdrH)
-			// 2. Height of visible rows (vpH) - calculated 
+			// 2. Height of  rows (vpH) - calculated 
 			// 3. Height of scrollbar (sbH)
 			// 4. Height of toolbar (tbH)
 

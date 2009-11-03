@@ -331,6 +331,7 @@ nitobi.treegrid.TreeGrid.prototype.properties = {
 nitobi.treegrid.TreeGrid.prototype.xColumnProperties = {
 	column: {
 		align:{n:"Align",t:"s",d:"left"},
+		headeralign:{n:"HeaderAlign",t:"s",d:"left"},
 		classname:{n:"ClassName",t:"s",d:""},
 		cssstyle:{n:"CssStyle",t:"s",d:""},
 		columnname:{n:"ColumnName",t:"s",d:""},
@@ -375,6 +376,7 @@ nitobi.treegrid.TreeGrid.prototype.xColumnProperties = {
 	},
 	numbercolumn: {
 		align:{n:"Align",t:"s",d:"right"},
+		headeralign:{n:"HeaderAlign",t:"s",d:"right"},
 		mask:{n:"Mask",t:"s",d:"#,###.00"},
 		negativemask:{n:"NegativeMask",t:"s",d:""},
 		groupingseparator:{n:"GroupingSeparator",t:"s",d:","},

@@ -104,6 +104,8 @@ nitobi.grid.Column.prototype = {
 	getInitial:function(){return this.xGET("Initial",arguments);},
 	getHidden:function(){return this.xGET("Hidden", arguments);},
 	setHidden:function(){return this.xSET("Hidden", arguments);},
+	getHeaderAlign:function(){return this.xGET("HeaderAlign", arguments);},
+	setHeaderAlign:function(){return this.xSET("HeaderAlign", arguments);},
 	/**
 	 * Sets the label to render for the column.
 	 * @param {String} label The label to use.
@@ -275,7 +277,7 @@ nitobi.grid.Column.prototype.getStyle = function()
  */
 nitobi.grid.Column.prototype.getHeaderStyle = function()
 {
-	var className = "acolumnheader"+this.grid.uid+"_"+this.column;
+	var className = "ntb-column-header"+this.grid.uid+"_"+this.column;
 	return nitobi.html.getClass(className);
 }
 /**
