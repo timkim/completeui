@@ -315,7 +315,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						_this.fire("PreviousPage");
 						_this.decrementCounter();
 					};
-				buttons[eachbutton].disable();
+				//buttons[eachbutton].disable();
 			break;
 			case "nextPage"+this.uid:
 				buttons[eachbutton].onClick = 
@@ -573,7 +573,7 @@ nitobi.ui.Toolbars.prototype.inputCounter = function()
 		var maxPage = Math.ceil(this.grid.datatable.totalRowCount/this.grid.getRowsPerPage());
 		var val = parseInt(start_page.value);
 		var isNotNumber = isNaN(start_page.value);
-		if(val < 0 || val > maxPage || isNotNumber)
+		if(val <= 0 || val > maxPage || isNotNumber)
 		{
 			alert('Please enter a value within the ranges of 1 and ' + maxPage);
 		}

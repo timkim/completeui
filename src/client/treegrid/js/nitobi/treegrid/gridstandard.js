@@ -110,7 +110,21 @@ nitobi.treegrid.GridStandard.prototype.disableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
-		t.getUiElements()[button+this.toolbars.uid].disable();
+	{	
+		if(t.getUiElements()[button+this.toolbars.uid])
+		{
+			t.getUiElements()[button+this.toolbars.uid].disable();
+		}
+	}
+	
+	var s = this.getToolbars().standardToolbar;
+	if (s != null)
+	{	
+		if(s.getUiElements()[button+this.toolbars.uid])
+		{
+			s.getUiElements()[button+this.toolbars.uid].disable();
+		}
+	}
 }
 nitobi.treegrid.GridStandard.prototype.enableNextPage = function()
 {
@@ -124,7 +138,21 @@ nitobi.treegrid.GridStandard.prototype.enableButton = function(button)
 {
 	var t = this.getToolbars().pagingToolbar;
 	if (t != null)
-		t.getUiElements()[button+this.toolbars.uid].enable();
+	{
+		if(t.getUiElements()[button+this.toolbars.uid])
+		{
+			t.getUiElements()[button+this.toolbars.uid].enable();
+		}
+	}
+	
+	var s = this.getToolbars().standardToolbar;
+	if (s != null)
+	{	
+		if(s.getUiElements()[button+this.toolbars.uid])
+		{
+			s.getUiElements()[button+this.toolbars.uid].enable();
+		}
+	}
 }
 
 nitobi.treegrid.GridStandard.prototype.pageFirst=function() {

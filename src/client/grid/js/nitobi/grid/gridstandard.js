@@ -144,6 +144,14 @@ nitobi.grid.GridStandard.prototype.disableButton = function(button)
 		}
 	}
 		
+	var s = this.getToolbars().standardToolbar;
+	if (s != null)
+	{	
+		if(s.getUiElements()[button+this.toolbars.uid])
+		{
+			s.getUiElements()[button+this.toolbars.uid].disable();
+		}
+	}
 }
 /**
  * Enables the page next button in the Grid toolbar.
@@ -170,6 +178,15 @@ nitobi.grid.GridStandard.prototype.enableButton = function(button)
 		if(t.getUiElements()[button+this.toolbars.uid])
 		{
 			t.getUiElements()[button+this.toolbars.uid].enable();
+		}
+	}
+	
+	var s = this.getToolbars().standardToolbar;
+	if (s != null)
+	{	
+		if(s.getUiElements()[button+this.toolbars.uid])
+		{
+			s.getUiElements()[button+this.toolbars.uid].enable();
 		}
 	}
 }
