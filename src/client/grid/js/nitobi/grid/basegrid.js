@@ -2444,6 +2444,7 @@ nitobi.grid.Grid.prototype.bindComplete=function()
 	
 	// TODO: This toolbar calc should not be here either
 	this.toolbars.calculateRange();
+	this.toolbars.resetCounter();
 	
 	// The bound property indicates that events from the datasource to which
 	// we are bound will now be able to cause re-renders of our interface

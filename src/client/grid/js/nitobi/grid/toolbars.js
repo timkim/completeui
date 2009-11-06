@@ -316,6 +316,23 @@ nitobi.ui.Toolbars.prototype.render= function()
 						_this.maxCounter();		
 					};
 			break;
+			case "previousPage"+this.uid:
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						_this.fire("PreviousPage");
+						_this.decrementCounter();
+					};
+				buttons[eachbutton].disable();
+			break;
+			case "nextPage"+this.uid:
+				buttons[eachbutton].onClick = 
+					function()
+					{
+						_this.fire("NextPage");
+						_this.incrementCounter();
+					};
+			break;
 			default:
 		}
 	}
@@ -380,14 +397,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						_this.fire("LastPage");	
 						_this.maxCounter();		
 					};
-			break;
-			case "startPage"+this.uid:
-				buttonsPaging[eachPbutton].onBlur = 
-					function()
-					{	
-						_this.inputCounter();		
-					};
-			break;			
+			break;		
 			default:
 		}
 	}
@@ -544,6 +554,9 @@ nitobi.ui.Toolbars.prototype.decrementCounter = function()
 nitobi.ui.Toolbars.prototype.inputCounter = function()
 {
 	var start_page = $ntb('startPage' + this.uid);
+	var disp_start = $ntb('startRow' + this.uid);
+	var disp_end = $ntb('numRows' + this.uid);
+	var rows_per_page = this.grid.getRowsPerPage();
 	if (start_page)
 	{		
 		var maxPage = Math.ceil(this.grid.datatable.totalRowCount/this.grid.getRowsPerPage());
@@ -555,6 +568,17 @@ nitobi.ui.Toolbars.prototype.inputCounter = function()
 		}
 		else
 		{
+			if(disp_start)
+			{
+				var start_disp = (val-1)*rows_per_page+1;
+				disp_start.innerHTML = "&nbsp;" + start_disp;
+			}
+			
+			if(disp_end)
+			{
+				var end_disp = start_disp+rows_per_page-1;
+				disp_end.innerHTML = "&nbsp;" + end_disp;			
+			}
 			this.fire("InputTextPage");
 		}
 	}	
