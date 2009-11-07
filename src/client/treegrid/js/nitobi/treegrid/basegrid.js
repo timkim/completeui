@@ -332,6 +332,7 @@ nitobi.treegrid.TreeGrid.prototype.xColumnProperties = {
 	column: {
 		align:{n:"Align",t:"s",d:"left"},
 		headeralign:{n:"HeaderAlign",t:"s",d:"left"},
+		hidden:{n:"Hidden",t:"b",d:false},
 		classname:{n:"ClassName",t:"s",d:""},
 		cssstyle:{n:"CssStyle",t:"s",d:""},
 		columnname:{n:"ColumnName",t:"s",d:""},
@@ -1784,10 +1785,12 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 		var hdr = columns[i];
 		
 		var hdrTitle = columns[i].getAttribute('label');
+		var hdrHidden = columns[i].getAttribute('hidden');
+		console.log(hdrHidden);
 		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
 		if (hdrTitle != null)
 		{
-			if(hdr != null)
+			if(hdr != null && hdrHidden != "true")
 			{
 				var list_item = document.createElement('li');
 				var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;

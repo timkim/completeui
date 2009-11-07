@@ -46,6 +46,8 @@ nitobi.treegrid.Column.prototype = {
 	getAlign:function(){return this.xGET("Align",arguments);},
 	getHeaderAlign:function(){return this.xGET("HeaderAlign", arguments);},
 	setHeaderAlign:function(){return this.xSET("HeaderAlign", arguments);},
+	getHidden:function(){return this.xGET("Hidden", arguments);},
+	setHidden:function(){return this.xSET("Hidden", arguments);},
 	setClassName:function(){this.xSET("ClassName",arguments);},
 	getClassName:function(){return this.xGET("ClassName",arguments);},
 	setCssStyle:function(){this.xSET("CssStyle",arguments);},
