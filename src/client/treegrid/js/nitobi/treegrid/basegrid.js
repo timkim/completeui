@@ -2311,11 +2311,29 @@ nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest)
  	var parentNode = source.surface.columnsNode;
 	var surface = source.surface;		
 
+	
 	var srcNode = parentNode.childNodes[srcIndex];
 	var destNode = parentNode.childNodes[destIndex];
 	var tmpNode = srcNode.cloneNode(true);
 	parentNode.removeChild(srcNode);
 	parentNode.insertBefore(tmpNode, destNode); 
+	
+	//update column xml declaration
+	var columnXmlPath = Math.floor(surfacePath.length/2);
+	var columnXml = this.Declaration.columns[columnXmlPath].firstChild;
+	var destCol = columnXml.childNodes[destIndex];
+  	var srcCol = columnXml.childNodes[srcIndex];
+  	var tmpColNode = srcCol.cloneNode(true);
+  	columnXml.removeChild(srcCol);
+  	columnXml.insertBefore(tmpColNode, destCol);
+	
+	//update grid xml declaration
+	var gridXml = this.Declaration.grid.firstChild;
+	var destGridXml = gridXml.childNodes[columnXmlPath];
+  	tmpColNode = columnXml.cloneNode(true);
+  	//gridXml.removeChild(gridXml.childNodes[columnXmlPath]);
+  	gridXml.replaceChild(tmpColNode,gridXml.childNodes[columnXmlPath]);
+
 	
 	this.Selection.clear();
 	// If we move a column on the first surface, purge all the surfaces
