@@ -1786,7 +1786,6 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 		
 		var hdrTitle = columns[i].getAttribute('label');
 		var hdrHidden = columns[i].getAttribute('hidden');
-		console.log(hdrHidden);
 		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
 		if (hdrTitle != null)
 		{
