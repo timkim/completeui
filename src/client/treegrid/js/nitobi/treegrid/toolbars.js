@@ -608,6 +608,15 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 	}
 }
 
+nitobi.ui.Toolbars.prototype.synchDropDown = function()
+{
+	var rows = this.grid.getRowsPerPage();
+	var dropdown = $ntb('pageDrop' + this.uid);
+	if(dropdown)
+	{
+		dropdown.value = rows;
+	}
+}
 
 nitobi.ui.Toolbars.prototype.resize = function()
 {
