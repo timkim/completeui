@@ -501,10 +501,10 @@ nitobi.grid.Grid.prototype.initialize= function()
  */
 nitobi.grid.Grid.prototype.initializeFromCss = function()
 {
-	this.CellHoverColor = this.getThemedStyle("ntb-cell-hover", "backgroundColor") || "#C0C0FF";
+	this.CellHoverColor = this.getThemedStyle("ntb-cell-hover", "backgroundColor") || "#6699CC";
 	this.RowHoverColor = this.getThemedStyle("ntb-row-hover", "backgroundColor") || "#FFFFC0";
-	this.CellActiveColor = this.getThemedStyle("ntb-cell-active", "backgroundColor") || "#F0C0FF";
-	this.RowActiveColor = this.getThemedStyle("ntb-row-active", "backgroundColor") || "#FFC0FF";
+	this.CellActiveColor = this.getThemedStyle("ntb-cell-active", "backgroundColor") || "#DDD9D5";
+	this.RowActiveColor = this.getThemedStyle("ntb-row-active", "backgroundColor") || "#DDD9D5";
 
 	var rowHeight = this.getThemedStyle("ntb-row", "height");
 	if (rowHeight != null && rowHeight != "")
