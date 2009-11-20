@@ -6228,6 +6228,7 @@ nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 			surface.onSetVisible.subscribeOnce(this.handleToggleSurface, this);
 			surface.expand();
 		}
+		
 	}
 	else
 	{
@@ -6240,7 +6241,6 @@ nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 		}
 		surface = this.expand(targetRow, targetKey);
 	}
-	this.toggleDetailButton(surface.columnSetId);
 	this.focus();
 }
 
@@ -6249,6 +6249,26 @@ nitobi.treegrid.TreeGrid.prototype.toggleDetailButton = function(colset)
 {
 	// If the show/hide is in fact enabled
 	var showhide_detail = this.toolbars.standardToolbar.getUiElements()["showhide_detail" + this.toolbars.uid];
+	/*
+	var found = false;
+
+		for(surf in this.scroller.surfaceMap)
+		{
+			if(this.scroller.surfaceMap[surf].key.length>1 && this.scroller.surfaceMap[surf].isVisible)
+			{
+				console.log('found it');
+				showhide_detail.enable();
+				found = true;
+				break;
+			}
+		}
+		
+		if(!found)
+		{	
+			console.log('disabled it');
+			showhide_detail.disable();
+		}
+		*/
 	if (showhide_detail)
 	{
 		if (this.scroller.isColSetVisible(colset))
@@ -6259,6 +6279,7 @@ nitobi.treegrid.TreeGrid.prototype.toggleDetailButton = function(colset)
 		{
 			showhide_detail.disable();
 		}
+		
 	}
 }
 
@@ -6310,6 +6331,7 @@ nitobi.treegrid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 	var inner_height = this.scroller.surface.view.midcenter.element.clientHeight;
 	var ratio = inner_height/outer_height;
 	this.vScrollbar.setRange(ratio);
+	this.toggleDetailButton(surface.columnSetId);
 }
 
 nitobi.treegrid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
