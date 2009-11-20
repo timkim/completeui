@@ -199,7 +199,15 @@
 }
 
 .flex .ntb-cell-hover { 
-	background-color: #44b7fe; 
+	background-color: #6699cc; 
+}
+
+.flex .ntb-cell-active { 
+	background-color: #ddd9d5; 
+}
+
+.flex .ntb-row-active { 
+	background-color: #ddd9d5; 
 }
 
 .flex .ntb-grid-selection-background {
