@@ -306,7 +306,7 @@ nitobi.grid.Column.prototype.hide = function()
 {
   var width = this.getWidth();
   var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
-  var classDef = nitobi.html.getClass(className);
+  var classDef = nitobi.html.getClass(className, true);
   classDef.display = "none";
   this.grid.resizePanes(-width, this.column );
   this.grid.adjustHorizontalScrollBars();
@@ -316,28 +316,41 @@ nitobi.grid.Column.prototype.show = function()
 {
   var width = this.getWidth();
   var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
-  var classDef = nitobi.html.getClass(className);
+  var classDef = nitobi.html.getClass(className, true);
   classDef.display = "";
   this.grid.resizePanes(width, this.column);
+  this.grid.adjustHorizontalScrollBars();
 }
 
 nitobi.grid.Column.prototype.toggleVis = function()
 {
   var columnXml = this.grid.Declaration.columns.firstChild.childNodes[this.column];
   var gridxml = this.grid.Declaration.grid.firstChild.firstChild.childNodes[this.column];
-
+ 
+  if(nitobi.browser.IE)
+  {
+  	var modelXml = this.grid.model.firstChild.childNodes[1].childNodes[this.column];
+  }
   var className = "ntb-column" + this.grid.uid + "_" + String(this.column + 1);
   var classDef = nitobi.html.getClass(className, true);
   if (classDef.display == "none")
   {
     columnXml.setAttribute('visible','true');
 	gridxml.setAttribute('visible','true');
+	if(nitobi.browser.IE)
+	{
+		modelXml.setAttribute('Visible','1');
+	}
   	this.show();
   }
   else
   { 
     columnXml.setAttribute('visible','false');
 	gridxml.setAttribute('visible','false');
+	if(nitobi.browser.IE)
+	{
+		modelXml.setAttribute('Visible','0');
+	}
 	this.hide();
   }
 }

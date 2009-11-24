@@ -233,7 +233,7 @@ nitobi.treegrid.Column.prototype.hide = function()
   var colSetId = this.surface.columnSetId;
   var width = this.getWidth();
   var className = "ntb-column" + this.grid.uid + "_" + colSetId +"_" + String(this.column + 1);
-  var classDef = nitobi.html.getClass(className);
+  var classDef = nitobi.html.getClass(className, true);
   classDef.display = "none";
   this.grid.adjustHorizontalScrollBars();
  }
@@ -243,8 +243,9 @@ nitobi.treegrid.Column.prototype.show = function()
   var colSetId = this.surface.columnSetId;
   var width = this.getWidth();
   var className = "ntb-column" + this.grid.uid + "_" + colSetId + "_" + String(this.column + 1);
-  var classDef = nitobi.html.getClass(className);
+  var classDef = nitobi.html.getClass(className, true);
   classDef.display = "";
+  this.grid.adjustHorizontalScrollBars();
 }
 
 nitobi.treegrid.Column.prototype.toggleVis = function()
@@ -257,17 +258,28 @@ nitobi.treegrid.Column.prototype.toggleVis = function()
   var columnXml = this.grid.Declaration.columns[theIndex].firstChild.childNodes[this.column];
   var gridxml = this.grid.Declaration.grid.firstChild.childNodes[theIndex].childNodes[this.column];
 
-
+  if(nitobi.browser.IE)
+  {
+  	var modelXml = this.grid.model.firstChild.firstChild.childNodes[theIndex].childNodes[this.column];
+  }
   if (classDef.display == "none")
   {
     columnXml.setAttribute('visible','true');
 	gridxml.setAttribute('visible','true');
+	if(nitobi.browser.IE)
+	{
+		modelXml.setAttribute('Visible','1');
+	}
   	this.show();
   }
   else 
   {
     columnXml.setAttribute('visible','false');
 	gridxml.setAttribute('visible','false');  	
+	if(nitobi.browser.IE)
+	{
+		modelXml.setAttribute('Visible','0');
+	}
 	this.hide();
   }
 }

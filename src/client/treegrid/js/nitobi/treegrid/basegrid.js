@@ -3990,7 +3990,6 @@ nitobi.treegrid.TreeGrid.prototype.generateFrameCss= function()
 
 	// Extended the HTMLStyleElement object to have the cssText property
 	var newCss = nitobi.xml.transformToString(this.model, this.frameCssXslProc);
-
 	if (!nitobi.browser.SAFARI && !nitobi.browser.CHROME && this.stylesheet == null)
 		this.stylesheet = nitobi.html.Css.createStyleSheet();
 
@@ -6249,26 +6248,6 @@ nitobi.treegrid.TreeGrid.prototype.toggleDetailButton = function(colset)
 {
 	// If the show/hide is in fact enabled
 	var showhide_detail = this.toolbars.standardToolbar.getUiElements()["showhide_detail" + this.toolbars.uid];
-	/*
-	var found = false;
-
-		for(surf in this.scroller.surfaceMap)
-		{
-			if(this.scroller.surfaceMap[surf].key.length>1 && this.scroller.surfaceMap[surf].isVisible)
-			{
-				console.log('found it');
-				showhide_detail.enable();
-				found = true;
-				break;
-			}
-		}
-		
-		if(!found)
-		{	
-			console.log('disabled it');
-			showhide_detail.disable();
-		}
-		*/
 	if (showhide_detail)
 	{
 		if (this.scroller.isColSetVisible(colset))

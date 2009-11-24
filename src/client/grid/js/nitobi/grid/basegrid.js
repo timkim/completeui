@@ -2227,7 +2227,7 @@ nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
 		}
 		else
 		{
-			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid);
+			var surfaceStyle = C.getClass(".ntb-grid-surfacewidth"+this.uid, true);
 			surfaceStyle.width = (parseInt(surfaceStyle.width) + dx) + "px";
 		}
 }
@@ -4889,7 +4889,7 @@ nitobi.grid.Grid.prototype.getColumnDefinitions= function()
  */
 nitobi.grid.Grid.prototype.getVisibleColumnDefinitions= function()
 {
-	return this.model.selectNodes("state/nitobi.grid.Columns/*[@Visible='true']");
+	return this.model.selectNodes("state/nitobi.grid.Columns/*[@Visible='1']");
 }
 
 /**
