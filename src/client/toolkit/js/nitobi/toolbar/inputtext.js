@@ -68,6 +68,9 @@ nitobi.ui.InputText.prototype.OnKeyDownHandler = function (value)
 {
 	if(value.keyCode==13)
 	{
+		value.returnValue = false;
+		value.cancel = true;
+		value.cancelBubble = true;
 		this.toolbar.inputCounter();
 	}
 	
