@@ -2104,7 +2104,7 @@ nitobi.treegrid.TreeGrid.prototype.measureColumns= function() {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
 	for (var i=0; i<cols;i++) {
-		if (colDefs[i].getAttribute("Visible") == "true" || colDefs[i].getAttribute("visible") == "true")
+		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true)
 		{
 			var w = Number(colDefs[i].getAttribute("Width"));
 			wT+=w;
@@ -3668,7 +3668,7 @@ nitobi.treegrid.TreeGrid.prototype.calculateWidth= function(start, end)
 	end = (end != null)?Math.min(end,cols):cols;
 	var wT = 0;
 	for (var i=start; i<end;i++) {
-		if (colDefs[i].getAttribute("Visible") == "true" || colDefs[i].getAttribute("visible") == "true") {
+		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true) {
 			wT+=Number(colDefs[i].getAttribute("Width"));
 		}
 	}
@@ -6315,7 +6315,6 @@ nitobi.treegrid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 
 nitobi.treegrid.TreeGrid.prototype.expand = function(rowIndex, surfacePath)
 {
-
 	var surface = this.Scroller.getSurface(surfacePath);
 	surface.onBeforeExpand.notify();
 	this.loadingScreen.show();
