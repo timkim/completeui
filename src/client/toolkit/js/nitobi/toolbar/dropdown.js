@@ -60,6 +60,7 @@ nitobi.ui.DropDown.prototype.onChangeHandler = function(value)
 {
 	var grid = this.toolbar.grid;
 	grid.setRowsPerPage(value);
+	grid.Declaration.grid.firstChild.setAttribute('rowsperpage',value);
 	grid.bind();
 	this.toolbar.resetCounter();
 }
