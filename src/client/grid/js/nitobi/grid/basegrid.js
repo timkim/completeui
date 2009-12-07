@@ -1954,7 +1954,7 @@ nitobi.grid.Grid.prototype.measureColumns= function() {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
 	for (var i=0; i<cols;i++) {
-		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true)
+		if (nitobi.lang.toBool(colDefs[i].getAttribute("Visible"),false) == true || nitobi.lang.toBool(colDefs[i].getAttribute("visible"),false) == true)
 		{
 			var w = Number(colDefs[i].getAttribute("Width"));
 			wT+=w;
@@ -3447,7 +3447,7 @@ nitobi.grid.Grid.prototype.calculateWidth= function(start, end)
 	end = (end != null)?Math.min(end,cols):cols;
 	var wT = 0;
 	for (var i=start; i<end;i++) {
-		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true) {
+		if (nitobi.lang.toBool(colDefs[i].getAttribute("Visible"),false) == true || nitobi.lang.toBool(colDefs[i].getAttribute("visible"),false) == true) {
 			wT+=Number(colDefs[i].getAttribute("Width"));
 		}
 	}

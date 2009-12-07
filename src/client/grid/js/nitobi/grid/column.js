@@ -309,7 +309,7 @@ nitobi.grid.Column.prototype.hide = function()
   var classDef = nitobi.html.getClass(className, true);
   classDef.display = "none";
   this.grid.resizePanes(-width, this.column );
-  this.grid.adjustHorizontalScrollBars();
+  //this.grid.adjustHorizontalScrollBars();
  }
 
 nitobi.grid.Column.prototype.show = function()
@@ -319,6 +319,7 @@ nitobi.grid.Column.prototype.show = function()
   var classDef = nitobi.html.getClass(className, true);
   classDef.display = "";
   this.grid.resizePanes(width, this.column);
+  //this.grid.adjustHorizontalScrollBars();
 }
 
 nitobi.grid.Column.prototype.toggleVis = function()

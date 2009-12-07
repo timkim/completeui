@@ -1781,22 +1781,20 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	listDiv.appendChild(menuDiv);
 	for (var i = 0; i < columns.length; ++i)
 	{
-		//var hdr = this.getColumnObject(i);
 		var hdr = columns[i];
-		
 		var hdrTitle = columns[i].getAttribute('label');
-		var hdrHidden = columns[i].getAttribute('hidden');
+		var hdrHidden = nitobi.lang.toBool(columns[i].getAttribute('hidden'), false);
 		// If a column doesn't have a title, we can't hide it.  (ExpandColumns)
 		if (hdrTitle != null)
 		{
-			if(hdr != null && hdrHidden != "true")
+			if(hdr != null && hdrHidden != true)
 			{
 				var list_item = document.createElement('li');
 				var id = "ntb-hidecol_" + i + "_" + setname + "_" + this.uid;
 				list_item.innerHTML = '<input type="checkbox" id="' + id + '"> ' + hdrTitle;
 				
 				list.appendChild(list_item);
-				if(hdr.getAttribute("Visible") == "false" || hdr.getAttribute("visible") == "false")
+				if(nitobi.lang.toBool(hdr.getAttribute("Visible"),true) == false || nitobi.lang.toBool(hdr.getAttribute("visible"), true) == false)
 				{
 					list_item.children[0].checked = true;
 				}
@@ -2104,12 +2102,12 @@ nitobi.treegrid.TreeGrid.prototype.measureColumns= function() {
 	var colDefs = this.getColumnDefinitions();
 	var cols = colDefs.length;
 	for (var i=0; i<cols;i++) {
-		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true)
-		{
+		//if (nitobi.lang.toBool(colDefs[i].getAttribute("Visible"),false) == true || nitobi.lang.toBool(colDefs[i].getAttribute("visible"),false) == true)
+		//{
 			var w = Number(colDefs[i].getAttribute("Width"));
 			wT+=w;
 			if (i<fL) wL+=w;
-		}
+		//}
 	}
 	this.setleft(wL);
 }
@@ -3668,9 +3666,9 @@ nitobi.treegrid.TreeGrid.prototype.calculateWidth= function(start, end)
 	end = (end != null)?Math.min(end,cols):cols;
 	var wT = 0;
 	for (var i=start; i<end;i++) {
-		if (colDefs[i].getAttribute("Visible") == true || colDefs[i].getAttribute("visible") == true) {
+		//if (nitobi.lang.toBool(colDefs[i].getAttribute("Visible"),false) == true || nitobi.lang.toBool(colDefs[i].getAttribute("visible"),false) == true) {
 			wT+=Number(colDefs[i].getAttribute("Width"));
-		}
+		//}
 	}
 	return (wT);
 }
