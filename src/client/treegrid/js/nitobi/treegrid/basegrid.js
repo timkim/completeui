@@ -1772,6 +1772,7 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	var columns = colset.firstChild.childNodes;
 	var listDiv = $ntb('ntb-treegrid-showhide' + uid);
 	var menuDiv = document.createElement('div');
+	menuDiv.innerHTML = "";
 	var list = document.createElement('ul');
 	menuDiv.setAttribute('id',  "ntb-treegrid-colmenu-" + setname);
 	menuDiv.setAttribute('style', 'display: none;');
@@ -1810,6 +1811,7 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 
 nitobi.treegrid.TreeGrid.prototype.toggleVis = function(evt)
 {
+
 	var colAttr = evt.srcElement.id.split('_');
 	var col = parseInt(colAttr[1]);
 	var colset = colAttr[2];
@@ -2345,6 +2347,9 @@ nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest)
 	surface.clearHeader();
 	surface.syncWithData();
 	surface.renderHeader();
+	
+	debugger;
+	this.populateColumnLists();
 	// We need to generate the CSS here so the columns have the proper width 
 	this.generateCss();
 }

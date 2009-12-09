@@ -1674,6 +1674,7 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
   var uid = this.uid;
   var listDiv = $ntb('ntb-grid-showhide' + uid);
   var list = $ntb('ntb-grid-colcheck' + uid);
+  list.innerHTML = "";
   var count = this.getColumnCount();
   for (var i = 0; i < count; ++i)
   {
@@ -2163,6 +2164,7 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   // Dump the old cached stuff out, redefine everything and bind it!
   this.columns = [];
   this.defineColumns(columns);
+  this.populateColumnList();
   this.bind();
 }
 
