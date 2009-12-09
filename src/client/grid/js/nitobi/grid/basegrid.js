@@ -1696,6 +1696,17 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
   } 
 }
 
+nitobi.grid.Grid.prototype.refreshColumnList = function()
+{
+	var list = $ntb('ntb-grid-colcheck' + this.uid);
+	var children = list.childNodes;
+	for(var i = 0; i < children.length;  ++i)
+	{
+		list.removeChild(children[i]);
+	}
+	this.populateColumnList();
+}
+
 /**
  * Called on the <code>AfterGridResize</code> event.
  * @private
