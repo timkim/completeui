@@ -1674,7 +1674,6 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
   var uid = this.uid;
   var listDiv = $ntb('ntb-grid-showhide' + uid);
   var list = $ntb('ntb-grid-colcheck' + uid);
-  list.innerHTML = "";
   var count = this.getColumnCount();
   for (var i = 0; i < count; ++i)
   {
@@ -1699,10 +1698,9 @@ nitobi.grid.Grid.prototype.populateColumnList = function()
 nitobi.grid.Grid.prototype.refreshColumnList = function()
 {
 	var list = $ntb('ntb-grid-colcheck' + this.uid);
-	var children = list.childNodes;
-	for(var i = 0; i < children.length;  ++i)
+	while(list.childNodes[0])
 	{
-		list.removeChild(children[i]);
+		list.removeChild(list.childNodes[0]);
 	}
 	this.populateColumnList();
 }
@@ -2175,7 +2173,7 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   // Dump the old cached stuff out, redefine everything and bind it!
   this.columns = [];
   this.defineColumns(columns);
-  this.populateColumnList();
+  this.refreshColumnList();
   this.bind();
 }
 
