@@ -1770,16 +1770,19 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	var uid = this.uid;
 	var setname = colset.firstChild.getAttribute('id');
 	var columns = colset.firstChild.childNodes;
+
 	var listDiv = $ntb('ntb-treegrid-showhide' + uid);
 	var menuDiv = document.createElement('div');
-	menuDiv.innerHTML = "";
 	var list = document.createElement('ul');
+
 	menuDiv.setAttribute('id',  "ntb-treegrid-colmenu-" + setname);
 	menuDiv.setAttribute('style', 'display: none;');
 	menuDiv.setAttribute('class', 'ntb-showhide');
 	list.setAttribute('id', "ntb-treegrid-colcheck-" + setname);
 	menuDiv.appendChild(list);
 	listDiv.appendChild(menuDiv);
+	
+
 	for (var i = 0; i < columns.length; ++i)
 	{
 		var hdr = columns[i];
@@ -1807,6 +1810,20 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	// This is stupid, but is required for IE
 	rendered_menu = $ntb('ntb-treegrid-colmenu-' + setname);
 	rendered_menu.style.display = "none";
+}
+
+nitobi.treegrid.TreeGrid.prototype.refreshColumnList = function(colset)
+{
+	var setname = colset.firstChild.getAttribute('id');
+	var list = $ntb('ntb-treegrid-showhide' + this.uid);
+	var flag = true;
+	var index = 0;
+	var theColumn = document.getElementById('ntb-treegrid-colmenu-' +setname);
+	if(theColumn)
+	{
+		list.removeChild(theColumn);
+	}
+	this.populateColList(colset);
 }
 
 nitobi.treegrid.TreeGrid.prototype.toggleVis = function(evt)
@@ -2348,8 +2365,8 @@ nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest)
 	surface.syncWithData();
 	surface.renderHeader();
 	
-	debugger;
-	this.populateColumnLists();
+	var theColSet = this.Declaration.columns[columnXmlPath];
+	this.refreshColumnList(theColSet);
 	// We need to generate the CSS here so the columns have the proper width 
 	this.generateCss();
 }
