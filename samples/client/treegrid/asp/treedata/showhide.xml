@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<toolbar id="toolbarthis.uid" title="Grid" height="25" width="110" image_directory="http://localhost/vss/EBALib/v13/Common/Toolbar/Styles/default">
+	<items>
+		<separator id="toolbar1_separator3" height="20" width="5" image="separator.jpg" />
+		<button id="showhide_master" onclick_event="this.onClick()" height="14" width="16" image="columns.gif" image_disabled="columns.gif" tooltip_text="Show/Hide Columns" />
+		<button id="showhide_detail" onclick_event="this.onClick()" height="14" width="16" image="refresh.gif" image_disabled="refresh_disabled.gif" tooltip_text="Show/Hide Columns" />
+		<separator id="toolbar1_separator4" height="20" width="5" image="separator.jpg" />
+		<dropdown id="pageDrop" />
+			
+		<button id="firstPage" onclick_event="this.onClick();" height="11" width="10" image="left.gif" image_disabled="left_disabled.gif" tooltip_text="First Page" />
+		<button id="previousPage" onclick_event="this.onClick();" height="11" width="10" image="left.gif" image_disabled="left_disabled.gif" tooltip_text="Previous Page" />
+		<text id="page" value="Page "/>
+		<inputtext id="startPage" value="1" onblur_event="this.onBlur();" float="left" width="25"/>
+		<!--<text id="startPage" value="1"/>-->
+		<text id="of" value="of"/>
+		<text id="endPage" value="0" />  
+		<button id="nextPage" onclick_event="this.onClick();" height="11" width="10" image="right.gif" image_disabled="right_disabled.gif" tooltip_text="Next Page" />
+		<button id="lastPage" onclick_event="this.onClick();" height="11" width="10" image="right.gif" image_disabled="right_disabled.gif" tooltip_text="Last Page" />
+		
+		<separator id="toolbar1_separator2" height="20" width="5" image="separator.jpg" />
+		<button id="refresh" onclick_event="this.onClick()" height="14" width="16" image="refresh.gif" image_disabled="refresh_disabled.gif" tooltip_text="Refresh" />
+		<text id="Row" value="Displaying "/>
+		<text id="startRow" value="1"/>
+		<text id="to" value="to" />
+		<text id="numRows" value="10" />
+		<text id="of" value="of"/>
+		<text id="endRow" value="0" />  
+		<text id="itemLabel" value="items" />
+     </items>
+</toolbar>

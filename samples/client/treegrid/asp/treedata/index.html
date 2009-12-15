@@ -12,7 +12,30 @@
 
 function init()
 {
+	nitobi.treegrid.toolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar());
+	nitobi.treegrid.pagingToolbarDoc = nitobi.xml.createXmlDoc(getShowHideToolBar2());
 	nitobi.loadComponent('TreeGrid');
+}
+var getShowHideToolBar = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'showhide.xml';
+  xhr.async = false;
+  xhr.get();
+ 
+  return xhr.httpObj.responseText;
+}
+
+var getShowHideToolBar2 = function()
+{
+  var xhr = new nitobi.ajax.HttpRequest();
+
+  xhr.handler = 'toolbar.xml';
+  xhr.async = false;
+  xhr.get();
+ 
+  return xhr.httpObj.responseText;
 }
 function click()
 {
@@ -42,6 +65,13 @@ function GetNewRecordID()
 		// return the result to the grid
 		return myAjaxRequest.httpObj.responseText;
 }
+
+function xmlOut()
+{
+	var tree = nitobi.getComponent('TreeGrid');
+	console.log("Grid: " + tree.Declaration.grid.xml + " \n\nColumns[0]: " + tree.Declaration.columns[0].xml + " \n\nColumns[1]: " + tree.Declaration.columns[1].xml + " \n\nColumns[2]: " + tree.Declaration.columns[2].xml);
+	
+}
 </script>
 </head>
 <body onLoad="init()">
@@ -65,11 +95,12 @@ function GetNewRecordID()
 			<option value="xp">XP</option>
 		</select>
 	</div>
+
     <ntb:treegrid id="TreeGrid" 
 				  width="630"
 				  height="500"
 				  mode="standard"
-				  rowsperpage="20"  
+
 				  gethandler="load_customers.asp"
 				  savehandler="save_customers.asp"
 				  toolbarenabled="true"
@@ -81,28 +112,32 @@ function GetNewRecordID()
 		
 				  >
 		  <ntb:columns id="customers">
-			<ntb:expandcolumn childcolumnset="orders" width="50"></ntb:expandcolumn>
-			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130" align="right"></ntb:textcolumn>
-	   		<ntb:textcolumn label="Contact Name" xdatafld="ContactName" width="130"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Email" xdatafld="ContactEmail" width="150" align="right"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Phone Number" xdatafld="PhoneNumber" width="100" align="right"></ntb:textcolumn>
-			<ntb:textcolumn label="Address" xdatafld="Address" width="100" align="right"></ntb:textcolumn>
+			<ntb:expandcolumn childcolumnset="orders" width="50" ></ntb:expandcolumn>
+			<ntb:textcolumn label="Customer Name" xdatafld="CustomerName" width="130"  visible="false" align="right"></ntb:textcolumn>
+	   		<ntb:textcolumn label="Contact Name" xdatafld="ContactName"  width="130"  visible="false" headeralign="right"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Email" xdatafld="ContactEmail" width="150" align="right"   visible="false" headeralign="left"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Phone Number" xdatafld="PhoneNumber" width="100" align="right"  headeralign="center"></ntb:textcolumn>
+			<ntb:textcolumn label="Address" xdatafld="Address" width="100" align="right"  headeralign="center"></ntb:textcolumn>
+			<ntb:numbercolumn label="asdf" editable="false" xdatafld="Numbers" width="100"  mask="#,##"	negativemask="-#,##" headeralign="center"></ntb:numbercolumn>
 		  </ntb:columns>
 		  
 		   <ntb:columns id="orders" gethandler="load_orders.asp" savehandler="save_orders.asp" headerenabled="true">
 		  	<ntb:expandcolumn childcolumnset="products" width="50"></ntb:expandcolumn>
-		  	<ntb:numbercolumn label="Order ID" editable="false" xdatafld="OrderID" width="100"></ntb:numbercolumn>
-		  	<ntb:textcolumn label="Order Date" xdatafld="OrderDate" width="140"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Shipped Date" xdatafld="ShippedDate" width="140"></ntb:textcolumn>
-			<ntb:textcolumn label="Product Name" xdatafld="ProductName" width="150"></ntb:textcolumn>
+		  	<ntb:numbercolumn label="Order ID" visible="true" editable="false" xdatafld="OrderID"  width="100"  headeralign="center"></ntb:numbercolumn>
+		  	<ntb:textcolumn label="Order Date" visible="true" xdatafld="OrderDate"  width="140"    headeralign="center"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Shipped Date" xdatafld="ShippedDate" width="140"    headeralign="center"></ntb:textcolumn>
+			<ntb:numbercolumn label="Order ID" editable="false" xdatafld="OrderID"  width="100"  headeralign="center"></ntb:numbercolumn>
+		  	<ntb:textcolumn label="Order Date" xdatafld="OrderDate"  width="140"    headeralign="center"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Shipped Date" xdatafld="ShippedDate" width="140"    headeralign="center"></ntb:textcolumn>
+
 		  </ntb:columns>
 		  
 		  <ntb:columns id="products" gethandler="load_products.asp">
-		  	<ntb:textcolumn label="Product Name" xdatafld="ProductName" width="150"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Product Name" xdatafld="ProductName"  width="150"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Price" xdatafld="ProductPrice"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Product Name" xdatafld="ProductSku" width="150"></ntb:textcolumn>
 		  	<ntb:textcolumn label="Price" xdatafld="ProductQuantityPerUnit"></ntb:textcolumn>
-		  	<ntb:textcolumn label="Product Name" xdatafld="ProductCategoryName" width="150"></ntb:textcolumn>
+		  	<ntb:textcolumn label="Product Name" xdatafld="ProductCategoryName"  width="150"></ntb:textcolumn>
 		  </ntb:columns>
 	</ntb:treegrid>
 </body>

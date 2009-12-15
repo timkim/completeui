@@ -112,6 +112,7 @@
 	EBAGetHandler_DefineField("CustomerName") 'column index 4
 	EBAGetHandler_DefineField("PhoneNumber") 'column index 5
 	EBAGetHandler_DefineField("Address") 'column index 6	
+	EBAGetHandler_DefineField("Numbers")
 
 	' *******************************************************************
 	' Lets loop through our data and send it to the grid
@@ -128,6 +129,7 @@
 				EBAGetHandler_DefineRecordFieldValue "CustomerName", RecordSet("CustomerName")
 				EBAGetHandler_DefineRecordFieldValue "PhoneNumber", RecordSet("PhoneNumber")
 				EBAGetHandler_DefineRecordFieldValue "Address", RecordSet("Address")
+				EBAGetHandler_DefineRecordFieldValue "Numbers", "-10000"
 			EBAGetHandler_SaveRecord
 	
 			RecordSet.MoveNext
