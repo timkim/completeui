@@ -58,11 +58,14 @@ nitobi.lang.extend(nitobi.ui.DropDown, nitobi.ui.InteractiveUiElement);
 
 nitobi.ui.DropDown.prototype.onChangeHandler = function(value)
 {
-	var grid = this.toolbar.grid;
-	grid.setRowsPerPage(value);
-	grid.Declaration.grid.firstChild.setAttribute('rowsperpage',value);
-	grid.bind();
-	this.toolbar.resetCounter();
+	if(value)
+	{
+		var grid = this.toolbar.grid;
+		grid.setRowsPerPage(value);
+		grid.Declaration.grid.firstChild.setAttribute('rowsperpage',value);
+		grid.bind();
+		this.toolbar.resetCounter();
+	}
 }
 
 nitobi.ui.DropDown.prototype.disable = function()
