@@ -98,10 +98,15 @@
 			&lt;/div&gt;
       &lt;/div&gt;
 
-      &lt;div id="ntb-grid-showhide<xsl:value-of select="$u" />" class="ntb-showhide" style="display:none;" &gt;
-      &lt;ul id="ntb-grid-colcheck<xsl:value-of select="$u" />"&gt;
-      &lt;/ul&gt;
-      &lt;/div&gt;
+		  &lt;div id="ntb-grid-showhide-wrapper<xsl:value-of select="$u" />"  style="display:none;" &gt;
+	      &lt;div id="ntb-grid-showhide<xsl:value-of select="$u" />" class="ntb-showhide" &gt;
+	      &lt;ul id="ntb-grid-colcheck<xsl:value-of select="$u" />"&gt;
+	      &lt;/ul&gt;
+	      &lt;/div&gt;
+		  &lt;div id="ntb-grid-showhide-close<xsl:value-of select="$u" />" class="ntb-showhide-close-button" onclick="$ntb(&#39;ntb-grid-showhide-wrapper<xsl:value-of select="$u" />&#39;).style.display=&#39;none&#39;" &gt;
+		  &lt;span&gt;close&lt;/span&gt;
+		  &lt;/div&gt;
+		  &lt;/div&gt;
 
 		<xsl:if test="$resizeEnabled = 1">
 	        &lt;div id="ntb-grid-resizecontainer<xsl:value-of select="$u"/>" style="height:0px;position:relative;"&gt;
