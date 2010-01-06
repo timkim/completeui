@@ -1772,17 +1772,37 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 	var columns = colset.firstChild.childNodes;
 
 	var listDiv = $ntb('ntb-treegrid-showhide' + uid);
+	var wrapperDiv = document.createElement('div');
 	var menuDiv = document.createElement('div');
 	var list = document.createElement('ul');
+	var closeDiv = document.createElement('div');
+	var closeElement = document.createElement('span');
 
+	wrapperDiv.setAttribute('id',  "ntb-treegrid-colmenu-wrapper" + setname);
+	wrapperDiv.setAttribute('style', 'display: none;');
 	menuDiv.setAttribute('id',  "ntb-treegrid-colmenu-" + setname);
-	menuDiv.setAttribute('style', 'display: none;');
-	menuDiv.setAttribute('class', 'ntb-showhide');
 	list.setAttribute('id', "ntb-treegrid-colcheck-" + setname);
-	menuDiv.appendChild(list);
-	listDiv.appendChild(menuDiv);
+	closeDiv.setAttribute('id',  "ntb-treegrid-colmenu-close" + setname);
+	closeElement.innerHTML = 'Close';
 	
-
+	
+	// Stupid ie hack
+	if(nitobi.browser.IE)
+	{
+		menuDiv.setAttribute('className', 'ntb-showhide');
+		closeDiv.setAttribute('className', 'ntb-showhide-close-button');
+		
+	}else
+	{
+		menuDiv.setAttribute('class', 'ntb-showhide');
+		closeDiv.setAttribute('class', 'ntb-showhide-close-button');
+	}
+	closeElement.onclick = function(){$ntb('ntb-treegrid-colmenu-wrapper'+setname).style.display="none";};
+	closeDiv.appendChild(closeElement);
+	menuDiv.appendChild(list);
+	wrapperDiv.appendChild(menuDiv);
+	wrapperDiv.appendChild(closeDiv);
+	listDiv.appendChild(wrapperDiv);
 	for (var i = 0; i < columns.length; ++i)
 	{
 		var hdr = columns[i];
@@ -1808,8 +1828,13 @@ nitobi.treegrid.TreeGrid.prototype.populateColList = function(colset)
 		}
 	}
 	// This is stupid, but is required for IE
-	rendered_menu = $ntb('ntb-treegrid-colmenu-' + setname);
-	rendered_menu.style.display = "none";
+	if(nitobi.browser.IE)
+	{
+		rendered_menu = $ntb('ntb-treegrid-colmenu-wrapper' + setname);
+		rendered_menu.style.display = "none";
+	}
+	
+	
 }
 
 nitobi.treegrid.TreeGrid.prototype.refreshColumnList = function(colset)
@@ -1818,7 +1843,7 @@ nitobi.treegrid.TreeGrid.prototype.refreshColumnList = function(colset)
 	var list = $ntb('ntb-treegrid-showhide' + this.uid);
 	var flag = true;
 	var index = 0;
-	var theColumn = document.getElementById('ntb-treegrid-colmenu-' +setname);
+	var theColumn = document.getElementById('ntb-treegrid-colmenu-wrapper' +setname);
 	if(theColumn)
 	{
 		list.removeChild(theColumn);

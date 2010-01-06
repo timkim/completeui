@@ -412,9 +412,9 @@
 
 .flex .ntb-showhide-close-button
 {
-	text-align: right;
 	background-color: #efefef; 
 	width:250px;
+	text-align: right;
 	border-left: 1px solid #000000; 
 	border-right: 1px solid #000000; 
 	border-bottom: 1px solid #000000;

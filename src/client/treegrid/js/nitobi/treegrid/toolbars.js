@@ -272,7 +272,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  element = _this.show_hide_btn;
 						  // Try to find the master and the detail
 						  var colset = grid.scroller.surface.columnSetId;
-						  var menu = $ntb('ntb-treegrid-colmenu-' + colset );
+						  var menu = $ntb('ntb-treegrid-colmenu-wrapper' + colset );
   						  nitobi.ui.Toolbars.showMenu(menu, element);
 					};
 			break;
@@ -295,7 +295,7 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  }
 						  if(colset != null && grid.Scroller.isColSetVisible(colset))
 						  {
-						  	var menu = $ntb('ntb-treegrid-colmenu-' + colset);
+						  	var menu = $ntb('ntb-treegrid-colmenu-wrapper' + colset);
 							nitobi.ui.Toolbars.showMenu(menu, element);
 						  }
 					};
