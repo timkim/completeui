@@ -2074,18 +2074,22 @@ nitobi.grid.Grid.prototype.afterColumnResize = function(resizer)
 nitobi.grid.Grid.prototype.afterDragDropColumn = function(dragbox)
 {
   var source = this.getColumnObject(dragbox.column);
+
   if (this.targetCol == null)
     var target = this.findColumnWithX(dragbox.x);
   else
     var target = this.targetCol;
-
+	
   if (source == target || target == null)
   {
     this.headerClicked(dragbox.column);
+  }else if(target=='last')
+  {
+  	this.moveColumns(source, this.getColumnObject(this.getColumnCount()-1), true);
   }
   else
   {
-    this.moveColumns(source, target);
+    this.moveColumns(source, target, false);
   }
 }
 
@@ -2151,7 +2155,7 @@ nitobi.grid.Grid.prototype.columnResize= function(column, width)
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
-nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
+nitobi.grid.Grid.prototype.moveColumns = function(source, dest, after)
 {
   var srcIndex = source.column;
   var destIndex = dest.column;
@@ -2162,7 +2166,14 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest)
   var srcCol = columns.childNodes[srcIndex];
   var tmpNode = srcCol.cloneNode(true);
   columns.removeChild(srcCol);
-  columns.insertBefore(tmpNode, destCol);
+  
+  if(!after)
+  {
+  	columns.insertBefore(tmpNode, destCol);
+  }else
+  {
+  	columns.appendChild(tmpNode);
+  }
 
   // Update the grid xml as well
   var gridXml = this.Declaration.grid.firstChild;
@@ -2188,7 +2199,7 @@ nitobi.grid.Grid.prototype.reloadColumnDef = function()
 nitobi.grid.Grid.prototype.findColumnWithX = function(x)
 {
   var C = nitobi.html.Css;
-  var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
+  var lastColumn = this.getColumnObject(this.getColumnCount()-1);
  
   if (nitobi.browser.IE)
   {
@@ -2206,22 +2217,35 @@ nitobi.grid.Grid.prototype.findColumnWithX = function(x)
   // We're trying to figure out the state of the grid on the DOM now
   if(frznCount > 0 && leftStyleWidth < x)
   {
+  	var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
      var new_range = ((x - gridLeft) - leftStyleWidth) + this.scroller.getScrollLeft();
      for(var i = frznCount; i < this.getColumnCount(); ++i)
      {
          if( this.getColumnObject(i).inRange(new_range) )
            return this.getColumnObject(i);
      } 
+	 if(new_range>(lastColumn.getHeaderElement().offsetLeft+lastColumn.getWidth()))
+	 {
+	 	return 'last';
+	 }
   }
   else
   {
+  	var gridLeft = this.getScrollSurface().scrollLeft;
     for (var i = 0; i < this.getColumnCount(); ++i)
     {
-      if( this.getColumnObject(i).inRange(x - gridLeft) )
+      if( this.getColumnObject(i).inRange(x + gridLeft) )
+	  {
         return this.getColumnObject(i);
+	  }
     }
+	
+	if((x + gridLeft)>(lastColumn.getHeaderElement().offsetLeft+lastColumn.getWidth()))
+	{
+		// hate to do this
+		return 'last';
+	}
   }
-
   return null;
 }
 

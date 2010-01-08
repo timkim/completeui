@@ -65,6 +65,7 @@ nitobi.grid.DragDropColumn.prototype.pickUp = function(grid, column, columnHeade
 	  var leftStyleWidth = parseInt(C.getClass(".ntb-grid-leftwidth"+this.grid.uid).width);
   }
 
+	
   var x = nitobi.html.getEventCoords(evt).x;
 
   //	TODO: encapsulate this sort of mouse position calculation stuff in a cross browser lib
@@ -119,7 +120,7 @@ nitobi.grid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
 
   if (target != null)
   {
-    targerCol = this.grid.getColumnObject(target);
+    this.targetCol = this.grid.getColumnObject(target);
   }
 
   if (nitobi.browser.IE)
