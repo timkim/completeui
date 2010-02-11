@@ -1503,18 +1503,17 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 	*/
 		}
 
-		if (!this.totalRowCount)
+		if (this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("totalrowcount") != "") 
 		{
 			var totalRowCount = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("totalrowcount");
 			totalRowCount = parseInt(totalRowCount);
 			
-			if (!isNaN(totalRowCount))
-			{
+			if (!isNaN(totalRowCount)) {
 				this.totalRowCount = totalRowCount;
+				// TODO: Should fire an event here to notify all interested parties that we have
+				// all the rows
+				this.fire("TotalRowCountReady", this.totalRowCount);
 			}
-			// TODO: Should fire an event here to notify all interested parties that we have
-			// all the rows
-			this.fire("TotalRowCountReady", this.totalRowCount);
 		}
 	
 		var parentField = this.xmlDoc.selectSingleNode("//ntb:datasource").getAttribute("parentfield");
