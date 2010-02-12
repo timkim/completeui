@@ -2254,13 +2254,10 @@ nitobi.treegrid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 	if (source == target || target == null)
 	{
 		this.headerClicked(source.column, surface.key);
-	}else if(target=='last')
-	{
-		this.moveColumns(source, this.getColumnObject(this.getColumnCount()-1, surface.key), true);
 	}
 	else
 	{
-		this.moveColumns(source, target, false);
+		this.moveColumns(source, target);
 	}
 }
 
@@ -2350,51 +2347,29 @@ nitobi.treegrid.TreeGrid.prototype.columnResize= function(column, width)
 	nitobi.event.evaluate(column.getOnAfterResizeEvent(), afterColumnResizeEventArgs);
 }
 
-nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest, after)
+nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest)
 {
 	var srcIndex = source.column;
-	var destIndex;
-	if(!after)
-	{
-		destIndex = dest.column;
-	}
-	
+	var destIndex = dest.column;
 	var surfacePath = source.surface.key;
  	var parentNode = source.surface.columnsNode;
 	var surface = source.surface;		
 
-	var srcNode = parentNode.childNodes[srcIndex];
-	var destNode;
-	if(!after)
-	{ 
-		destNode = parentNode.childNodes[destIndex];
-	}
 	
+	var srcNode = parentNode.childNodes[srcIndex];
+	var destNode = parentNode.childNodes[destIndex];
 	var tmpNode = srcNode.cloneNode(true);
 	parentNode.removeChild(srcNode);
+	parentNode.insertBefore(tmpNode, destNode); 
 	
 	//update column xml declaration
 	var columnXmlPath = Math.floor(surfacePath.length/2);
 	var columnXml = this.Declaration.columns[columnXmlPath].firstChild;
-	var destCol;
-	if(!after)
-	{
-		destCol = columnXml.childNodes[destIndex];
-	}
-	
+	var destCol = columnXml.childNodes[destIndex];
   	var srcCol = columnXml.childNodes[srcIndex];
   	var tmpColNode = srcCol.cloneNode(true);
   	columnXml.removeChild(srcCol);
-	
-	if (!after) 
-	{
-		parentNode.insertBefore(tmpNode, destNode); 
-		columnXml.insertBefore(tmpColNode, destCol);
-	}else
-	{
-		parentNode.appendChild(tmpNode); 
-		columnXml.appendChild(tmpColNode);
-	}
+  	columnXml.insertBefore(tmpColNode, destCol);
 	
 	//update grid xml declaration
 	var gridXml = this.Declaration.grid.firstChild;
@@ -2424,8 +2399,7 @@ nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest, after)
 nitobi.treegrid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)
 {
 	var C = nitobi.html.Css;
-	
-	var gridLeft = this.getScrollSurface().scrollLeft;
+	var gridLeft = nitobi.html.getBoundingClientRect(this.UiContainer).left;
 
 	if (surface.key == "0")
 		var colContainer = this;
@@ -2435,17 +2409,10 @@ nitobi.treegrid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y
  	
 	for (var i = 0; i < colCount; ++i)
     	{
-      		if( this.getColumnObject(i, surface.key).inRange(x + gridLeft) )
+      		if( this.getColumnObject(i, surface.key).inRange(x - gridLeft) )
         		return this.getColumnObject(i, surface.key);
     	}
 
-	var lastColumn = this.getColumnObject(colCount-1, surface.key);
-	
-	if((x + gridLeft)>(lastColumn.getHeaderElement().offsetLeft+lastColumn.getWidth()))
-	{
-		// hate to do this
-		return 'last';
-	}
 	return null;
 }
 

@@ -106,7 +106,7 @@ nitobi.treegrid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
 
   if (target != null)
   {
-    this.targetCol = this.grid.getColumnObject(target);
+    targerCol = this.grid.getColumnObject(target);
   }
   
 
