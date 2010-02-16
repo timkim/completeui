@@ -3463,7 +3463,20 @@ nitobi.grid.Grid.prototype.calculateHeight = function(start, end)
 	start = (start != null)?start:0;
 	var numRows = this.getDisplayedRowCount();
 	end = (end != null)?end:numRows - 1;
-	return (end - start + 1) * this.getRowHeight();
+
+	var height=0;
+	for(var i=0;i<end;i++)
+	{
+		if ($ntb('row_' + i + '_' + this.uid)) {
+			height += $ntb('row_' + i + '_' + this.uid).clientHeight;
+		}else
+		{
+			height+= this.getRowHeight();
+		}
+	}
+	
+	return height;
+	//return (end - start + 1) * this.getRowHeight();
 }
 
 /**
