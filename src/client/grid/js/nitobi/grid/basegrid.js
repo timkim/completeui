@@ -3462,7 +3462,7 @@ nitobi.grid.Grid.prototype.calculateHeight = function(start, end)
 {
 	start = (start != null)?start:0;
 	var numRows = this.getDisplayedRowCount();
-	end = (end != null)?end:numRows - 1;
+	end = (end != null)?end:numRows;
 
 	var height=0;
 	for(var i=0;i<end;i++)
