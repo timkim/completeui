@@ -30,7 +30,6 @@
 	</xsl:variable>
 	<xsl:variable name="scrollerHeight" select="number($g/@Height)-(number($g/@scrollbarHeight)*$showhscroll)-(number($g/@ToolbarHeight)*$showtoolbar)" />
 	<xsl:variable name="scrollerWidth" select="number($g/@Width)-(number($g/@scrollbarWidth)*number($g/@VScrollbarEnabled))" />
-
 	<xsl:variable name="midHeight" select="number($g/@Height)-(number($g/@scrollbarHeight)*$showhscroll)-(number($g/@ToolbarHeight)*$showtoolbar)-number($g/@top)"/>
 
 	#grid<xsl:value-of select="$u" />  {
@@ -140,7 +139,7 @@
 			<xsl:call-template name="get-pane-width">
 				<xsl:with-param name="start-column" select="$start-column+1"/>
 				<xsl:with-param name="end-column" select="$end-column"/>
-				<xsl:with-param name="current-width" select="number($current-width) + number(//state/nitobi.grid.Columns/nitobi.grid.Column[$start-column]/@Width)"/>
+				<xsl:with-param name="current-width" select="number($current-width) + number(//state/nitobi.grid.Columns/nitobi.grid.Column[$start-column]/@Width)*number(//state/nitobi.grid.Columns/nitobi.grid.Column[$start-column]/@Visible)"/>
 			</xsl:call-template>
 		</xsl:when>
 		<xsl:otherwise>
