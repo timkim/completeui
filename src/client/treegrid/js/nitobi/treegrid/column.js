@@ -235,7 +235,7 @@ nitobi.treegrid.Column.prototype.hide = function()
   var className = "ntb-column" + this.grid.uid + "_" + colSetId +"_" + String(this.column + 1);
   var classDef = nitobi.html.getClass(className, true);
   classDef.display = "none";
-  //this.grid.resizeSurfaces();
+  this.grid.resizeSurfaces();
   this.grid.adjustHorizontalScrollBars();
  }
 
@@ -247,7 +247,7 @@ nitobi.treegrid.Column.prototype.show = function()
   var classDef = nitobi.html.getClass(className, true);
   classDef.display = "";
 
-  //this.grid.resizeSurfaces();
+  this.grid.resizeSurfaces();
   this.grid.adjustHorizontalScrollBars();
 }
 

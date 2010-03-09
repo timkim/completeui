@@ -2431,7 +2431,11 @@ nitobi.treegrid.TreeGrid.prototype.resizeSurfaces = function()
 		}
 	}
 	this.setViewableWidth(maxWidth);
-	if (nitobi.browser.MOZ && oldWidth < maxWidth)
+	if (nitobi.browser.IE7)
+	{
+		this.generateCss();
+	}
+	else if (nitobi.browser.MOZ && oldWidth < maxWidth)
 	{
 		var C = nitobi.html.Css;
 		var surface = this.scroller.surface;
@@ -6285,6 +6289,11 @@ nitobi.treegrid.TreeGrid.prototype.toggleSurface = function(cell)
 		}
 		surface = this.expand(targetRow, targetKey);
 	}
+	
+	// I hate this
+	//var tempColumn = this.getColumnObject(0);
+	//this.columnResize(0, tempColumn.getWidth());
+	this.resizeSurfaces();
 	this.focus();
 }
 
