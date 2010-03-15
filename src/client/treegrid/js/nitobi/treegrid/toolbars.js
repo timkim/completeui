@@ -274,6 +274,20 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  var colset = grid.scroller.surface.columnSetId;
 						  var menu = $ntb('ntb-treegrid-colmenu-wrapper' + colset );
   						  nitobi.ui.Toolbars.showMenu(menu, element);
+						  
+						  var detColset = null;
+						  for( surf in grid.Scroller.surfaceMap)
+						  {
+							if(surf.indexOf('0_') != -1 && surf.length == 3)
+							{
+								detColset = grid.Scroller.surfaceMap[surf].columnSetId;
+							}		
+						  }
+						  if(detColset != null && grid.Scroller.isColSetVisible(detColset))
+						  {
+						  	var detMenu = $ntb('ntb-treegrid-colmenu-wrapper' + detColset);
+							nitobi.ui.Toolbars.hideMenu(detMenu);
+						  }
 					};
 			break;
 			case "showhide_detail"+this.uid:
@@ -298,6 +312,10 @@ nitobi.ui.Toolbars.prototype.render= function()
 						  	var menu = $ntb('ntb-treegrid-colmenu-wrapper' + colset);
 							nitobi.ui.Toolbars.showMenu(menu, element);
 						  }
+						  
+						  var masterColset = grid.scroller.surface.columnSetId;
+						  var masterMenu = $ntb('ntb-treegrid-colmenu-wrapper' + masterColset );
+  						  nitobi.ui.Toolbars.hideMenu(masterMenu);
 					};
 			break;
 			case "firstPage"+this.uid:
@@ -444,16 +462,22 @@ nitobi.ui.Toolbars.showMenu = function(menu, element)
 		menu.style.display = "";
 		var m_height = menu.clientHeight;
 		// Pull it back and put it in the right spot
-		menu.style.display = "none";
+		//menu.style.display = "none";
     		menu.style.top = (element.m_HtmlElementHandle.parentNode.offsetTop - m_height) + "px";
     		menu.style.left = (element.m_HtmlElementHandle.offsetLeft + element.m_HtmlElementHandle.offsetWidth)+ "px";
     		menu.style.display = "";
-    	}
-    	else
-    	{
+    }
+    else
+    {
   		menu.style.position="relative";
-    		menu.style.display = "none";
-    	}
+    	menu.style.display = "none";
+    }
+}
+
+nitobi.ui.Toolbars.hideMenu = function(menu)
+{
+	menu.style.position="relative";
+    menu.style.display = "none";
 }
 
 nitobi.ui.Toolbars.prototype.resetCounter = function()
