@@ -19,7 +19,7 @@ nitobi.form.Calendar = function()
 	div.innerHTML = 
 			"<table border='0' cellpadding='0' cellspacing='0' style='table-layout:fixed;' class='ntb-input-border'><tr><td>" +
 			"<input id='ntb-datepicker-input' type='text' maxlength='255' style='width:100%;' />" +
-			"</td><td class='ntb-datepicker-button'><a id='ntb-datepicker-button' href='#' onclick='return false;'></a></td></tr><tr><td colspan='2' style='width:1px;height:1px;position:relative;'><!-- --></td></tr><colgroup><col></col><col style='width:20px;'></col></colgroup></table>";
+			"</td><td class='ntb-datepicker-button'><a id='ntb-datepicker-button' href='#' onclick='return false;'></a></td></tr><tr><td colspan='2' style='width:1px;height:1px;position:absolute;'><!-- --></td></tr><colgroup><col></col><col style='width:20px;'></col></colgroup></table>";
 
 	this.control = div.getElementsByTagName('input')[0];
 
@@ -119,8 +119,9 @@ nitobi.form.Calendar.prototype.handleClick = function(evt)
 		var dp = this.datePicker;
 		dp.setSelectedDate(nitobi.base.DateMath.parseIso8601(this.control.value));
 		dp.render();
-		dp.getCalendar().getHtmlNode().style.width = "";
+		dp.getCalendar().getHtmlNode().style.width = "180px";
 		nitobi.html.Css.setStyle(dp.getCalendar().getHtmlNode(), "position", "absolute");
+		nitobi.html.Css.setStyle(dp.getCalendar().getHtmlNode(), "z-index", "9999");
 	}
 
 	this.ignoreBlur = true;
