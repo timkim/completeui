@@ -195,51 +195,51 @@ nitobi.grid.GridStandard.prototype.enableButton = function(button)
  * Go to the first page
  */
 nitobi.grid.GridStandard.prototype.pageFirst=function() {
-	this.fire("BeforeLoadPreviousPage");
+	//this.fire("BeforeLoadPreviousPage");
 	this.loadDataPage(0);
-	this.fire("AfterLoadPreviousPage");
+	//this.fire("AfterLoadPreviousPage");
 }
 
 /**
  * Load the previous page of data.
  */
 nitobi.grid.GridStandard.prototype.pagePrevious=function() {
-	this.fire("BeforeLoadPreviousPage");
+	//this.fire("BeforeLoadPreviousPage");
 	this.loadDataPage(Math.max(this.getCurrentPageIndex()-1,0));
-	this.fire("AfterLoadPreviousPage");
+	//this.fire("AfterLoadPreviousPage");
 }
 
 /**
  * Load the next page of data.
  */
 nitobi.grid.GridStandard.prototype.pageNext=function() {
-	this.fire("BeforeLoadNextPage");
+	//this.fire("BeforeLoadNextPage");
 	this.loadDataPage(this.getCurrentPageIndex()+1);
-	this.fire("AfterLoadNextPage");
+	//this.fire("AfterLoadNextPage");
 }
 
 /**
  * Go to the last page
  */
 nitobi.grid.GridStandard.prototype.pageLast=function() {
-	this.fire("BeforeLoadNextPage");
+	//this.fire("BeforeLoadNextPage");
 	var totalPages = Math.ceil(this.datatable.totalRowCount/this.getRowsPerPage());
 	this.loadDataPage(totalPages-1);
-	this.fire("AfterLoadNextPage");
+	//this.fire("AfterLoadNextPage");
 }
 
 /**
  * Jump to the page based on the input text
  */
 nitobi.grid.GridStandard.prototype.pageTextInput=function() {
-	this.fire("BeforeLoadNextPage");
+	//this.fire("BeforeLoadNextPage");
 	var input = $ntb('startPage' + this.toolbars.uid);
 	if(input)
 	{
 		var val = parseInt(input.value);
 		this.loadDataPage(val-1);
 	}
-	this.fire("AfterLoadNextPage");
+	//this.fire("AfterLoadNextPage");
 }
 /**
  * Load a specific page of data.
@@ -290,6 +290,7 @@ nitobi.grid.GridStandard.prototype.loadDataPage = function(newPageNumber)
  */
 nitobi.grid.GridStandard.prototype.afterLoadDataPage=function(eventArgs) 
 {
+	//console.log('?');
 	this.setDisplayedRowCount(eventArgs.numRowsReturned);
 	this.setRowCount(eventArgs.numRowsReturned)
 	if(eventArgs.numRowsReturned != this.getRowsPerPage()) {
