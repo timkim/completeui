@@ -280,7 +280,7 @@ nitobi.grid.Scroller3x3.prototype.performRender=function()
 			{
 				var firstRow = this.getCurrentPageIndex() * this.getRowsPerPage();
 				var lastRow = firstRow + this.getRowsPerPage();
-				datatable.get(firstRow, lastRow);
+				//datatable.get(firstRow, lastRow);
 			}
 			else
 			{
