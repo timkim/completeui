@@ -2424,6 +2424,7 @@ nitobi.treegrid.TreeGrid.prototype.moveColumns = function(source, dest, after)
 	this.refreshColumnList(theColSet);
 	// We need to generate the CSS here so the columns have the proper width 
 	this.generateCss();
+	this.Scroller.setScrollLeft(this.Scroller.getScrollLeft());
 }
 
 nitobi.treegrid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y)

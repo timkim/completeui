@@ -2186,6 +2186,7 @@ nitobi.grid.Grid.prototype.moveColumns = function(source, dest, after)
   this.defineColumns(columns);
   this.refreshColumnList();
   this.bind();
+  this.Scroller.setScrollLeft(this.Scroller.getScrollLeft());
 }
 
 nitobi.grid.Grid.prototype.reloadColumnDef = function()
