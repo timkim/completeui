@@ -1484,7 +1484,6 @@ nitobi.grid.Grid.prototype.adjustHorizontalScrollBars = function()
 	
 	var C = nitobi.html.Css;
 	var viewport_Width = parseInt(C.getStyle(this.getScrollSurface(), "width"));
-	
 	if ((viewableWidth <= viewport_Width))
 	{
 		hScrollbarContainer.style.display = "none";
@@ -2256,10 +2255,15 @@ nitobi.grid.Grid.prototype.resizePanes= function(dx, columnIndex)
 		// Things are different if we are resizing a frozen or unfrozen column
 		if (columnIndex < this.getFrozenLeftColumnCount())
 		{
-			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid);
-			leftStyle.width = (parseInt(leftStyle.width) + dx) + "px";
-			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid);
-			centerStyle.width = (parseInt(centerStyle.width) - dx) + "px";
+			var leftStyle = C.getClass(".ntb-grid-leftwidth"+this.uid, true);
+			var parsedLeftStyleWidth = parseInt(leftStyle.width);
+			var leftSyleCalcWidth =  parsedLeftStyleWidth + dx;
+			leftStyle.width =  leftSyleCalcWidth + "px";
+			
+			var centerStyle = C.getClass(".ntb-grid-centerwidth"+this.uid, true);
+			var parsedCenterStyleWidth = parseInt(centerStyle.width);
+			var centerStyleWidthCalc = parsedCenterStyleWidth - dx;
+			centerStyle.width = centerStyleWidthCalc + "px";
 		}
 		else
 		{
