@@ -408,7 +408,7 @@ nitobi.html.getWidth = function(elem)
 	return elem.offsetWidth;
 }
 
-if (nitobi.browser.IE)
+if (nitobi.browser.IE||nitobi.browser.MOZ)
 {
 	/**
 	 * Returns an associative array containing position and dimensions of the box for the specified element. 
@@ -431,60 +431,6 @@ if (nitobi.browser.IE)
 				height: rect.bottom - rect.top,
 				width: rect.right - rect.left};	
 	}
-}
-else if	(nitobi.browser.MOZ)
-{
-	/**
-	 * @ignore
-	 */
-	nitobi.html.getBox = function(elem)
-	{
-		var fixTop = 0;
-		var fixLeft = 0;
-		var parent = elem.parentNode;
-		while (parent.nodeType == 1  && parent != document.body)
-		{
-			//if (nitobi.html.getBox.cache[parent] == null || true)
-			//{
-				fixTop += nitobi.lang.parseNumber(parent.scrollTop) 
-							- (nitobi.html.getStyle(parent,"overflow") == "auto" ? nitobi.lang.parseNumber(nitobi.html.getStyle(parent,"border-top-width")) :0);
-				fixLeft += nitobi.lang.parseNumber(parent.scrollLeft) 
-							 - (nitobi.html.getStyle(parent,"overflow") == "auto" ? nitobi.lang.parseNumber(nitobi.html.getStyle(parent,"border-left-width")) :0);
-				
-			// This caching needs work.
-			/*	nitobi.html.getBox.cache[parent] = {};
-				nitobi.html.getBox.cache[parent].left = fixLeft;
-				nitobi.html.getBox.cache[parent].top = fixTop;
-			}
-			else
-			{
-				// Cache hit
-				fixTop += nitobi.html.getBox.cache[parent].top;
-				fixLeft += nitobi.html.getBox.cache[parent].left;
-				break;
-			}*/
-			parent = parent.parentNode;
-		}
-		
-		var mozBox = elem.ownerDocument.getBoxObjectFor(elem);
-		var borderLeft = nitobi.lang.parseNumber(nitobi.html.getStyle(elem,"border-left-width"))
-		var borderRight = nitobi.lang.parseNumber(nitobi.html.getStyle(elem,"border-right-width"))
-		var borderTop = nitobi.lang.parseNumber(nitobi.html.getStyle(elem,"border-top-width"))
-		var top = nitobi.lang.parseNumber(mozBox.y)  - fixTop - borderTop;
-		var left = nitobi.lang.parseNumber(mozBox.x) - fixLeft - borderLeft;
-		var right = left + nitobi.lang.parseNumber(mozBox.width); 
-		var bottom = top + mozBox.height;
-		var height = nitobi.lang.parseNumber(mozBox.height);
-		var width = nitobi.lang.parseNumber(mozBox.width);
-
-		return {top: top, 
-				left: left, 
-				bottom: bottom, 
-				right: right,
-				height: height,
-				width: width};	
-	}
-	nitobi.html.getBox.cache = {};
 }
 else if (nitobi.browser.SAFARI || nitobi.browser.CHROME)
 {
@@ -704,14 +650,9 @@ nitobi.html.getScrollBarWidth = function(container)
 			container = d;
 //			return(Math.abs(this.GetScrollBarWidth(d)));
 		}
-		if (nitobi.browser.IE)
+		if (nitobi.browser.IE || nitobi.browser.MOZ)
 		{
 			nitobi.html.scrollBarWidth = Math.abs(container.offsetWidth - container.clientWidth - (container.clientLeft ? container.clientLeft * 2 : 0));
-		}
-		else if (nitobi.browser.MOZ)
-		{
-			var b = document.getBoxObjectFor(container);
-			nitobi.html.scrollBarWidth = Math.abs((b.width - container.clientWidth));
 		}
 		else if (nitobi.browser.SAFARI || nitobi.browser.CHROME)
 		{
@@ -995,7 +936,7 @@ nitobi.html.insertAdjacentElement = function(sibling,pos,node)
  */
 nitobi.html.getClientRects = function(node, scrollTop, scrollLeft) 
 {
-	if (nitobi.browser.IE)
+	if (nitobi.browser.IE||nitobi.browser.MOZ)
 		return node.getClientRects();
 	
 	scrollTop = scrollTop || 0;
@@ -1006,11 +947,7 @@ nitobi.html.getClientRects = function(node, scrollTop, scrollLeft)
 		scrollTop = 0;
 		scrollLeft = 0;
 	}
-	else
-	{
-		var td = document.getBoxObjectFor(node);
-		//td = node.ownerDocument.getBoxObjectFor(node)
-	}
+	
 	return new Array({top: (td.y - scrollTop), left: (td.x - scrollLeft), bottom: (td.y + td.height - scrollTop), right: (td.x + td.width - scrollLeft)});
 }
 
@@ -1020,7 +957,7 @@ nitobi.html.getClientRects = function(node, scrollTop, scrollLeft)
  */
 nitobi.html.getBoundingClientRect = function(node,scrollTop, scrollLeft) 
 {
-	if (nitobi.browser.IE)
+	if (nitobi.browser.IE||nitobi.browser.MOZ)
 		return node.getBoundingClientRect();
 
 	scrollTop = scrollTop || 0;
@@ -1031,10 +968,7 @@ nitobi.html.getBoundingClientRect = function(node,scrollTop, scrollLeft)
 		scrollTop = 0;
 		scrollLeft = 0;
 	}
-	else
-	{
-		td = document.getBoxObjectFor(node);
-	}
+
 	var top = td.y-scrollTop;
 	var left = td.x-scrollLeft;
 	return {top: top, left: left, bottom: (top + td.height), right: (left + td.width)};
