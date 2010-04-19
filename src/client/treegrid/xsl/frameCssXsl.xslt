@@ -102,7 +102,8 @@
 
 	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$rowHeight" />px;line-height:<xsl:value-of select="$rowHeight" />px;margin:0px;}
 	.ntb-header-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$g/@HeaderHeight" />px;}
-
+	.<xsl:value-of select="$t"/> .ntb-column-indicator {height:<xsl:value-of select="number($g/@HeaderHeight)-2" />px;}
+	
 	<xsl:apply-templates select="//ntb:columns" />
 
 </xsl:template>
