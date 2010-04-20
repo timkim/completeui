@@ -97,7 +97,9 @@
 
 	.<xsl:value-of select="$t"/> .ntb-column-indicator {
 		overflow:hidden;
-		white-space: nowrap;    
+		white-space: normal;    
+		display: block;
+		padding: 0px 5px;
 	}
 
 	.ntb-row<xsl:value-of select="$u" /> {height:<xsl:value-of select="$rowHeight" />px;line-height:<xsl:value-of select="$rowHeight" />px;margin:0px;}
