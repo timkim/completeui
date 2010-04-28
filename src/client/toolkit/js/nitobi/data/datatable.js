@@ -1410,11 +1410,11 @@ nitobi.data.DataTable.prototype.getComplete = function(evtArgs)
 		var lastRowReturned;
 		// This gets set to the number of rows returned.
 		var numRowsReturned = rowNodes.length;
-
 		// If the pagesize is null, we got whatever the server would give us.
 		// Update the evt args according to what was delievered by the server.
 		if (getCompleteEvtArgs.pageSize == null)
 		{
+
 			getCompleteEvtArgs.pageSize = numRowsReturned;
 			getCompleteEvtArgs.lastRow = getCompleteEvtArgs.startXi + getCompleteEvtArgs.pageSize - 1;
 			getCompleteEvtArgs.firstRow = getCompleteEvtArgs.startXi;
@@ -1853,7 +1853,7 @@ nitobi.data.DataTable.prototype.get = function(start, pageSize, context, callbac
 		}
 */
 		var result = null;
-
+		//debugger;
 		if (this.mode=="caching") {
 			result = this.getCached(start, pageSize, context, callback, errorCallback)
 		}
@@ -1951,10 +1951,10 @@ nitobi.data.DataTable.prototype.getCached = function(start, pageSize, context, c
 
 				//	There is a request outstanding for this data already ...
 				if (requestGaps.length == 0)
-				{
+				{	
 					var funcref = nitobi.lang.close(this, this.get, arguments);
 					//window.setTimeout(funcref, 100);
-					this.requestQueue.push(funcref);
+					//this.requestQueue.push(funcref);
 					return;
 				}
 //				else
