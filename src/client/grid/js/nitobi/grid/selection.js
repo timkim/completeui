@@ -958,6 +958,7 @@ nitobi.grid.Selection.prototype.align = function(source,target1,target2,AlignBit
 	ow=ow || 0;
 	oy=oy || 0;
 	ox=ox || 0;
+	
 	var a=AlignBit_HWTBLRCM;
 	var td,sd,tt,tb,tl,tr,th,tw,st,sb,sl,sr,sh,sw;
 
@@ -998,9 +999,13 @@ nitobi.grid.Selection.prototype.align = function(source,target1,target2,AlignBit
 	sw=Math.abs(sr-sl);
 
 	var H = nitobi.html;
-
-	if (a&0x10000000) source.style.height = (Math.max(bb-at,ab-bt)+oh)+'px'; // make same height
-	if (a&0x01000000) source.style.width = (Math.max(br-al,ar-bl)+ow)+'px'; // make same width
+	
+	var height = (Math.max(bb-at,ab-bt)+oh); 
+	height = (height < 0)?height=0: height;
+	var width = (Math.max(br-al,ar-bl)+ow);
+	width = (width < 0)?width=0: width;
+	if (a&0x10000000) source.style.height = height+'px'; // make same height
+	if (a&0x01000000) source.style.width = width+'px'; // make same width
 	if (a&0x00100000) source.style.top = (H.getStyleTop(source)+Math.min(tt,bt)-st+oy) + 'px'; // align top
 	if (a&0x00010000) source.style.top = (H.getStyleTop(source)+tt-st+th-sh+oy) + 'px'; // align bottom
 	if (a&0x00001000) source.style.left = (H.getStyleLeft(source)-sl+Math.min(tl,bl)+ox) + 'px'; // align left
