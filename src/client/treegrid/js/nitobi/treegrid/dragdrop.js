@@ -101,15 +101,6 @@ nitobi.treegrid.DragDropColumn.prototype.drop = function(dragStopEventArgs)
   this.x = dragStopEventArgs.x;
   this.y = dragStopEventArgs.y;
 
-  // At least try to get the target column, before relying on guesswork
-  var target = nitobi.treegrid.Cell.getColumnNumber(dragStopEventArgs.event.srcElement.parentNode);
-
-  if (target != null)
-  {
-    this.targetCol = this.grid.getColumnObject(target);
-  }
-  
-
   var gridLeft = nitobi.html.getBoundingClientRect(this.grid.UiContainer).left;
 
   var ls = this.boxstyle;

@@ -2242,6 +2242,7 @@ nitobi.treegrid.TreeGrid.prototype.afterDragDropColumn = function(dragbox)
 {
 	var source = dragbox.column;
 	var surface = dragbox.surface;
+
 	if (this.targetCol == null)
 	{
 		var target = this.findColumnWithCoords(dragbox.surface, dragbox.x, dragbox.y);
@@ -2432,21 +2433,30 @@ nitobi.treegrid.TreeGrid.prototype.findColumnWithCoords = function(surface, x, y
 	var C = nitobi.html.Css;
 	var gridLeft = this.getScrollSurface().scrollLeft;
 
-	if (surface.key == "0")
+	if (surface.key == "0") 
+	{
 		var colContainer = this;
-	else
-	   	var colContainer = surface;
+		var groupOffset = 0;
+	}
+	else 
+	{
+		var colContainer = surface;
+		// need the 7 for a little extra fudge
+		var groupOffset = this.getGroupOffset()+7;
+	}
+
+	var adjustedDropCoordinates = x + gridLeft - groupOffset;
 	var colCount = colContainer.getColumnCount();
  	
 	for (var i = 0; i < colCount; ++i)
     	{
-      		if( this.getColumnObject(i, surface.key).inRange(x + gridLeft) )
+      		if( this.getColumnObject(i, surface.key).inRange(adjustedDropCoordinates) )
         		return this.getColumnObject(i, surface.key);
     	}
 
 	var lastColumn = this.getColumnObject(colCount-1, surface.key);
 	
-	if((x + gridLeft)>(lastColumn.getHeaderElement().offsetLeft+lastColumn.getWidth()))
+	if((adjustedDropCoordinates)>(lastColumn.getHeaderElement().offsetLeft+lastColumn.getWidth()))
 	{
 		// hate to do this
 		return 'last';
