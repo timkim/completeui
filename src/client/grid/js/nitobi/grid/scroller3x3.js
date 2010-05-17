@@ -56,6 +56,7 @@ nitobi.grid.Scroller3x3 = function(owner,height,rows,columns,freezetop,freezelef
 	this.dataTable = null;
 
 	this.cacheMap = new nitobi.collections.CacheMap(-1,-1);
+	this.refresh = false;
 	// Attach to Viewport events
 
 }
@@ -280,11 +281,17 @@ nitobi.grid.Scroller3x3.prototype.performRender=function()
 			{
 				var firstRow = this.getCurrentPageIndex() * this.getRowsPerPage();
 				var lastRow = firstRow + this.getRowsPerPage();
-				//datatable.get(firstRow, lastRow);
+				if (this.refresh) 
+				{
+					datatable.get(firstRow, lastRow);
+					this.refresh = false;
+				}
+					
 			}
 			else
 			{
 				datatable.get(low, rows);
+				
 			}
 			// We may already have at least some of the data ... so render what we got
 			var cached = datatable.cachedRanges(low,high);
@@ -293,8 +300,8 @@ nitobi.grid.Scroller3x3.prototype.performRender=function()
 				for (var j=0;j<subGaps.length;j++) {
 					visibleRows.first = subGaps[j].low;
 					visibleRows.last = subGaps[j].high;
-
 					this.renderGap(subGaps[j].low,subGaps[j].high);
+
 				}
 			}
 			return false;

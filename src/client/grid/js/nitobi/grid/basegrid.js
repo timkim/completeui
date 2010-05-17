@@ -4206,7 +4206,6 @@ nitobi.grid.Grid.prototype.refresh= function()
 	if (!this.fire('BeforeRefresh', eventArgs)) return;
 
 	ntbAssert(this.datatable != null,'The Grid must be conntected to a DataTable to call refresh.','',EBA_THROW);
-
 	// TODO: Not sure why clear is commented out and the other code is here?
 	//this.clear();
 	this.selectedRows = [];
@@ -4214,6 +4213,7 @@ nitobi.grid.Grid.prototype.refresh= function()
 	if(this.getDataMode()!="local")
 		this.datatable.clearData();
 
+	this.Scroller.refresh = true;
 	this.syncWithData();
 
 	this.subscribeOnce("HtmlReady", this.handleAfterRefresh, this);
