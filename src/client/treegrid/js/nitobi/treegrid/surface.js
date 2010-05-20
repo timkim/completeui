@@ -1219,7 +1219,14 @@ nitobi.treegrid.Surface.prototype.calculateWidth = function()
 		}
 	}
 	// TODO: I hate this...but we need to account for the surface's indentation, if any -Mike...
-	var offset = nitobi.html.getFirstChild(this.htmlNode).offsetLeft;
+	var offset
+	if(nitobi.html.getFirstChild(this.htmlNode))
+	{
+		offset = nitobi.html.getFirstChild(this.htmlNode).offsetLeft;
+	}else
+	{
+		offset = 0;
+	}
 	return wT + offset;
 };
 

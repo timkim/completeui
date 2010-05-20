@@ -4396,7 +4396,7 @@ nitobi.treegrid.TreeGrid.prototype.refresh= function()
 
 	ntbAssert(this.datatable != null,'The Grid must be conntected to a DataTable to call refresh.','',EBA_THROW);
 
-	var rows = (this.getPagingMode() == nitobi.treegrid.PAGINGMODE_STANDARD?this.getRowsPerPage():this.scroller.surface.rows)
+	var rows = (this.getPagingMode() == nitobi.treegrid.PAGINGMODE_STANDARD?this.scroller.surface.rows:this.getRowsPerPage())
 	this.setRowCount(rows);
 	this.scroller.surface.displayedRowCount = rows;
 	this.scroller.surface.rows = rows;
