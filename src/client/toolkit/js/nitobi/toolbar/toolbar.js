@@ -90,7 +90,7 @@ nitobi.ui.pagingToolbarXsl =
    nitobi.ui.ButtonXsl +
    nitobi.ui.BinaryStateButtonXsl + 
    nitobi.ui.InputXsl +
-   
+
       "<xsl:template match=\"separator\">"+
          "<div align='center'>"+
 	         "<xsl:attribute name=\"style\">"+
