@@ -592,7 +592,6 @@ nitobi.ui.Toolbars.prototype.calculateRange = function()
 	{
 		total_items.innerHTML = "&nbsp;" + this.grid.datatable.totalRowCount;
 	}
-	
 	if(last_page)
 	{
 		last_page.innerHTML = "&nbsp;" + Math.ceil(pages);
