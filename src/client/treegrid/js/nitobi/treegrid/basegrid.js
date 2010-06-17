@@ -2098,7 +2098,6 @@ nitobi.treegrid.TreeGrid.prototype.updateCellRanges= function()
 			if (width > maxWidth && surface.isVisible)
 				maxWidth = width;	
 		}
-
 		// This is required because we need to get the height of the headers in the child grids
 		this.fire("PercentHeightChanged", ratio);
 		this.fire("PercentWidthChanged",this.getWidth()/maxWidth);
@@ -4098,7 +4097,6 @@ nitobi.treegrid.TreeGrid.prototype.generateFrameCss= function()
 		scrollTop = ss.scrollTop;
 		scrollLeft = ss.scrollLeft;
 	}
-
 	if (this.oldFrameCss != newCss)
 	{
 		this.oldFrameCss = newCss;
@@ -6408,7 +6406,7 @@ nitobi.treegrid.TreeGrid.prototype.handleToggleSurface = function(eventArgs)
 	}
 	// Do the calculation here for toggling the row height
 	// TODO: Clean this up and maybe put it somewhere else
-	var outer_height = this.scroller.surface.view.midcenter.container.clientHeight; 
+	var outer_height = this.scroller.surface.view.midcenter.container.offsetHeight; 
 	var inner_height = this.scroller.surface.view.midcenter.element.clientHeight;
 	var ratio = inner_height/outer_height;
 	this.vScrollbar.setRange(ratio);
