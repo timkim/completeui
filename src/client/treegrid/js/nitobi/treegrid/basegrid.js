@@ -4440,8 +4440,7 @@ nitobi.treegrid.TreeGrid.prototype.clear = function()
  */
 nitobi.treegrid.TreeGrid.prototype.handleContextMenu= function(evt, obj)
 {
-	var contextMenuFunc = this.getOnContextMenuEvent();
-	if (contextMenuFunc == null) {
+	if (!this.OnContextMenuEvent) {
 		return true;
 	} else {
 		if (this.fire("ContextMenu")) {
